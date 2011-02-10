@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:rdb="http://namespaces.zope.org/rdb"
+  xmlns:sqlos="http://namespaces.sqlobject.org/sqlos"
+  xmlns:five="http://namespaces.zope.org/five">
+
+  <browser:page 
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder" 
+    name="post"
+    class=".traverse.GSPostTraversal"
+    permission="zope2.View" />
+    
+  <browser:page 
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder" 
+    name="gspost"
+    class=".singlepost.GSPostView"
+    template="browser/templates/singlepost.pt"
+    permission="zope2.Public" />
+    
+</configure>
