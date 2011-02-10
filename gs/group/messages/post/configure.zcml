@@ -5,6 +5,9 @@
   xmlns:sqlos="http://namespaces.sqlobject.org/sqlos"
   xmlns:five="http://namespaces.zope.org/five">
 
+  <class class=".traverse.GSPostTraversal">
+    <implements interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
   <browser:page 
     for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder" 
     name="post"

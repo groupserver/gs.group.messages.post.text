@@ -1,11 +1,10 @@
 # coding=utf-8
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces import IPublishTraverse
-from Products.XWFMailinListManager.queries import MessageQuery
+from Products.XWFMailingListManager.queries import MessageQuery
 from gs.group.base.page import GroupPage
 
 class GSPostTraversal(GroupPage):
-    implements(IPublishTraverse)
     def __init__(self, context, request):
         GroupPage.__init__(self, context, request)
         self.__messageQuery = None
