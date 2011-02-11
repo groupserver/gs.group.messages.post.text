@@ -1,22 +1,12 @@
 # coding=utf-8
 from zope.component import getMultiAdapter
-from zope.publisher.interfaces import IPublishTraverse
-from Products.XWFMailingListManager.queries import MessageQuery
+from zope.location.interfaces import LocationError
 from gs.group.base.page import GroupPage
 
 class GSPostTraversal(GroupPage):
     def __init__(self, context, request):
         GroupPage.__init__(self, context, request)
         self.__messageQuery = None
-
-    @property
-    def messageQuery(self):
-        assert self.context
-        if self.__messageQuery == None:
-            da = self.context.zsqlalchemy 
-            assert da, 'No data-adaptor found'
-            self.__messageQuery = MessageQuery(self.context, da)
-        return self.__messageQuery
         
     def publishTraverse(self, request, name):
         if not request.has_key('postId'):
@@ -24,5 +14,15 @@ class GSPostTraversal(GroupPage):
         return self
     
     def __call__(self):
-        return getMultiAdapter((self.context, self.request), name="gspost")()
+        try:
+            retval = getMultiAdapter((self.context, self.request), name="gspost")()
+        except LocationError, e:
+            retval = 'Ooops, Location error %s' % e
+        except AssertionError, e:
+            retval = 'Ooops, Assertion error %s' % e
+        except KeyError, e:
+            retval = 'Ooops, Key error %s' % e
+        except ValueError, e:
+            retval = 'Ooops, Value error %s' % e
+        return retval
 

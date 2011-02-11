@@ -50,10 +50,11 @@ class GSPostView(GroupPage):
             self.request.response.redirect('/r/post-no-id')
         else:
             self.request.response.redirect('/r/post-not-found?id=%s' % self.postId)
-          
-    def get_topic_title(self):
+    
+    @property
+    def topicTitle(self):
         assert hasattr(self, 'post')
-        retval = self.post and self.post['subject'] or ''
+        retval = self.post.get('subject', '')
         return retval
           
     def get_previous_post(self):
