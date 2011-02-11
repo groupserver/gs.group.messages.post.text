@@ -57,26 +57,6 @@ class GSPostView(GroupPage):
         retval = self.post.get('subject', '')
         return retval
           
-    def get_previous_post(self):
-        assert hasattr(self, 'relatedPosts')
-        assert self.relatedPosts.has_key('previous_post_id')
-        return self.relatedPosts['previous_post_id']
-                    
-    def get_next_post(self):
-        assert hasattr(self, 'relatedPosts')
-        assert self.relatedPosts.has_key('next_post_id')
-        return self.relatedPosts['next_post_id']
-          
-    def get_first_post(self):
-        assert hasattr(self, 'relatedPosts')
-        assert self.relatedPosts.has_key('first_post_id')
-        return self.relatedPosts['first_post_id']
-          
-    def get_last_post(self):
-        assert hasattr(self, 'relatedPosts')
-        assert self.relatedPosts.has_key('last_post_id')
-        return self.relatedPosts['last_post_id']
-          
     def get_post(self):
         assert hasattr(self, 'post')
         return self.post
