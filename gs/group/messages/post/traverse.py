@@ -1,4 +1,5 @@
 # coding=utf-8
+from traceback import format_exc
 from zope.component import getMultiAdapter
 from zope.location.interfaces import LocationError
 from gs.group.base.page import GroupPage
@@ -16,13 +17,10 @@ class GSPostTraversal(GroupPage):
     def __call__(self):
         try:
             retval = getMultiAdapter((self.context, self.request), name="gspost")()
-        except LocationError, e:
-            retval = 'Ooops, Location error %s' % e
-        except AssertionError, e:
-            retval = 'Ooops, Assertion error %s' % e
-        except KeyError, e:
-            retval = 'Ooops, Key error %s' % e
-        except ValueError, e:
-            retval = 'Ooops, Value error %s' % e
+        except Exception, e:
+            self.request.form['q'] = self.request.URL
+            self.request.form['m'] = format_exc()
+            retval = getMultiAdapter((self.context, self.request),
+                        name="new_unexpected_error.html")()
         return retval
 
