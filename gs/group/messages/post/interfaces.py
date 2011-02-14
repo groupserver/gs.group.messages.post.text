@@ -55,3 +55,11 @@ class IGSPostContentProvider(Interface):
         required=False,
         default="browser/templates/postcontentprovider.pt")
 
+# Used for some utilities
+class IMarkupEmail(Interface):
+    pass
+
+class IWrapEmail(Interface):
+    pass
+
+

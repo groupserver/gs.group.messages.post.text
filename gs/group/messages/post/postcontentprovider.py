@@ -5,7 +5,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.cache import LRUCache, SimpleCache
 from Products.XWFCore.XWFUtils import getOption
-from Products.XWFMailingListManager.emailbody import get_email_intro_and_remainder
+from postbody import get_post_intro_and_remainder
 
 class GSPostContentProvider(GroupContentProvider):
     # We want a really simple cache for templates, because there aren't
@@ -53,8 +53,8 @@ class GSPostContentProvider(GroupContentProvider):
         if not self.cookedResult.has_key(self.cacheKey):
             self.authored = self.user_authored()
             self.authorInfo = self.get_author()
-            ir = get_email_intro_and_remainder(self.context,
-                                               self.post['body'])
+            ir = get_post_intro_and_remainder(self.context,
+                                              self.post['body'])
             self.postIntro, self.postRemainder = ir
             self.cssClass = self.get_cssClass()              
             self.filesMetadata = self.post['files_metadata']
