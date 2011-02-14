@@ -13,7 +13,6 @@ log = logging.getLogger(SUBSYSTEM) #@UndefinedVariable
 class GSPostTraversal(GroupPage):
     def __init__(self, context, request):
         GroupPage.__init__(self, context, request)
-        self.__messageQuery = None
         
     def publishTraverse(self, request, name):
         if not request.has_key('postId'):
