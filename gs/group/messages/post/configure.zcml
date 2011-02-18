@@ -51,6 +51,13 @@
            provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
-  
+
+  <!--Help-->
+  <browser:viewlet name="gs-group-messages-topic-post"
+    manager="gs.help.interfaces.IUserHelp"
+    template="browser/templates/help.pt"
+    permission="zope.Public"
+    weight="12" />
+    
 </configure>
 

@@ -1,0 +1,91 @@
+<div class="section" id="gs-group-messages-post">
+  <h3>Post</h3>
+  <p>
+    A post on the web is made up of six parts: a title, navigation links,
+    information about the post, the share box,
+    the body of the message, and then a list of files that were posted
+    along with the message.
+  </p>
+  <div class="section" id="gs-group-messages-post-title">
+    <h4>Title</h4>
+    <p>
+      The title reads <q>Post in&#8230;</q> followed by the name of
+      the topic.
+      It is the similar to the <strong>subject</strong> line of an
+      email.
+      It will be the same for all posts in the same topic.
+    </p>
+  </div>
+  <div class="section" id="gs-group-messages-post-navigation-links">
+    <h4>Navigation Links</h4>
+    <p>
+      There are five navigation links:
+    </p>
+    <ol>
+      <li>Click <samp class="link">First post</samp>
+        to view the the post that started the topic.</li>
+      <li>Click <samp class="link">Previous post</samp> 
+        to view the post in the topic that was made just before the
+        current post.</li>
+      <li>Click <samp class="link">Topic</samp> 
+        to view the entire
+        <a href="#gs-group-messages-topic">topic.</a></li>
+      <li>Click <samp class="link">Next post</samp> to view the post
+        in the topic made just after the current post.</li>
+      <li>Click <samp class="link">Last post</samp> to view the
+        most recent post made in the topic.</li>
+    </ol>
+  </div>
+  <div class="section" id="gs-group-messages-post-metadata">
+    <h4>Information about the Post</h4>
+    <p>
+      There are two items of information about the post:
+      who made the post and when the post was made.
+    <p>
+      The name of <strong>the author</strong> appears at the top of
+      the post, after the word <samp>From</samp>.
+      Clicking on the group members name will show his or her profile page.
+      If the author has added <strong>a profile photo</strong> it will
+      appear at the left of the post, below the name of the author.
+    </p>
+    <p>
+      After the author's name is <strong>the date</strong> when the post
+      was made.
+      Mouse-over the date to view the exact time the post was made.
+    </p>
+  </div>
+  <div class="section" id="gs-group-messages-post-share">
+    <h4>The Share Box</h4>
+    <p>
+      The share box appears at the top of the post, after the date.
+      It is detailed in <a href="gs-content-js-sharebox">the Sharebox
+      section</a> below.
+    </p>
+  </div>
+  <div class="section" id="gs-group-messages-post-body">
+    <h4>Body</h4>
+    <p>
+      The body of the message is divided in two parts.
+    </p>
+    <dl>
+      <dt>Main Message</dt>
+      <dd>The main part is message that the author wrote.</dd>
+      <dt>Quoted Text</dt>
+      <dd>
+        Sometimes people will include the text of previous messages
+        at the bottom of a post.
+        A &#9654; will appear at the bottom of the main message if this
+        <em class="wordasword">quoted</em> text is present.
+        <ul>
+          <li>Click the &#9654; to show the quoted text.
+            The quoted text will be shown and the &#9654; will turn into a
+            &#9660;.</li>
+          <li>Click the &#9660; to hide the quoted text.
+            The quoted text will then be hidden and the &#9660; will turn
+            into a &#9654;.</li>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</div>
+
