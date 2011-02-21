@@ -36,7 +36,7 @@ setup(name='gs.group.messages.post',
         'Products.GSGroup',
         'gs.group.base',
         'gs.group.messages.base',
-        'gs.content.js.shrebox',
+        'gs.content.js.sharebox',
         'gs.help',
         'gs.errormesg',
         # -*- Extra requirements: -*-
