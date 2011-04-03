@@ -17,9 +17,27 @@ CREATE TABLE post (
     has_attachments   BOOLEAN                  NOT NULL,
     hidden            TIMESTAMP WITH TIME ZONE,
 );
--- Existing installs will need to update the post table:
+-- Installs prior to GS 11.04 will need to update the post table:
 -- ALTER TABLE post 
 --  ADD COLUMN hidden TIMESTAMP WITH TIME ZONE;
 CREATE INDEX site_group_idx ON post USING BTREE (site_id, group_id);
 CREATE INDEX topic_idx ON post USING BTREE (topic_id);
+
+--
+-- Initialise the trigger and rowcount for the post table
+--
+BEGIN;
+   -- Make sure no rows can be added to post until we have finished
+   LOCK TABLE post IN SHARE ROW EXCLUSIVE MODE;
+
+   create TRIGGER count_post_rows
+      AFTER INSERT OR DELETE on post
+      FOR EACH ROW EXECUTE PROCEDURE count_rows();
+   
+   -- Initialise the row count record
+   DELETE FROM rowcount WHERE table_name = 'post';
+
+   INSERT INTO rowcount (table_name, total_rows)
+   VALUES  ('post',  (SELECT COUNT(*) FROM post));
+COMMIT;
 
