@@ -23,14 +23,12 @@ CREATE TABLE post (
 CREATE INDEX site_group_idx ON post USING BTREE (site_id, group_id);
 CREATE INDEX topic_idx ON post USING BTREE (topic_id);
 
---
 -- Initialise the trigger and rowcount for the post table
---
 BEGIN;
    -- Make sure no rows can be added to post until we have finished
    LOCK TABLE post IN SHARE ROW EXCLUSIVE MODE;
 
-   create TRIGGER count_post_rows
+   CREATE TRIGGER count_post_rows
       AFTER INSERT OR DELETE on post
       FOR EACH ROW EXECUTE PROCEDURE count_rows();
    
