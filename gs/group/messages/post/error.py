@@ -2,3 +2,6 @@
 class NoIDError(Exception):
     pass
 
+class Hidden(Exception):
+    pass
+

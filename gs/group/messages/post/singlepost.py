@@ -4,7 +4,7 @@ from zope.security.interfaces import Unauthorized
 from Products.XWFMailingListManager.queries import MessageQuery
 from Products.GSGroup.utils import is_public
 from gs.group.base.page import GroupPage
-from error import NoIDError
+from error import NoIDError, Hidden
 
 class GSPostView(GroupPage):
     def __init__(self, context, request):
@@ -42,9 +42,8 @@ class GSPostView(GroupPage):
                 m = u'You are not authorized to access this post from '\
                     'the group %s' % self.groupInfo.name
                 raise Unauthorized(m)
-            # TODO: Check for a post being hidden. Hidden posts will 
-            # sometimes raise a 410
-            # <https://projects.iopen.net/groupserver/ticket/316>
+            if self.__post['hidden']:
+                raise Hidden('The post %s is hidden' % self.postId)
         assert self.__post
         return self.__post
         
