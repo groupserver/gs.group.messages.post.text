@@ -51,6 +51,13 @@
            provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
+           
+  <!-- The Gone (410) page -->
+  <browser:page 
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
+    name="post_hidden.html"
+    class=".hidden.PostHidden" 
+    permission="zope2.Public" />
 
   <!--Help-->
   <browser:viewlet name="gs-group-messages-topic-post"
