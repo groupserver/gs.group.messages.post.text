@@ -13,63 +13,26 @@ class GSPostContentProvider(GroupContentProvider):
         self.__updated = False
 
     def update(self):
-        """Update the internal state of the post content-provider.
-          
-        This method can be considered the main "setter" for the 
-        content provider; for the most part, information about the post's 
-        author is set.
-        
-        SIDE EFFECTS
-          The following attributes are set.
-            * "self.__updated"     Set to "True"
-            * "self.authorId"      Set to the user-id of the post author.
-            * "self.authorName"    Set to the name of the post author.
-            * "self.authorExists"  Set to "True" if the author exists
-            * "self.authored"      Set to "True" if the current user 
-                                   authored the post.
-            * "self.authorImage"   Set to the URL of the author's image.
-            * "self.siteInfo"     Set to an instance of GSSiteInfo
-            * "self.groupInfo"    Set to an instance of GSGroupInfo
-        """
-        assert self.post
+        assert self.post # Passed in
         self.__updated = True
           
         self.authored = self.user_authored()
-        self.authorInfo = self.get_author()
+        self.authorInfo = createObject('groupserver.UserFromId',
+                            self.context, self.post['author_id'])
+
         ir = get_post_intro_and_remainder(self.context, self.post['body'])
         self.postIntro, self.postRemainder = ir
+
         self.cssClass = self.get_cssClass()              
         self.filesMetadata = self.post['files_metadata']
+
     def render(self):
-        """Render the post
-          
-        The donkey-work of this method is done by "self.pageTemplate", 
-        which is set when the content-provider is created.
-          
-        RETURNS
-            An HTML-snippet that represents the post.
-            
-        """
         if not self.__updated:
             raise UpdateNotCalled
             
         pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)
         self.request.debug = False
-        r = pageTemplate(self, 
-                         authorInfo=self.authorInfo,
-                         authored=self.authored, 
-                         showPhoto=self.showPhoto, 
-                         postIntro=self.postIntro,
-                         postRemainder=self.postRemainder, 
-                         cssClass=self.cssClass, 
-                         topicName=self.topicName, 
-                         filesMetadata=self.filesMetadata,
-                         post=self.post, 
-                         context=self.context, 
-                         siteName = self.siteInfo.get_name(), 
-                         siteURL = self.siteInfo.get_url(), 
-                         groupId = self.groupInfo.get_id(),
-                         isPublic = self.isPublic)
+        r = pageTemplate(self)
         return r
 
     #########################################
@@ -77,14 +40,12 @@ class GSPostContentProvider(GroupContentProvider):
     #########################################
 
     def get_cssClass(self):
-        retval = ''
-        even = (self.position % 2) == 0
-        if even:
+        assert hasattr(self, 'position') # passed in
+        if ((self.position % 2) == 0):
             retval = 'even'
         else:
             retval = 'odd'
-                  
-        assert retval
+        assert retval in ('odd', 'even')
         return retval
 
     def user_authored(self):
@@ -105,25 +66,6 @@ class GSPostContentProvider(GroupContentProvider):
         retval = False
         if user.getId():
             retval = user.getId() == self.post['author_id']
-                    
-        assert retval in (True, False)
+        assert type(retval) == bool
         return retval
-
-    def get_author(self):
-        """ Get the user object associated with the author.
-          
-          RETURNS
-             The user object if the author has an account, otherwise None.
-          
-        """
-        authorId = self.post['author_id']
-        author_cache = getattr(self.view, '__author_object_cache', {})
-        user = author_cache.get(authorId, None)
-        if not user:
-            user = createObject('groupserver.UserFromId',
-                self.context, self.post['author_id'])
-            author_cache[authorId] = user
-            self.view.__author_object_cache = author_cache
-              
-        return user
 

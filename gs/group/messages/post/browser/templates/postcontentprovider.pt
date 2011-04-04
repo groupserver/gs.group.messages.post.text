@@ -1,13 +1,5 @@
 <tal:block tal:define="munge_date python:modules['Products.XWFCore.XWFUtils'].munge_date;
-  change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;
-  post options/post;
-  isPublic options/isPublic;
-  authorInfo options/authorInfo;
-  authored python:options['authored'];
-  showPhoto options/showPhoto;
-  postIntro options/postIntro;
-  postRemainder options/postRemainder;
-  filesMetadata options/filesMetadata">
+  change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;">
   <div tal:attributes="class string:hentry ${options/cssClass}; 
     id string:post-${post/post_id};">
     <div class="email-metadata">
@@ -18,10 +10,10 @@
         <strong>From:</strong>
         <span class="vcard">
           <a class="fn url" 
-            tal:omit-tag="authorInfo/anonymous"
-            tal:attributes="href authorInfo/url;
-              title string:Profile of ${authorInfo/name};"
-            tal:content="authorInfo/name">Me!</a>
+            tal:omit-tag="view/authorInfo/anonymous"
+            tal:attributes="href view/authorInfo/url;
+              title string:Profile of ${view/authorInfo/name};"
+            tal:content="view/authorInfo/name">Me!</a>
         </span>
       </span>
       <span class="posted"
@@ -38,17 +30,17 @@
           title string:${post/subject};
           public python:isPublic and 1 or 0">&#160;</div>
     </div><!--email-metadata-->
-    <div tal:condition="showPhoto"
-      tal:define="user authorInfo/user"
+    <div tal:condition="view/showPhoto"
+      tal:define="user view/authorInfo/user"
       tal:replace="structure provider:groupserver.UserImage"/>
-    <pre class="email-body entry-content"><p tal:replace="structure options/postIntro">
+    <pre class="email-body entry-content"><p tal:replace="structure view/postIntro">
         This is the body of the document.
       </p>
     </pre><!--email-body-->
     <div class="email-remainder"
       tal:define="remId string:emailRemainder${post/post_id};
       discloseId string:emailDiscloseButton${post/post_id}">
-        <div class="disclosureWidget" tal:condition="options/postRemainder"
+        <div class="disclosureWidget" tal:condition="view/postRemainder"
           tal:attributes="id remId">
           <p>
             <a class="disclosureButton"
@@ -56,9 +48,9 @@
               href="#">&#160;</a>
           </p>
           <div class="disclosureShowHide" style="display:none;"  
-            tal:condition="options/postRemainder">
+            tal:condition="view/postRemainder">
             <div>
-              <pre tal:content="structure options/postRemainder">
+              <pre tal:content="structure view/postRemainder">
                 This is the remainder of the email, with such things as the 
                 footer.
               </pre>
@@ -67,9 +59,11 @@
       </div>
     </div><!--email-remainder-->	
     <div class="fileNotification" 
-      tal:condition="filesMetadata">
-      <p tal:condition="python:len(filesMetadata) == 1">The following file was added to this topic:</p>
-      <p tal:condition="python:len(filesMetadata) > 1">The following files were added to this topic:</p>
+      tal:condition="view/filesMetadata">
+      <p tal:condition="python:len(view.filesMetadata) == 1">The 
+        following file was added to this topic:</p>
+      <p tal:condition="python:len(view.filesMetadata) &gt; 1">The 
+        following files were added to this topic:</p>
       <div class="fileMetadata"
         tal:repeat="fm filesMetadata">
           <div class="figure"
