@@ -34,6 +34,12 @@ class GSPostContentProvider(GroupContentProvider):
         assert self.post
         self.__updated = True
           
+        self.authored = self.user_authored()
+        self.authorInfo = self.get_author()
+        ir = get_post_intro_and_remainder(self.context, self.post['body'])
+        self.postIntro, self.postRemainder = ir
+        self.cssClass = self.get_cssClass()              
+        self.filesMetadata = self.post['files_metadata']
     def render(self):
         """Render the post
           
@@ -46,12 +52,8 @@ class GSPostContentProvider(GroupContentProvider):
         """
         if not self.__updated:
             raise UpdateNotCalled
-              
-        pageTemplate = self.cookedTemplates.get(self.pageTemplateFileName)
-        if not pageTemplate:
-            pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)    
-            self.cookedTemplates.add(self.pageTemplateFileName, pageTemplate)
-          
+            
+        pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)
         self.request.debug = False
         r = pageTemplate(self, 
                          authorInfo=self.authorInfo,
