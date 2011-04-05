@@ -5,8 +5,14 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
 from postbody import get_post_intro_and_remainder
+from Products.XWFCore.cache import SimpleCache
 
 class GSPostContentProvider(GroupContentProvider):
+    # We maintain a really simple cache for the actual page templates which
+    # are read from disk. This avoids the overhead of reading and parsing
+    # the template for every post.
+    cookedTemplates = SimpleCache("GSPostContentProvider.cookedTemplates")
+    
     post = None
     def __init__(self, context, request, view):
         GroupContentProvider.__init__(self, context, request, view)
@@ -40,6 +46,7 @@ class GSPostContentProvider(GroupContentProvider):
         self.postIntro, self.postRemainder = ir
         self.cssClass = self.get_cssClass()              
         self.filesMetadata = self.post['files_metadata']
+
     def render(self):
         """Render the post
           
@@ -52,8 +59,13 @@ class GSPostContentProvider(GroupContentProvider):
         """
         if not self.__updated:
             raise UpdateNotCalled
-            
-        pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)
+    
+        pageTemplate = self.cookedTemplates.get(self.pageTemplateFileName)
+        if not pageTemplate:
+	    pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)
+            self.cookedTemplates.add(self.pageTemplateFileName,
+                                     pageTemplate)
+        
         self.request.debug = False
         r = pageTemplate(self, 
                          authorInfo=self.authorInfo,
