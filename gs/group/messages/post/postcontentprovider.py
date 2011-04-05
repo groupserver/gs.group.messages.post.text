@@ -4,8 +4,9 @@ from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
-from postbody import get_post_intro_and_remainder
 from Products.XWFCore.cache import SimpleCache
+from postbody import get_post_intro_and_remainder
+from queries import PostQuery
 
 class GSPostContentProvider(GroupContentProvider):
     # We maintain a really simple cache for the actual page templates which
@@ -39,14 +40,21 @@ class GSPostContentProvider(GroupContentProvider):
             * "self.post"         Set to the content of the post.
         """
         assert self.post
+        # See the interface for what is passed in.
         self.__updated = True
           
         self.authored = self.user_authored()
-        self.authorInfo = self.get_author()
+        self.authorInfo = createObject('groupserver.UserFromId',
+                            self.context, self.post['author_id'])
+
         ir = get_post_intro_and_remainder(self, self.post['body'])
         self.postIntro, self.postRemainder = ir
         self.cssClass = self.get_cssClass()              
-        self.filesMetadata = self.post['files_metadata']
+        
+        self.hiddenPostDetails = None
+        if self.post['hidden']:
+            self.hiddenPostInfo = HiddenPostInfo(self.context, 
+                                    self.post['post_id'])
 
     def render(self):
         """Render the post
@@ -68,21 +76,7 @@ class GSPostContentProvider(GroupContentProvider):
                                      pageTemplate)
         
         self.request.debug = False
-        r = pageTemplate(self, 
-                         authorInfo=self.authorInfo,
-                         authored=self.authored, 
-                         showPhoto=self.showPhoto, 
-                         postIntro=self.postIntro,
-                         postRemainder=self.postRemainder, 
-                         cssClass=self.cssClass, 
-                         topicName=self.topicName, 
-                         filesMetadata=self.filesMetadata,
-                         post=self.post, 
-                         context=self.context, 
-                         siteName = self.siteInfo.get_name(), 
-                         siteURL = self.siteInfo.get_url(), 
-                         groupId = self.groupInfo.get_id(),
-                         isPublic = self.isPublic)
+        r = pageTemplate(self)
         return r
 
     #########################################
@@ -90,14 +84,12 @@ class GSPostContentProvider(GroupContentProvider):
     #########################################
 
     def get_cssClass(self):
-        retval = ''
-        even = (self.position % 2) == 0
-        if even:
+        assert hasattr(self, 'position') # passed in
+        if ((self.position % 2) == 0):
             retval = 'even'
         else:
             retval = 'odd'
-                  
-        assert retval
+        assert retval in ('odd', 'even')
         return retval
 
     def user_authored(self):
@@ -118,25 +110,25 @@ class GSPostContentProvider(GroupContentProvider):
         retval = False
         if user.getId():
             retval = user.getId() == self.post['author_id']
-                    
-        assert retval in (True, False)
+
+        assert isinstance(retval, bool)
+
         return retval
 
-    def get_author(self):
-        """ Get the user object associated with the author.
-          
-          RETURNS
-             The user object if the author has an account, otherwise None.
-          
-        """
-        authorId = self.post['author_id']
-        author_cache = getattr(self.view, '__author_object_cache', {})
-        user = author_cache.get(authorId, None)
-        if not user:
-            user = createObject('groupserver.UserFromId',
-                self.context, self.post['author_id'])
-            author_cache[authorId] = user
-            self.view.__author_object_cache = author_cache
-              
-        return user
+class HiddenPostInfo(object):
+    def __init__(self, context, postId):
+        self.postId = postId
+        
+        da = context.zsqlalchemy
+        q = PostQuery(context, da)
+        
+        hiddenPostDetails = q.get_hidden_post_details(postId)
+        m = 'No details for the hidden post %s' % postId
+        assert hiddenPostDetails, m
+
+        self.adminInfo = createObject('groupserver.UserFromId',
+                            context, hiddenPostDetails['hiding_user'])
+
+        self.date = hiddenPostDetails['date_hidden']
+        self.reason = hiddenPostDetails['reason']
 
