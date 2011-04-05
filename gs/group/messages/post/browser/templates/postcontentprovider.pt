@@ -1,11 +1,11 @@
 <tal:block tal:define="munge_date python:modules['Products.XWFCore.XWFUtils'].munge_date;
   change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;">
-  <div tal:attributes="class string:hentry ${options/cssClass}; 
-    id string:post-${post/post_id};">
+  <div tal:attributes="class string:hentry ${view/cssClass}; 
+    id string:post-${view/post/post_id};">
     <div class="email-metadata">
-      <a class="topic entry-title" tal:condition="options/topicName"
-        tal:attributes="href string:/r/topic/${post/post_id}#post-${post/post_id};"
-        tal:content="options/topicName">A Topic</a>
+      <a class="topic entry-title" tal:condition="view/topicName"
+        tal:attributes="href string:/r/topic/${view/post/post_id}#post-${view/post/post_id};"
+        tal:content="view/topicName">A Topic</a>
       <span class="author">
         <strong>From:</strong>
         <span class="vcard">
@@ -17,29 +17,43 @@
         </span>
       </span>
       <span class="posted"
-        tal:define="d python:change_tz(post['date'], 'UTC').replace(microsecond=0);
-          date python:munge_date(options['context'], post['date'])">
+        tal:define="pd view/post/date;
+          d python:change_tz(pd, 'UTC').replace(microsecond=0);
+          date python:munge_date(view.context, pd)">
         <strong>Date:</strong>
         <abbr class="date updated published"
           title="Stuff"
           tal:attributes="title string:${d/isoformat}Z"
           tal:content="date">Today, Tomorrow, Timaru</abbr>
       </span>
-      <div class="share-bar" 
-        tal:attributes="href string:${view/siteInfo/url}/r/post/${post/post_id};
-          title string:${post/subject};
-          public python:isPublic and 1 or 0">&#160;</div>
+      <div class="share-bar" tal:condition="not:view/post/hidden"
+        tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
+          title string:${view/post/subject};
+          public python:view.isPublic and 1 or 0">&#160;</div>
     </div><!--email-metadata-->
     <div tal:condition="view/showPhoto"
       tal:define="user view/authorInfo/user"
       tal:replace="structure provider:groupserver.UserImage"/>
-    <pre class="email-body entry-content"><p tal:replace="structure view/postIntro">
-        This is the body of the document.
+    <div class="hidden-post" tal:condition="view/post/hidden">
+      <p>
+        Sorry, but the post you want to see is hidden.
+        The reason that <a href="#">an admin</a> gave for hiding
+        the post is as follows.
       </p>
-    </pre><!--email-body-->
-    <div class="email-remainder"
-      tal:define="remId string:emailRemainder${post/post_id};
-      discloseId string:emailDiscloseButton${post/post_id}">
+      <blockquote>
+        <p>
+          Too many turtles.
+        </p>
+      </blockquote>
+    </div><!--hidden-post-->
+    <div class="email-message" tal:condition="not:view/post/hidden">
+      <pre class="email-body entry-content" 
+        tal:content="structure view/postIntro">
+          This is the body of the document.
+      </pre><!--email-body-->
+      <div class="email-remainder"
+        tal:define="remId string:emailRemainder${view/post/post_id};
+        discloseId string:emailDiscloseButton${view/post/post_id}">
         <div class="disclosureWidget" tal:condition="view/postRemainder"
           tal:attributes="id remId">
           <p>
@@ -49,23 +63,21 @@
           </p>
           <div class="disclosureShowHide" style="display:none;"  
             tal:condition="view/postRemainder">
-            <div>
-              <pre tal:content="structure view/postRemainder">
-                This is the remainder of the email, with such things as the 
-                footer.
-              </pre>
-            </div>
-          </div>
-      </div>
-    </div><!--email-remainder-->	
-    <div class="fileNotification" 
-      tal:condition="view/filesMetadata">
-      <p tal:condition="python:len(view.filesMetadata) == 1">The 
-        following file was added to this topic:</p>
-      <p tal:condition="python:len(view.filesMetadata) &gt; 1">The 
-        following files were added to this topic:</p>
-      <div class="fileMetadata"
-        tal:repeat="fm filesMetadata">
+            <pre tal:content="structure view/postRemainder">
+              This is the remainder of the email, with such things as 
+              the footer.
+            </pre>
+          </div><!--disclosureShowHide-->
+        </div><!--disclosureWidget-->
+      </div><!--email-remainder-->	
+      <div class="fileNotification" 
+        tal:condition="view/post/files_metadata"
+        tal:define="fms view/post/files_metadata">
+        <p tal:condition="python:len(fms) == 1">The 
+          following file was added to this topic:</p>
+        <p tal:condition="python:len(fms) &gt; 1">The 
+          following files were added to this topic:</p>
+        <div class="fileMetadata" tal:repeat="fm fms">
           <div class="figure"
             tal:condition="python:'image' in fm['mime_type']">
             <a href="#" tal:attributes="href string:/r/img/${fm/file_id}">
@@ -89,9 +101,10 @@
                   tal:content="fm/file_name">Filename</a>
               (<span class="size"
                 tal:content="python:u'%.0fKB' % (fm['file_size']/1024.0)">-1B</span>)
-          </div>
-      </div><!--fileMetadata-->
-    </div><!--fileNotification-->
-  </div><!--email-details-->
+          </div><!--info-->
+        </div><!--fileMetadata-->
+      </div><!--fileNotification-->
+    </div><!--email-message-->
+  </div><!--hentry-->
 </tal:block>
 
