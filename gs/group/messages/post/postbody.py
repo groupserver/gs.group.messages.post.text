@@ -1,8 +1,17 @@
+# encoding: utf-8
 import re, cgi, textwrap, logging
 
 from zope.component import getUtility, createObject
 from interfaces import IMarkupEmail, IWrapEmail
 from Products.GSGroup.utils import *
+from Products.XWFCore.cache import LRUCache
+
+# Store the cooked bodies of the messages, to save on future processing.
+# ♫ I won't eat people, I shan't eat people, eating people is wrong! ♫
+# IMPORTANT TO NOTE: When modifying the markup functions, you must check
+# that the cacheKey in get_post_intro_and_remainder is adequate.
+cookedBodies = LRUCache("gs.group.messages.post.postbody.cookedBodies")
+cookedBodies.set_max_objects(1536)
 
 log = logging.getLogger('emailbody')
 
@@ -20,7 +29,7 @@ vimeo_matcher = re.compile("""(?i)(http://)(.*)vimeo.com/(.*)($|\s)""")
 bold_matcher = re.compile("""(\*.*\*)""")
 
 # The following expression is based on the one inside the
-#   TextWrapper class, but without the breaking on '-'.
+# TextWrapper class, but without the breaking on '-'.
 splitExp = re.compile(r'(\s+|(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')
 
 def escape_word(word):
@@ -28,7 +37,7 @@ def escape_word(word):
     
     return word
 
-def markup_uri(context, word, substituted, substituted_words):
+def markup_uri(contentProvider, word, substituted, substituted_words):
     """ Markup URI in word.
     
     """
@@ -39,12 +48,12 @@ def markup_uri(context, word, substituted, substituted_words):
                            word)
     return word    
 
-def markup_email_address(context, word, substituted, substituted_words):
+def markup_email_address(contentProvider, word, substituted, substituted_words):
     retval = word
     if not(substituted) and email_matcher.match(word):
-        groupInfo = createObject('groupserver.GroupInfo', context)
-        if ((not groupInfo.groupObj) or \
-            (get_visibility(groupInfo.groupObj) == PERM_ANN)):
+        groupInfo = contentProvider.groupInfo
+        
+        if get_visibility(groupInfo.groupObj) == PERM_ANN:
             # The messages in the group are visibile to the anonymous user,
             #   so obfuscate (redact) any email addresses in the post.
             retval = email_matcher.sub('&lt;email obscured&gt;', word)
@@ -57,7 +66,7 @@ def markup_email_address(context, word, substituted, substituted_words):
     
     return retval
 
-def markup_youtube(context, word, substituted, substituted_words):
+def markup_youtube(contentProvider, word, substituted, substituted_words):
     """ Markup youtube URIs.
     
     """
@@ -74,7 +83,7 @@ def markup_youtube(context, word, substituted, substituted_words):
     
     return word
 
-def markup_vimeo(context, word, substituted, substituted_words):
+def markup_vimeo(contentProvider, word, substituted, substituted_words):
     """ Markup vimeo URIs.
     
     """
@@ -96,7 +105,7 @@ def markup_vimeo(context, word, substituted, substituted_words):
     
     return word
 
-def markup_splashcast(context, word, substituted, substituted_words):
+def markup_splashcast(contentProvider, word, substituted, substituted_words):
     """ Markup splashcast URIs.
     
     """
@@ -112,7 +121,7 @@ def markup_splashcast(context, word, substituted, substituted_words):
     
     return word
 
-def markup_bold(context, word, substituted, substituted_words):
+def markup_bold(contentProvider, word, substituted, substituted_words):
     """Markup words that should be bold, because they have astersisks 
       around them.
     """
@@ -272,12 +281,12 @@ def split_message(messageText, max_consecutive_comment=12,
 standard_markup_functions = (markup_email_address, markup_youtube,
                              markup_splashcast, markup_vimeo, markup_uri, markup_bold)
 
-def markup_word(context, word, substituted_words):
+def markup_word(contentProvider, word, substituted_words):
     word = escape_word(word)
     substituted = False
 
     for function in standard_markup_functions:
-        nword = function(context, word, substituted, substituted_words)
+        nword = function(contentProvider, word, substituted, substituted_words)
         if nword != word:
             substituted = True
             if word not in substituted_words:
@@ -287,7 +296,7 @@ def markup_word(context, word, substituted_words):
 
     return word
 
-def markup_email(context, text):
+def markup_email(contentProvider, text):
     retval = ''
     substituted_words = []
     word_count = 0
@@ -297,7 +306,7 @@ def markup_email(context, text):
         for char in text:
             if char.isspace():
                 if curr_word:
-                    markedUpWord = markup_word(context, curr_word, substituted_words)
+                    markedUpWord = markup_word(contentProvider, curr_word, substituted_words)
                     curr_word = ''
                     out_text += markedUpWord
                     word_count += 1
@@ -309,14 +318,14 @@ def markup_email(context, text):
                 curr_word += char
  
         if curr_word:
-            markedUpWord = markup_word(context, curr_word, substituted_words)
+            markedUpWord = markup_word(contentProvider, curr_word, substituted_words)
             out_text += markedUpWord
 
         retval = out_text.strip()
 
     return retval    
 
-def get_mail_body(context, text):
+def get_mail_body(contentProvider, text):
     """Get the body of the mail message, formatted for the Web.
     
     The "self.post" instance contains the plain-text version
@@ -328,7 +337,7 @@ def get_mail_body(context, text):
     does these things.  
     
     ARGUMENTS
-        context:  The context of the message.
+        contentProvider:  The contentProvider of the message.
         text:     The text to extract a body from
     
     RETURNS
@@ -344,17 +353,18 @@ def get_mail_body(context, text):
         text = wrapEmail(text)
         
         markupEmail = getUtility(IMarkupEmail)
-        text = markupEmail(context, text)
+        text = markupEmail(contentProvider, text)
         
         retval = text
 
     return retval
 
-def get_post_intro_and_remainder(context, text):
-    """Get the intoduction and remainder text of the formatted post
+def get_post_intro_and_remainder(contentProvider, text):
+    """Get the introduction and remainder text of the formatted post
     
     ARGUMENTS
-        context:  The context of the post.
+        contentProvider:  The contentProvider for the post, providing
+                  access to the context, groupInfo and other useful tidbits.
         text:     The text to split into an introduction and remainder
         
     RETURNS
@@ -363,8 +373,14 @@ def get_post_intro_and_remainder(context, text):
         
     SIDE EFFECTS
         None.
-    """             
-    mailBody = get_mail_body(context, text)
-    retval = split_message(mailBody)
-    return retval
+    """
+    assert contentProvider.groupInfo.groupObj, "The groupInfo object should always have a groupObj"
+    cacheKey = "%s:%s" % (contentProvider.post['post_id'],
+                          get_visibility(groupInfo.groupObj))
+    
+    retval = cookedBodies.get(cacheKey)
+    if not retval: 
+        mailBody = get_mail_body(contentProvider, text)
+        retval = split_message(mailBody)
 
+    return retval

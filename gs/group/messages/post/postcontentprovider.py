@@ -27,22 +27,23 @@ class GSPostContentProvider(GroupContentProvider):
         
         SIDE EFFECTS
           The following attributes are set.
-            * "self.__updated"     Set to "True"
+            * "self.__updated"     Set to "True".
             * "self.authorId"      Set to the user-id of the post author.
             * "self.authorName"    Set to the name of the post author.
-            * "self.authorExists"  Set to "True" if the author exists
+            * "self.authorExists"  Set to "True" if the author exists.
             * "self.authored"      Set to "True" if the current user 
                                    authored the post.
             * "self.authorImage"   Set to the URL of the author's image.
-            * "self.siteInfo"     Set to an instance of GSSiteInfo
-            * "self.groupInfo"    Set to an instance of GSGroupInfo
+            * "self.siteInfo"     Set to an instance of GSSiteInfo.
+            * "self.groupInfo"    Set to an instance of GSGroupInfo.
+            * "self.post"         Set to the content of the post.
         """
         assert self.post
         self.__updated = True
           
         self.authored = self.user_authored()
         self.authorInfo = self.get_author()
-        ir = get_post_intro_and_remainder(self.context, self.post['body'])
+        ir = get_post_intro_and_remainder(self, self.post['body'])
         self.postIntro, self.postRemainder = ir
         self.cssClass = self.get_cssClass()              
         self.filesMetadata = self.post['files_metadata']
