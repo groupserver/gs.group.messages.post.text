@@ -13,8 +13,6 @@ from Products.XWFCore.cache import LRUCache
 cookedBodies = LRUCache("gs.group.messages.post.postbody.cookedBodies")
 cookedBodies.set_max_objects(1536)
 
-log = logging.getLogger('emailbody')
-
 # this is currently the hard limit on the number of word's we will process.
 # after this we insert a message. TODO: make this more flexible by using
 # AJAX to incrementally fetch large emails
@@ -376,11 +374,12 @@ def get_post_intro_and_remainder(contentProvider, text):
     """
     assert contentProvider.groupInfo.groupObj, "The groupInfo object should always have a groupObj"
     cacheKey = "%s:%s" % (contentProvider.post['post_id'],
-                          get_visibility(groupInfo.groupObj))
+                          get_visibility(contentProvider.groupInfo.groupObj))
     
     retval = cookedBodies.get(cacheKey)
     if not retval: 
         mailBody = get_mail_body(contentProvider, text)
         retval = split_message(mailBody)
+        cookedBodies.add(cacheKey, retval)
 
     return retval
