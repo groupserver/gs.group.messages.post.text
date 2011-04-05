@@ -36,12 +36,16 @@
       tal:replace="structure provider:groupserver.UserImage"/>
     <div class="hidden-post" tal:condition="view/post/hidden">
       <p>
-        Sorry, but the post you want to see is hidden.
-        The reason that <a href="#">an admin</a> gave for hiding
-        the post is as follows.
+        Sorry, this post is hidden.
+        The reason that 
+        <a class="fn"  href="#"
+          tal:define="u view/hiddenPostInfo/adminInfo" 
+          tal:attributes="href u/url"
+          tal:content="u/name">an admin</a> 
+        gave for hiding the post is as follows.
       </p>
       <blockquote>
-        <p>
+        <p tal:content="view/hiddenPostInfo/reason">
           Too many turtles.
         </p>
       </blockquote>

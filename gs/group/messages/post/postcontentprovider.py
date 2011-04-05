@@ -5,6 +5,7 @@ from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
 from postbody import get_post_intro_and_remainder
+from queries import PostQuery
 
 class GSPostContentProvider(GroupContentProvider):
     def __init__(self, context, request, view):
@@ -21,9 +22,12 @@ class GSPostContentProvider(GroupContentProvider):
 
         ir = get_post_intro_and_remainder(self.context, self.post['body'])
         self.postIntro, self.postRemainder = ir
-
         self.cssClass = self.get_cssClass()              
-        self.filesMetadata = self.post['files_metadata']
+        
+        self.hiddenPostDetails = None
+        if self.post['hidden']:
+            self.hiddenPostInfo = HiddenPostInfo(self.context, 
+                                    self.post['post_id'])
 
     def render(self):
         if not self.__updated:
@@ -67,4 +71,21 @@ class GSPostContentProvider(GroupContentProvider):
             retval = user.getId() == self.post['author_id']
         assert type(retval) == bool
         return retval
+
+class HiddenPostInfo(object):
+    def __init__(self, context, postId):
+        self.postId = postId
+        
+        da = context.zsqlalchemy
+        q = PostQuery(context, da)
+        
+        hiddenPostDetails = q.get_hidden_post_details(postId)
+        m = 'No details for the hidden post %s' % postId
+        assert hiddenPostDetails, m
+
+        self.adminInfo = createObject('groupserver.UserFromId',
+                            context, hiddenPostDetails['hiding_user'])
+
+        self.date = hiddenPostDetails['date_hidden']
+        self.reason = hiddenPostDetails['reason']
 
