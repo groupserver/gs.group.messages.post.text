@@ -7,13 +7,12 @@ from Products.XWFCore.XWFUtils import getOption
 from postbody import get_post_intro_and_remainder
 
 class GSPostContentProvider(GroupContentProvider):
-    post = None
     def __init__(self, context, request, view):
         GroupContentProvider.__init__(self, context, request, view)
         self.__updated = False
 
     def update(self):
-        assert self.post # Passed in
+        # See the interface for what is passed in.
         self.__updated = True
           
         self.authored = self.user_authored()
