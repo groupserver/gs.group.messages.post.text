@@ -4,6 +4,7 @@ from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
+from Products.XWFCore.cache import SimpleCache
 from postbody import get_post_intro_and_remainder
 from queries import PostQuery
 
