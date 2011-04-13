@@ -1,6 +1,7 @@
 # coding=utf-8
 from zope.publisher.interfaces import NotFound
 from zope.security.interfaces import Unauthorized
+from zope.cachedescriptors.property import Lazy
 from Products.XWFMailingListManager.queries import MessageQuery
 from Products.GSGroup.utils import is_public
 from gs.group.base.page import GroupPage
@@ -9,52 +10,46 @@ from error import NoIDError, Hidden
 class GSPostView(GroupPage):
     def __init__(self, context, request):
         GroupPage.__init__(self, context, request)
-        self.__isPublic = self.__messageQuery = self.__post = \
-            self.__relatedPosts = None
         self.postId = self.request.get('postId', None)
         if not self.postId:
             raise NoIDError('No ID Specified')
     
-    @property
+    @Lazy
     def isPublic(self):
-        if self.__isPublic == None:
-            assert self.groupInfo.groupObj, 'No group in the groupInfo!'
-            self.__isPublic = is_public(self.groupInfo.groupObj)
-        return self.__isPublic
+        assert self.groupInfo.groupObj, 'No group in the groupInfo!'
+        retval = is_public(self.groupInfo.groupObj)
+        assert type(retval) == bool
+        return retval
 
-    @property
+    @Lazy
     def messageQuery(self):
-        if self.__messageQuery == None:
-            assert self.context, 'No context for a post!'
-            da = self.context.zsqlalchemy 
-            assert da, 'No data-adaptor found'
-            self.__messageQuery = MessageQuery(self.context, da)
-        assert self.__messageQuery
-        return self.__messageQuery
+        assert self.context, 'No context for a post!'
+        da = self.context.zsqlalchemy 
+        assert da, 'No data-adaptor found'
+        retval = MessageQuery(self.context, da)
+        assert retval
+        return retval
 
-    @property
+    @Lazy
     def post(self):
-        if self.__post == None:
-            self.__post = self.messageQuery.post(self.postId)
-            if not self.__post:
-              raise NotFound(self, self.postId, self.request)
-            if self.__post['group_id'] != self.groupInfo.id:
-                m = u'You are not authorized to access this post from '\
-                    'the group %s' % self.groupInfo.name
-                raise Unauthorized(m)
-            if self.__post['hidden']:
-                raise Hidden('The post %s is hidden' % self.postId)
-        assert self.__post
-        return self.__post
+        retval = self.messageQuery.post(self.postId)
+        if not retval:
+          raise NotFound(self, self.postId, self.request)
+        if retval['group_id'] != self.groupInfo.id:
+            m = u'You are not authorized to access this post from '\
+                'the group %s' % self.groupInfo.name
+            raise Unauthorized(m)
+        if retval['hidden']:
+            raise Hidden('The post %s is hidden' % self.postId)
+        assert retval
+        return retval
         
-    @property
+    @Lazy
     def relatedPosts(self):
-        if self.__relatedPosts == None:
-            self.__relatedPosts = \
-                self.messageQuery.topic_post_navigation(self.postId)
-        return self.__relatedPosts
+        retval = self.messageQuery.topic_post_navigation(self.postId)
+        return retval
 
-    @property
+    @Lazy
     def topicTitle(self):
         retval = self.post.get('subject', '')
         return retval
