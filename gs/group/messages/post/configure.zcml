@@ -52,6 +52,13 @@
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
            
+
+  <browser:page 
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
+    name="hide_post.ajax"
+    class=".hide.HidePost" 
+    permission="zope2.View" />
+
   <!-- The Gone (410) page -->
   <browser:page 
     for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"

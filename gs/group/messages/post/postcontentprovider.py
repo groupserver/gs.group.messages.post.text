@@ -42,7 +42,9 @@ class GSPostContentProvider(GroupContentProvider):
         assert self.post
         # See the interface for what is passed in.
         self.__updated = True
-          
+        
+        self.showPhoto = self.showPhoto and (not self.post['hidden'])
+                  
         self.authored = self.user_authored()
         self.authorInfo = createObject('groupserver.UserFromId',
                             self.context, self.post['author_id'])
@@ -85,11 +87,9 @@ class GSPostContentProvider(GroupContentProvider):
 
     def get_cssClass(self):
         assert hasattr(self, 'position') # passed in
-        if ((self.position % 2) == 0):
-            retval = 'even'
-        else:
-            retval = 'odd'
-        assert retval in ('odd', 'even')
+        retval = (((self.position % 2) == 0) and 'even ') or 'odd '
+        retval += self.post['hidden'] and 'hidden disclosureWidget' or \
+          'visible'
         return retval
 
     def user_authored(self):

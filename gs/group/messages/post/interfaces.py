@@ -1,6 +1,6 @@
 # coding=utf-8
 from zope.interface import Interface
-from zope.schema import TextLine, ASCIILine, Field, Int, Bool
+from zope.schema import TextLine, ASCIILine, Field, Int, Bool, Text
 
 class INavLinksContentProvider(Interface):
     topicTitle = TextLine(title=u"Title of the Topic",
@@ -62,4 +62,13 @@ class IMarkupEmail(Interface):
 class IWrapEmail(Interface):
     pass
 
+
+class IHide(Interface):
+    postId = TextLine(title=u'Post Identifier',
+      description=u'The identifier of the post that is to be hidden',
+      required=True)
+    
+    reason = Text(title=u'Reason',
+      description=u'The reason the post needs to be hidden.',
+      required=True)
 

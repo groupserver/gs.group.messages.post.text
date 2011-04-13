@@ -27,6 +27,18 @@
         tal:attributes="title string:${view/siteInfo/name} Help;"
         href="/help"/>
     </tal:block>
+    <tal:block metal:fill-slot="style">
+      <style type="text/css">
+        #hide-the-post {
+          display: block;
+          position: absolute;
+          z-index:32;
+          background-color: rgba(255, 255, 255, 0.9);
+          margin: 2.769em 0 0 8.307em; /*2u 0 0 6u*/
+          padding: 0.692em;
+        }
+      </style>
+    </tal:block>
   </head>
   <body>
     <div metal:fill-slot="body" id="single-post-page">
@@ -48,10 +60,44 @@
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
       </p>
-    </div>
+      <div id="hide-the-post" title="Hide the Post">
+        <p class="loading">Loading…</p>
+      </div><!--hide-the-post-->
+    </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">
-        <script type="text/javascript"
-                src="/++resource++sharebox-20100721.js">&#160;</script>
+      <script type="text/javascript"
+        src="/++resource++sharebox-20100721.js">&#160;</script>
+      <script type="text/javascript">
+        jQuery.noConflict();
+        var showDialog = function(event) {
+          var style  ='';
+          var post = null;
+          var pos = null;
+          var postId = '';
+          
+          // Get the position of the post (hentry) that contains the
+          // hide button that has been clicked.
+          post = jQuery(this).parents('.hentry');
+          postId = post.attr('id');
+          postId = postId.slice(5);
+                                                                                                       
+          pos = post.position();
+          // Position the Hide UI over the post.
+          style = style + 'top:'+ pos.top+'px;right:0;';
+          jQuery('#hide-the-post')
+            .attr('style', style);
+          jQuery("#hide-the-post").load('../hide_post.ajax', {'form.postId': postId});
+        };
+        
+        jQuery(document).ready( function () {
+          jQuery('.hide-button')
+            .removeAttr('href')
+            .click(showDialog);
+
+          jQuery('#hide-the-post')
+            .attr('style', 'display:none;');
+        });
+      </script>
     </tal:block>
   </body>
 </html>
