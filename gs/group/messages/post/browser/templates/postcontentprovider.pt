@@ -29,13 +29,15 @@
           tal:attributes="title string:${d/isoformat}Z"
           tal:content="date">Today, Tomorrow, Timaru</abbr>
       </span>
-      <div class="share-bar" tal:condition="not:view/post/hidden"
-        tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
-          title string:${view/post/subject};
-          public python:view.isPublic and 1 or 0">
-          &#160;
-      </div><!--share-bar-->
-      <a class="hide-button" href="#">Hide</a>
+      <tal:block condition="not:view/post/hidden">
+        <div class="share-bar"
+          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
+            title string:${view/post/subject};
+            public python:view.isPublic and 1 or 0">
+            &#160;
+        </div><!--share-bar-->
+        <a class="hide-button" href="#">Hide</a>
+      </tal:block>
     </div><!--email-metadata-->
     <div tal:condition="view/showPhoto"
       tal:define="user view/authorInfo/user"
