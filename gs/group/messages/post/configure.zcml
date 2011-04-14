@@ -59,13 +59,6 @@
     class=".hide.HidePost" 
     permission="zope2.View" />
 
-  <!-- The Gone (410) page -->
-  <browser:page 
-    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
-    name="post_hidden.html"
-    class=".hidden.PostHidden" 
-    permission="zope2.Public" />
-
   <!--Help-->
   <browser:viewlet name="gs-group-messages-topic-post"
     manager="gs.help.interfaces.IUserHelp"

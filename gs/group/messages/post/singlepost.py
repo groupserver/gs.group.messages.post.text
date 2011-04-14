@@ -39,8 +39,6 @@ class GSPostView(GroupPage):
             m = u'You are not authorized to access this post from '\
                 'the group %s' % self.groupInfo.name
             raise Unauthorized(m)
-        if retval['hidden']:
-            raise Hidden('The post %s is hidden' % self.postId)
         assert retval
         return retval
         

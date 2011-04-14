@@ -36,10 +36,6 @@ class GSPostTraversal(GroupPage):
                 (self.request.URL, uri)
             log.info(m)
             retval = self.request.RESPONSE.redirect(uri)
-        except Hidden, h:
-            self.request.form['q'] = self.request.URL
-            retval = getMultiAdapter((self.context, self.request),
-                        name="post_hidden.html")()
         except Exception, e:
             self.request.form['q'] = self.request.URL
             self.request.form['m'] = format_exc()

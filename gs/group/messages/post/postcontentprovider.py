@@ -6,7 +6,7 @@ from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
 from Products.XWFCore.cache import SimpleCache
 from postbody import get_post_intro_and_remainder
-from queries import PostQuery
+from hiddendetails import HiddenPostInfo
 
 class GSPostContentProvider(GroupContentProvider):
     # We maintain a really simple cache for the actual page templates which
@@ -114,21 +114,4 @@ class GSPostContentProvider(GroupContentProvider):
         assert isinstance(retval, bool)
 
         return retval
-
-class HiddenPostInfo(object):
-    def __init__(self, context, postId):
-        self.postId = postId
-        
-        da = context.zsqlalchemy
-        q = PostQuery(context, da)
-        
-        hiddenPostDetails = q.get_hidden_post_details(postId)
-        m = 'No details for the hidden post %s' % postId
-        assert hiddenPostDetails, m
-
-        self.adminInfo = createObject('groupserver.UserFromId',
-                            context, hiddenPostDetails['hiding_user'])
-
-        self.date = hiddenPostDetails['date_hidden']
-        self.reason = hiddenPostDetails['reason']
 
