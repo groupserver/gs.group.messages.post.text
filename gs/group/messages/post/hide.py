@@ -23,7 +23,7 @@ class HidePost(GroupForm):
         self.postQuery.hide_post(data['postId'], self.loggedInUser.id, 
                                     data['reason'])
         self.status = u'Hidden the post.'
-        uri = '/r/topic/%s' % data['postId']
+        uri = '/r/topic/%s#post-%s' % (data['postId'], data['postId'])
         self.request.RESPONSE.redirect(uri)
     
     def handle_failure(self, action, data, errors):

@@ -51,7 +51,6 @@
            provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
-           
 
   <browser:page 
     for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
