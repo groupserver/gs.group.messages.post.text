@@ -59,6 +59,12 @@
     class=".hide.HidePost" 
     permission="zope2.View" />
 
+  <!---->
+  <browser:resource 
+    name="hide-post-20110415.js"
+    file="browser/javascript/hide-post.js"
+    permission="zope2.Public"/>
+
   <!--Help-->
   <browser:viewlet name="gs-group-messages-topic-post"
     manager="gs.help.interfaces.IUserHelp"
