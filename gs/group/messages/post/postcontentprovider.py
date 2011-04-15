@@ -1,4 +1,5 @@
 # coding=utf-8
+from urllib import quote
 from zope.component import createObject
 from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -113,5 +114,11 @@ class GSPostContentProvider(GroupContentProvider):
 
         assert isinstance(retval, bool)
 
+        return retval
+        
+    def quote(self, msg):
+        assert msg
+        retval = quote(msg)
+        assert retval
         return retval
 
