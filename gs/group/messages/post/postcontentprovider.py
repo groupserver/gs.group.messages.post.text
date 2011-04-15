@@ -1,5 +1,6 @@
 # coding=utf-8
 from urllib import quote
+from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
@@ -8,6 +9,7 @@ from Products.XWFCore.XWFUtils import getOption
 from Products.XWFCore.cache import SimpleCache
 from postbody import get_post_intro_and_remainder
 from hiddendetails import HiddenPostInfo
+from canhide import can_hide_post
 
 class GSPostContentProvider(GroupContentProvider):
     # We maintain a really simple cache for the actual page templates which
@@ -58,17 +60,11 @@ class GSPostContentProvider(GroupContentProvider):
         if self.post['hidden']:
             self.hiddenPostInfo = HiddenPostInfo(self.context, 
                                     self.post['post_id'])
+                                    
+        self.canHide = can_hide_post(self.loggedInUser, self.groupInfo, 
+                                        self.post)
 
     def render(self):
-        """Render the post
-          
-        The donkey-work of this method is done by "self.pageTemplate", 
-        which is set when the content-provider is created.
-          
-        RETURNS
-            An HTML-snippet that represents the post.
-            
-        """
         if not self.__updated:
             raise UpdateNotCalled
     
@@ -94,31 +90,21 @@ class GSPostContentProvider(GroupContentProvider):
         return retval
 
     def user_authored(self):
-        """Did the user write the email message?
-          
-          ARGUMENTS
-              None.
-          
-          RETURNS
-              A boolean that is "True" if the current user authored the
-              email message, "False" otherwise.
-              
-          SIDE EFFECTS
-              None.
-              
-        """
-        user = self.request.AUTHENTICATED_USER
         retval = False
-        if user.getId():
-            retval = user.getId() == self.post['author_id']
-
-        assert isinstance(retval, bool)
-
+        if not(self.loggedInUser.anonymous):
+            retval = self.loggedInUser.id == self.post['author_id']
+        assert type(retval) == bool
         return retval
         
     def quote(self, msg):
         assert msg
         retval = quote(msg)
+        assert retval
+        return retval
+        
+    @Lazy
+    def loggedInUser(self):
+        retval = createObject('groupserver.LoggedInUser', self.context)
         assert retval
         return retval
 
