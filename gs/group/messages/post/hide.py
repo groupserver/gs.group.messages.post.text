@@ -32,6 +32,8 @@ class HidePost(GroupForm):
             raise Unauthorized(m)
         self.postQuery.hide_post(data['postId'], self.loggedInUser.id, 
                                     data['reason'])
+        if self.postQuery.all_posts_in_topic_hidden(data['postId']):
+            self.postQuery.hide_topic(data['postId'])
         self.status = u'Hidden the post.'
         uri = '/r/topic/%s#post-%s' % (data['postId'], data['postId'])
         self.request.RESPONSE.redirect(uri)

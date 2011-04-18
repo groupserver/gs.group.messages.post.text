@@ -1,4 +1,5 @@
 # coding=utf-8
+from operator import and_
 import sqlalchemy as sa
 from datetime import datetime
 from pytz import UTC
@@ -9,14 +10,16 @@ class PostQuery(object):
         
         self.postTable = da.createTable('post')
         self.hiddenPostTable = da.createTable('hidden_post')
+        self.topicTable = da.createTable('topic')
         
     def get_hidden_post_details(self, postId):
         s = self.hiddenPostTable.select()
         s.append_whereclause(self.hiddenPostTable.c.post_id == postId)
+        s.order_by(sa.desc(self.hiddenPostTable.c.date_hidden))
         
         retval = None
         r = s.execute()
-        if r.rowcount == 1:
+        if r.rowcount >= 1:
             row = r.fetchone()
             retval = {
                 'post_id':      row['post_id'],
@@ -40,4 +43,25 @@ class PostQuery(object):
             date_hidden = dt,
             hiding_user = userId,
             reason = reason)
+
+    def all_posts_in_topic_hidden(self, postId):
+        s1 = sa.select([self.postTable.c.topic_id])
+        s1.append_whereclause(self.postTable.c.post_id == postId)
+        ss = s1.alias('ss')
+        
+        s2 = sa.select([self.postTable.c.hidden])
+        s2.append_whereclause(self.postTable.c.topic_id == ss.c.topic_id)
+        
+        r = s2.execute()
+        retval = reduce(and_, [bool(x['hidden']) for x in r], True)
+        return retval
+        
+    def hide_topic(self, postId):
+        s1 = sa.select([self.postTable.c.topic_id])
+        s1.append_whereclause(self.postTable.c.post_id == postId)
+        ss = s1.alias('ss')
+        
+        u = self.topicTable.update(ss.c.topic_id == self.topicTable.c.topic_id)
+        now = datetime.now(UTC)
+        u.execute(hidden = now)
 
