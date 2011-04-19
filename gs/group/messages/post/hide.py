@@ -26,7 +26,7 @@ class HidePost(GroupForm):
     def handle_hide(self, action, data):
         postInfo = self.get_post(data['postId'])
         if not(can_hide_post(self.loggedInUser, self.groupInfo, postInfo)):
-            # Do not try and hack the URL, bastard.
+            # Do not try and hack the URL.
             m = 'You are not allowed to hide the post %s in %s (%s)' %\
                 (data['postId'], self.groupInfo.name, self.groupInfo.id)
             raise Unauthorized(m)
@@ -37,6 +37,15 @@ class HidePost(GroupForm):
         self.status = u'Hidden the post.'
         uri = '/r/topic/%s#post-%s' % (data['postId'], data['postId'])
         self.request.RESPONSE.redirect(uri)
+    
+        # --=mpj17=-- There is a potential for an information leak with
+        # post hiding. If the post is hidden and the topic contains a
+        # visible post then the contents of the hidden post can be
+        # determined by doing a series of searches: if the topic comes
+        # up and the keyword in not in any of the visible posts then it
+        # must be in the hidden post. Lets consider fixing this issue
+        # when we deal to Ticket 224: Optimise Search Performance
+        # <https://projects.iopen.net/groupserver/ticket/224>.
     
     def handle_failure(self, action, data, errors):
         if len(errors) == 1:
