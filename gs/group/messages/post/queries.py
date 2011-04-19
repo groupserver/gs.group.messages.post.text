@@ -59,9 +59,10 @@ class PostQuery(object):
     def hide_topic(self, postId):
         s1 = sa.select([self.postTable.c.topic_id])
         s1.append_whereclause(self.postTable.c.post_id == postId)
-        ss = s1.alias('ss')
+        r = s1.execute()
+        t = r.fetchone()['topic_id']
         
-        u = self.topicTable.update(ss.c.topic_id == self.topicTable.c.topic_id)
+        u = self.topicTable.update(t == self.topicTable.c.topic_id)
         now = datetime.now(UTC)
         u.execute(hidden = now)
 
