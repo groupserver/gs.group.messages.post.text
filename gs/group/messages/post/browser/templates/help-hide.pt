@@ -1,0 +1,83 @@
+<div class="section" id="gs-group-messages-hide">
+  <h2>Hiding a Message</h2>
+  <p>
+    You and the administrators of a group can hide the posts you have 
+    made.
+    To hide a post carry out the following steps.
+  </p>
+  <ol>
+    <li>Log in, if necessary.</li>
+    <li>View 
+      <a href="#gs-group-messages-post">the post on the web.</a></li>
+    <li>Click the <samp class="link">Hide</samp> link.
+      The <cite>Hide</cite> form will be shown.</li>
+    <li>Enter the reason for hiding the post in the
+      <samp class="entry">Reason</samp> entry.</li>
+    <li>Click the <samp class="button">Hide</samp> button.
+      The post will be hidden, and you be shown the hidden post in
+      the topic.
+  </ol>
+  <p>
+    Some information about the post is still available after it has 
+    been hidden.
+    <a href="#gs-group-messages-hide-visible">The table below</a>
+    details what can be seen and what is hidden.
+  </p>
+  <table id="gs-group-messages-hide-visible">
+    <caption>What is visible after a post is hidden</caption>
+    <tbody>
+      <tr>
+        <th style="width:7.615em">Email Messages</th>
+        <td>
+          The email messages that were sent out to the group members
+          when the post was made are still <strong>visible</strong>
+          after the post has been hidden.
+        </td>
+      </tr>
+      <tr>
+        <th>Post on the Web</th>
+        <td>
+          Some of the post on the web is hidden.
+          <a href="#gs-group-messages-post-metadata">The information
+            about the post</a>
+          is <strong>visible.</strong>
+          This includes who made the post, and when the post was made.
+          However, 
+          <a href="#gs-group-messages-post-body">the body of the 
+            post</a>
+          is <strong>hidden.</strong>
+        </td>
+      </tr>
+      <tr>
+        <th>Files</th>
+        <td>
+          The files that were added as part of the post are
+          <strong>hidden.</strong>
+          If someone tries to view the file he or she will see an
+          error page.
+          The error page will show the reason that the post was hidden.
+        </td>
+      </tr>
+      <tr>
+        <th>Images</th>
+        <td>
+          The images that were added as part of the post are
+          <strong>hidden.</strong>
+          If someone tries to view the file he or she will see an
+          error page.
+          The error page will show the reason that the post was hidden.
+        </td>
+      </tr>
+      <tr>
+        <th>Reason</th>
+        <td>
+          The reason the post was hidden is <strong>visible</strong>
+          to 
+          <a href="#gs-group-messages-privacy">those that could see the
+            post previously.</a>
+        </td>
+      </tr>
+    </tbody>
+  </table><!--gs-group-messages-hide-visible-->
+</div><!--gs-group-messages-hide-->
+

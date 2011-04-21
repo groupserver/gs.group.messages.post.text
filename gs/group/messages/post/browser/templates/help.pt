@@ -1,10 +1,17 @@
 <div class="section" id="gs-group-messages-post">
   <h3>Post</h3>
   <p>
-    A post on the web is made up of six parts: a title, navigation links,
-    information about the post, the share box,
-    the body of the message, and then a list of files that were posted
-    along with the message.
+    A post on the web is made up of seven parts: 
+    <a href="#gs-group-messages-post-title">a title,</a>
+    <a href="#gs-group-messages-post-navigation-links">navigation 
+      links,</a>
+    <a href="#gs-group-messages-post-metadata">information about the 
+      post,</a>
+    <a href="#gs-group-messages-post-share">a share box,</a>
+    <a href="#gs-group-messages-post-hide">a hide button,</a>
+    <a href="#gs-group-messages-post-body">the body of the message,</a> 
+    and then 
+    <a href="">a list of files</a> that were posted along with the message.
   </p>
   <div class="section" id="gs-group-messages-post-title">
     <h4>Title</h4>
@@ -58,8 +65,18 @@
     <h4>The Share Box</h4>
     <p>
       The share box appears at the top of the post, after the date.
-      It is detailed in <a href="gs-content-js-sharebox">the Sharebox
+      It is detailed in <a href="#gs-content-js-sharebox">the Sharebox
       section</a> below.
+    </p>
+  </div>
+  <div class="section" id="gs-group-messages-post-hide">
+    <h4>The Hide Button</h4>
+    <p>
+      The hide button appears at the top of the post, after the share 
+      box.
+      It is detailed in
+      <a href="#gs-group-messages-hide">the Hiding a Message section</a> 
+      below.
     </p>
   </div>
   <div class="section" id="gs-group-messages-post-body">
