@@ -5,25 +5,19 @@
     define="errors view/errors; status view/status; widgets view/widgets"
     content="structure provider:groupserver.FormStatusMessage"
     metal:fill-slot="messages">&#160;</tal:block-->
-
   <!--Explanation-->
   <p>
     To hide this post add a reason below and click the
     <samp class="button">Hide</samp> button.
-    A hidden post will be <strong>visible</strong> to you, and the
-    administrators.
-    Everyone else will see the reason the post was hidden, but the
-    post will not be shown to them.
+    Everyone will see the reason the post was hidden, but the
+    post will not be shown.
   </p>
-
-  <!--Fields-->
   <tal:block define="widgets python:[view.widgets['reason']]">
     <tal:block replace="structure provider:groupserver.FormWidgets"/>
   </tal:block>
   <tal:block define="widget python:view.widgets['postId']">
     <span tal:replace="structure widget/hidden"/>
   </tal:block>
-  
   <div class="buttons">
     <tal:block define="action view/actions/form.actions.hide">
       <div class="formelementbutton">

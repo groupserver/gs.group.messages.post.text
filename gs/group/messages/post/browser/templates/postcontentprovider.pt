@@ -61,8 +61,6 @@
       <p tal:define="siteId view/siteInfo/id;
         gse python:modules['Products.XWFCore.XWFUtils'].get_support_email;
         supportEmail python:gse(context,siteId);">
-        The post can now only be seen by the administrators and the
-        author of the post.
         If you think you should be able to see the post
         <a href="#"
           tal:define="m string:Hi!
