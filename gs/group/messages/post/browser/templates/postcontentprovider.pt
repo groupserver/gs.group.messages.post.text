@@ -36,7 +36,8 @@
             public python:view.isPublic and 1 or 0">
             &#160;
         </div><!--share-bar-->
-        <a class="hide-button" href="#">Hide</a>
+        <a class="hide-button" tal:condition="view/canHide"
+          href="#">Hide</a>
       </tal:block>
     </div><!--email-metadata-->
     <div tal:condition="view/showPhoto"
