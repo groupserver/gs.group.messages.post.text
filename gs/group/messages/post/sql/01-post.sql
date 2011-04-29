@@ -15,7 +15,7 @@ CREATE TABLE post (
     htmlbody          TEXT                     NOT NULL DEFAULT ''::TEXT,
     header            TEXT                     NOT NULL,
     has_attachments   BOOLEAN                  NOT NULL,
-    hidden            TIMESTAMP WITH TIME ZONE,
+    hidden            TIMESTAMP WITH TIME ZONE
 );
 -- Installs prior to GS 11.04 will need to update the post table:
 -- ALTER TABLE post 
