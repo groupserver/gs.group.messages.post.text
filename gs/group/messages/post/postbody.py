@@ -152,9 +152,9 @@ def wrap_message(messageText, width=79):
     """
     email_wrapper = textwrap.TextWrapper(width=width, expand_tabs=False, 
                           replace_whitespace=False, 
-                          break_long_words=False)
+                          break_on_hyphens=False, break_long_words=False)
     email_wrapper.wordsep_re = splitExp
-    retval = '\n'.join(map(lambda l: '\n'.join(email_wrapper.wrap(l)), 
+    retval = '\n'.join(map(lambda l: email_wrapper.fill(l), 
                             messageText.split('\n')))
     return retval
 
