@@ -37,7 +37,7 @@
             &#160;
         </div><!--share-bar-->
         <a class="hide-button" tal:condition="view/canHide"
-          href="#">Hide</a>
+          href="#">Hide post</a>
       </tal:block>
     </div><!--email-metadata-->
     <div tal:condition="view/showPhoto"
@@ -88,7 +88,7 @@ because...;
           <p>
             <a class="disclosureButton"
               tal:attributes="href string:javascript:showHideDisclosure('${remId}')"
-              href="#">&#160;</a>
+              href="#">Rest of post</a>
           </p>
           <div class="disclosureShowHide" style="display:none;"  
             tal:condition="view/postRemainder">

@@ -8,7 +8,7 @@
     <a href="#gs-group-messages-post-metadata">information about the 
       post,</a>
     <a href="#gs-group-messages-post-share">a share box,</a>
-    <a href="#gs-group-messages-post-hide">a hide button,</a>
+    <a href="#gs-group-messages-post-hide">a hide post button,</a>
     <a href="#gs-group-messages-post-body">the body of the message,</a> 
     and then 
     <a href="">a list of files</a> that were posted along with the message.
@@ -70,12 +70,13 @@
     </p>
   </div>
   <div class="section" id="gs-group-messages-post-hide">
-    <h4>The Hide Button</h4>
+    <h4>The Hide Post Button</h4>
     <p>
       The hide button appears at the top of the post, after the share 
       box.
       It is detailed in
-      <a href="#gs-group-messages-hide">the Hiding a Message section</a> 
+      <a href="#gs-group-messages-hide">the 
+        <cite class="section">Hide a Post</cite> section</a> 
       below.
     </p>
   </div>
@@ -87,17 +88,22 @@
     <dl>
       <dt>Main Message</dt>
       <dd>The main part is message that the author wrote.</dd>
-      <dt>Quoted Text</dt>
+      <dt>Rest of Post</dt>
       <dd>
         Sometimes people will include the text of previous messages
         at the bottom of a post.
-        A &#9654; will appear at the bottom of the main message if this
+        The text 
+        <samp class="link">&#9654; Rest of post</samp> will
+        appear at the bottom of the main message if this 
         <em class="wordasword">quoted</em> text is present.
         <ul>
-          <li>Click the &#9654; to show the quoted text.
+          <li>Click <samp class="link">&#9654; Rest of post</samp> 
+            to show the quoted text.
             The quoted text will be shown and the &#9654; will turn into a
             &#9660;.</li>
-          <li>Click the &#9660; to hide the quoted text.
+          <li>Click 
+            <samp class="link">&#9660; Rest of post</samp>  
+            to hide the quoted text.
             The quoted text will then be hidden and the &#9660; will turn
             into a &#9654;.</li>
         </ul>

@@ -1,15 +1,15 @@
 <div class="section" id="gs-group-messages-hide">
-  <h2>Hiding a Message</h2>
+  <h2>Hide a Post</h2>
   <p>
     You and the administrators of a group can hide the posts you have 
     made.
     To hide a post carry out the following steps.
   </p>
   <ol>
-    <li>Log in, if necessary.</li>
+    <li><a href="/p">Log in,</a> if necessary.</li>
     <li>View 
       <a href="#gs-group-messages-post">the post on the web.</a></li>
-    <li>Click the <samp class="link">Hide</samp> link.
+    <li>Click the <samp class="link">Hide post</samp> link.
       The <cite>Hide</cite> form will be shown.</li>
     <li>Enter the reason for hiding the post in the
       <samp class="entry">Reason</samp> entry.</li>
