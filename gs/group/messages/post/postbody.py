@@ -21,7 +21,8 @@ EMAIL_WORD_LIMIT = 5000
 email_matcher = re.compile(r".*?([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,4}).*?",
                            re.I|re.M|re.U)
 uri_matcher = re.compile("""(?i)(http://|https://)(.+?)(\&lt;|\&gt;|\)|\]|\}|\"|\'|$|\s)""")
-youtube_matcher = re.compile("""(?i)(http://)(.*)(youtube.com/watch\?v\=)(.*)($|\s)""")
+www_matcher = re.compile("""(?i)(www\..+)""")
+youtube_matcher = re.compile("""(?:http://)?(?:www.)?youtu(?:be)?.(?:[a-z]){2,3}(?:[a-z/?=]+)([a-zA-Z0-9-_]{11})(?:[a-z0-9?&-_=]+)?""")
 splashcast_matcher = re.compile("""(?i)(http://www.splashcastmedia.com/web_watch/\?code\=)(.*)($|\s)""")
 vimeo_matcher = re.compile("""(?i)(http://)(.*)vimeo.com/(.*)($|\s)""")
 bold_matcher = re.compile("""(\*.*\*)""")
@@ -45,6 +46,17 @@ def markup_uri(contentProvider, word, substituted, substituted_words):
     word = uri_matcher.sub('<a href="\g<1>\g<2>">\g<1>\g<2></a>\g<3>', 
                            word)
     return word    
+
+def markup_www(contentProvider, word, substituted, substituted_words):
+    """ Markup URIs starting with www, but no method.
+    
+    """
+    if substituted:
+        return word
+
+    word = www_matcher.sub('<a href="http://\g<1>">\g<1></a>',
+                           word)
+    return word
 
 def markup_email_address(contentProvider, word, substituted, substituted_words):
     retval = word
@@ -74,9 +86,9 @@ def markup_youtube(contentProvider, word, substituted, substituted_words):
     if word in substituted_words:
         return word
 
-    word = youtube_matcher.sub('<div class="markup-youtube"><object width="425" height="344"><param name="movie" value="http://\g<2>youtube.com/v/\g<4>'
-                  '&amp;hl=en&amp;fs=1"></param><param name="allowFullScreen" value="true"></param><embed src="http://\g<2>youtube.com/v/\g<4>&amp;hl=en&amp;fs=1"'
-                  ' type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344"></embed></object></div>\g<5>',
+    word = youtube_matcher.sub('<div class="markup-youtube"><object width="425" height="344"><param name="movie" value="http://youtube.com/v/\g<1>'
+                  '&amp;hl=en&amp;fs=1"></param><param name="allowFullScreen" value="true"></param><embed src="http://youtube.com/v/\g<1>&amp;hl=en&amp;fs=1"'
+                  ' type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344"></embed></object></div>',
                   word)
     
     return word
@@ -277,7 +289,8 @@ def split_message(messageText, max_consecutive_comment=12,
     return retval
 
 standard_markup_functions = (markup_email_address, markup_youtube,
-                             markup_splashcast, markup_vimeo, markup_uri, markup_bold)
+                             markup_splashcast, markup_vimeo,
+                             markup_uri, markup_www, markup_bold)
 
 def markup_word(contentProvider, word, substituted_words):
     word = escape_word(word)
