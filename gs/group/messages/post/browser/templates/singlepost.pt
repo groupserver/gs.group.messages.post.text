@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-  metal:use-macro="context/@@groupserver_layout/page">
+  metal:use-macro="context/@@groupserver_site_home_layout/page">
   <head>
   	<title metal:fill-slot="title">
       Post in
@@ -18,14 +18,8 @@
       </tal:block>
       <meta name="description" tal:attributes="content view/post/summary"/>
       <link rel="bookmark" title="Group Homepage" href="#"
-        tal:attributes="title string:${view/groupInfo/name} Homepage;
-        href view/groupInfo/url" />
-      <link rel="home" 
-        tal:attributes="title string:${view/siteInfo/name} Homepage;
-        href view/siteInfo/url" />
-      <link rel="help" 
-        tal:attributes="title string:${view/siteInfo/name} Help;"
-        href="/help"/>
+        tal:attributes="title view/groupInfo/name;
+        href view/groupInfo/relativeURL" />
     </tal:block>
   </head>
   <body>
