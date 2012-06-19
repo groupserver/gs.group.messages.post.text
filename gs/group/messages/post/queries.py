@@ -64,12 +64,13 @@ class PostQuery(object):
         return retval
         
     def hide_topic(self, postId):
+        session = getSession()
         s1 = sa.select([self.postTable.c.topic_id])
         s1.append_whereclause(self.postTable.c.post_id == postId)
-        session = getSession()
         r = session.execute(s1)
         t = r.fetchone()['topic_id']
         
         u = self.topicTable.update(t == self.topicTable.c.topic_id)
         now = datetime.now(UTC)
-        u.execute(hidden = now)
+        d = {'hidden', now)
+        session.execute(u, params=d)
