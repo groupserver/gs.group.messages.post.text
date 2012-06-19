@@ -37,7 +37,9 @@ class PostQuery(object):
         
     def update_post_table(self, postId, dt):
         u = self.postTable.update(self.postTable.c.post_id == postId)
-        u.execute(hidden = dt)
+        session = getSession()
+        d = {'hidden': dt}
+        session.execute(u, params=d)
     
     def update_hidden_post_table(self, postId, dt, userId, reason):
         i = self.hiddenPostTable.insert()
