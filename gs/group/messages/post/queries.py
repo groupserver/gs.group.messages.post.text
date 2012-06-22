@@ -72,5 +72,5 @@ class PostQuery(object):
         
         u = self.topicTable.update(t == self.topicTable.c.topic_id)
         now = datetime.now(UTC)
-        d = {'hidden', now)
+        d = {'hidden': now}
         session.execute(u, params=d)

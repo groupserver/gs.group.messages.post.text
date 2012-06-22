@@ -24,9 +24,7 @@ class GSPostView(GroupPage):
     @Lazy
     def messageQuery(self):
         assert self.context, 'No context for a post!'
-        da = self.context.zsqlalchemy 
-        assert da, 'No data-adaptor found'
-        retval = MessageQuery(self.context, da)
+        retval = MessageQuery(self.context)
         assert retval
         return retval
 

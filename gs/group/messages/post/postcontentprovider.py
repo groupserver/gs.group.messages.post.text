@@ -6,17 +6,12 @@ from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from Products.XWFCore.XWFUtils import getOption
-from Products.XWFCore.cache import SimpleCache
 from postbody import get_post_intro_and_remainder
 from hiddendetails import HiddenPostInfo
 from canhide import can_hide_post
+from gs.cache import cache
 
 class GSPostContentProvider(GroupContentProvider):
-    # We maintain a really simple cache for the actual page templates which
-    # are read from disk. This avoids the overhead of reading and parsing
-    # the template for every post.
-    cookedTemplates = SimpleCache("GSPostContentProvider.cookedTemplates")
-    
     post = None
     def __init__(self, context, request, view):
         GroupContentProvider.__init__(self, context, request, view)
@@ -64,16 +59,14 @@ class GSPostContentProvider(GroupContentProvider):
         self.canHide = can_hide_post(self.loggedInUser, self.groupInfo, 
                                         self.post)
 
+    #@cache('GSPostContentProvider.cooked', lambda x,y: y, 3600)
+    def cook_template(self, fname):
+        return ViewPageTemplateFile(fname)
+
     def render(self):
         if not self.__updated:
             raise UpdateNotCalled
-    
-        pageTemplate = self.cookedTemplates.get(self.pageTemplateFileName)
-        if not pageTemplate:
-	    pageTemplate = ViewPageTemplateFile(self.pageTemplateFileName)
-            self.cookedTemplates.add(self.pageTemplateFileName,
-                                     pageTemplate)
-        
+        pageTemplate = self.cook_template(self.pageTemplateFileName)
         self.request.debug = False
         r = pageTemplate(self)
         return r

@@ -4,14 +4,6 @@ import re, cgi, textwrap, logging
 from zope.component import getUtility, createObject
 from interfaces import IMarkupEmail, IWrapEmail
 from Products.GSGroup.utils import *
-from Products.XWFCore.cache import LRUCache
-
-# Store the cooked bodies of the messages, to save on future processing.
-# ♫ I won't eat people, I shan't eat people, eating people is wrong! ♫
-# IMPORTANT TO NOTE: When modifying the markup functions, you must check
-# that the cacheKey in get_post_intro_and_remainder is adequate.
-cookedBodies = LRUCache("gs.group.messages.post.postbody.cookedBodies")
-cookedBodies.set_max_objects(1536)
 
 # this is currently the hard limit on the number of word's we will process.
 # after this we insert a message. TODO: make this more flexible by using
@@ -370,6 +362,12 @@ def get_mail_body(contentProvider, text):
 
     return retval
 
+@cache('gs.group.messages.post.postintroremainder',
+             lambda contentProvider, text: ':'.join(
+                 (str(contentProvider.post['post_id']),
+                  str((get_visibility(contentProvider.groupInfo.groupObj))))
+                 )
+             , 3600)
 def get_post_intro_and_remainder(contentProvider, text):
     """Get the introduction and remainder text of the formatted post
     
@@ -386,13 +384,9 @@ def get_post_intro_and_remainder(contentProvider, text):
         None.
     """
     assert contentProvider.groupInfo.groupObj, "The groupInfo object should always have a groupObj"
-    cacheKey = "%s:%s" % (contentProvider.post['post_id'],
-                          get_visibility(contentProvider.groupInfo.groupObj))
-    
-    retval = cookedBodies.get(cacheKey)
-    if not retval: 
-        mailBody = get_mail_body(contentProvider, text)
-        retval = split_message(mailBody)
-        cookedBodies.add(cacheKey, retval)
+    mailBody = get_mail_body(contentProvider, text)
+    retval = split_message(mailBody)
+
+    print "MISS"
 
     return retval

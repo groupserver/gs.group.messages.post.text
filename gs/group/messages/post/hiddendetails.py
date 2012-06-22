@@ -6,8 +6,7 @@ class HiddenPostInfo(object):
     def __init__(self, context, postId):
         self.postId = postId
         
-        da = context.zsqlalchemy
-        q = PostQuery(context, da)
+        q = PostQuery(context)
         
         hiddenPostDetails = q.get_hidden_post_details(postId)
         m = 'No details for the hidden post %s' % postId
