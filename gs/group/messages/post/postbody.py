@@ -387,6 +387,4 @@ def get_post_intro_and_remainder(contentProvider, text):
     mailBody = get_mail_body(contentProvider, text)
     retval = split_message(mailBody)
 
-    print "MISS"
-
     return retval
