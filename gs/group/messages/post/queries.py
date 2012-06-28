@@ -3,10 +3,12 @@ from operator import and_
 import sqlalchemy as sa
 from datetime import datetime
 from pytz import UTC
+from zope.sqlalchemy import mark_changed
 from gs.database import getSession, getTable
 
+
 class PostQuery(object):
-    def __init__(self, context, da):
+    def __init__(self, context):
         self.context = context
         
         self.postTable = getTable('post')
@@ -15,8 +17,8 @@ class PostQuery(object):
         
     def get_hidden_post_details(self, postId):
         s = self.hiddenPostTable.select()
-        s.append_whereclause(self.hiddenPostTable.c.post_id == postId,
-                order_by=sa.desc(self.hiddenPostTable.c.date_hidden))
+        s = s.order_by(sa.desc(self.hiddenPostTable.c.date_hidden))
+        s.append_whereclause(self.hiddenPostTable.c.post_id == postId)
         
         retval = None
         session = getSession()
@@ -40,6 +42,7 @@ class PostQuery(object):
         session = getSession()
         d = {'hidden': dt}
         session.execute(u, params=d)
+        mark_changed(session)
     
     def update_hidden_post_table(self, postId, dt, userId, reason):
         i = self.hiddenPostTable.insert()
@@ -49,6 +52,7 @@ class PostQuery(object):
              'hiding_user': userId,
              'reason': reason}
         session.execute(i, params=d)
+        mark_changed(session)
 
     def all_posts_in_topic_hidden(self, postId):
         s1 = sa.select([self.postTable.c.topic_id])
