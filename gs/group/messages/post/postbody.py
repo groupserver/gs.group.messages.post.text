@@ -4,6 +4,7 @@ import re, cgi, textwrap, logging
 from zope.component import getUtility, createObject
 from interfaces import IMarkupEmail, IWrapEmail
 from Products.GSGroup.utils import *
+from gs.cache import cache
 
 # this is currently the hard limit on the number of word's we will process.
 # after this we insert a message. TODO: make this more flexible by using
