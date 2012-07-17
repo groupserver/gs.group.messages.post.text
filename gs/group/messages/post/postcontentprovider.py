@@ -21,6 +21,8 @@ class GSPostContentProvider(GroupContentProvider):
     def __init__(self, context, request, view):
         GroupContentProvider.__init__(self, context, request, view)
         self.__updated = False
+        # allow baseclass override
+        self.can_hide_post = can_hide_post
 
     def update(self):
         """Update the internal state of the post content-provider.
@@ -61,7 +63,7 @@ class GSPostContentProvider(GroupContentProvider):
             self.hiddenPostInfo = HiddenPostInfo(self.context, 
                                     self.post['post_id'])
                                     
-        self.canHide = can_hide_post(self.loggedInUser, self.groupInfo, 
+        self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo, 
                                         self.post)
 
     def render(self):
