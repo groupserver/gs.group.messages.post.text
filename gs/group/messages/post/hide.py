@@ -21,11 +21,12 @@ class HidePost(GroupForm):
 
     def __init__(self, context, request):
         GroupForm.__init__(self, context, request)
+        self.can_hide_post = can_hide_post
 
     @form.action(label=_('Hide'), failure='handle_failure')
     def handle_hide(self, action, data):
         postInfo = self.get_post(data['postId'])
-        if not(can_hide_post(self.loggedInUser, self.groupInfo, postInfo)):
+        if not(self.can_hide_post(self.loggedInUser, self.groupInfo, postInfo)):
             # Do not try and hack the URL.
             m = 'You are not allowed to hide the post %s in %s (%s)' %\
                 (data['postId'], self.groupInfo.name, self.groupInfo.id)
