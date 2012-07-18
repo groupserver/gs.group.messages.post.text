@@ -21,7 +21,7 @@ class HidePost(GroupForm):
 
     def __init__(self, context, request):
         GroupForm.__init__(self, context, request)
-         self.can_hide_post = can_hide_post
+        self.can_hide_post = can_hide_post
 
     @form.action(label=_('Hide'), failure='handle_failure')
     def handle_hide(self, action, data):
