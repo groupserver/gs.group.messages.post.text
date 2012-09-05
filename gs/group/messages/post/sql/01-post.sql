@@ -15,8 +15,19 @@ CREATE TABLE post (
     htmlbody          TEXT                     NOT NULL DEFAULT ''::TEXT,
     header            TEXT                     NOT NULL,
     has_attachments   BOOLEAN                  NOT NULL,
-    hidden            TIMESTAMP WITH TIME ZONE
+    hidden            TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    fts_vectors       tsvector -- PostgreSQL dependency
 );
+-- Installprior up to and including GS 12.05 will need to update the post 
+-- table:
+-- ALTER TABLE post ADD COLUMN fts_vectors tsvector;
+-- UPDATE post SET fts_vectors = 
+--   to_tsvector('english', coalesce(subject,'') || ' ' || coalesce(body, ''));
+CREATE TRIGGER fts_vectors_update 
+  BEFORE INSERT or UPDATE ON post 
+  FOR EACH ROW EXECUTE PROCEDURE 
+    tsvector_update_trigger(fts_vectors, 'pg_catalog.english', subject, body);
+
 -- Installs prior to GS 11.04 will need to update the post table:
 -- ALTER TABLE post 
 --  ADD COLUMN hidden TIMESTAMP WITH TIME ZONE;
