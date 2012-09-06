@@ -110,7 +110,7 @@ because...;
           <div class="figure"
             tal:condition="python:'image' in fm['mime_type']">
             <a href="#" tal:attributes="href string:/r/img/${fm/file_id}">
-              <img src="#"
+              <img src="#" style='max-width: 198px; max-height: 198px;'
                 tal:attributes="src string:/r/file/${fm/file_id}/resize/198/198/${fm/file_name}"/>
             </a>
           </div><!--figure-->
