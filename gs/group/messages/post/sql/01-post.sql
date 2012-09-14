@@ -19,7 +19,7 @@ CREATE TABLE post (
     fts_vectors       tsvector -- PostgreSQL dependency
 );
 
--- Installprior up to and including GS 12.05 will need to update the post 
+-- Installs up to and including GS 12.05 will need to update the post 
 -- table:
 -- ALTER TABLE post ADD COLUMN fts_vectors tsvector;
 -- UPDATE post SET fts_vectors = 
