@@ -33,6 +33,7 @@ CREATE TRIGGER fts_vectors_update
 --  ADD COLUMN hidden TIMESTAMP WITH TIME ZONE;
 CREATE INDEX site_group_idx ON post USING BTREE (site_id, group_id);
 CREATE INDEX topic_idx ON post USING BTREE (topic_id);
+CREATE INDEX fts_vectors_idx ON post USING gin(fts_vectors);
 
 -- Create the row-count table, which is used all over the place
 -- TODO: Move to a base product. Maybe create a gs.base or put it in
