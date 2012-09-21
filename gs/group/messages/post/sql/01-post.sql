@@ -18,7 +18,6 @@ CREATE TABLE post (
     hidden            TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     fts_vectors       tsvector -- PostgreSQL dependency
 );
-CREATE INDEX post_fts_vectors ON post USING gin(fts_vectors);
 
 -- Installs up to and including GS 12.05 will need to update the post 
 -- table:
@@ -32,7 +31,7 @@ CREATE INDEX post_fts_vectors ON post USING gin(fts_vectors);
 
 CREATE INDEX site_group_idx ON post USING BTREE (site_id, group_id);
 CREATE INDEX topic_idx ON post USING BTREE (topic_id);
-CREATE INDEX fts_vectors_idx ON post USING gin(fts_vectors);
+CREATE INDEX post_fts_vectors ON post USING gin(fts_vectors);
 
 CREATE TRIGGER fts_vectors_update 
   BEFORE INSERT or UPDATE ON post 
