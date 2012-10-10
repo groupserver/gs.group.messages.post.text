@@ -22,8 +22,8 @@ CREATE TABLE post (
 -- Installs up to and including GS 12.05 will need to update the post 
 -- table:
 -- ALTER TABLE post ADD COLUMN fts_vectors tsvector;
--- UPDATE post SET fts_vectors = 
---   to_tsvector('english', coalesce(subject,'') || ' ' || coalesce(body, ''));
+-- UPDATE post 
+--   SET fts_vectors = to_tsvector('english', left(coalesce(subject,'') || ' ' || coalesce(body, ''), 1048575));
 
 -- Installs prior to GS 11.04 will need to update the post table:
 -- ALTER TABLE post 
@@ -32,6 +32,7 @@ CREATE TABLE post (
 CREATE INDEX site_group_idx ON post USING BTREE (site_id, group_id);
 CREATE INDEX topic_idx ON post USING BTREE (topic_id);
 CREATE INDEX post_fts_vectors ON post USING gin(fts_vectors);
+CREATE INDEX post_last_post_date_idx ON post (date DESC);
 
 CREATE TRIGGER fts_vectors_update 
   BEFORE INSERT or UPDATE ON post 
