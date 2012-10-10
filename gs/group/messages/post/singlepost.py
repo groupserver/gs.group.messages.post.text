@@ -5,7 +5,8 @@ from zope.cachedescriptors.property import Lazy
 from Products.XWFMailingListManager.queries import MessageQuery
 from Products.GSGroup.utils import is_public
 from gs.group.base.page import GroupPage
-from error import NoIDError, Hidden
+from error import NoIDError
+
 
 class GSPostView(GroupPage):
     def __init__(self, context, request):
@@ -13,7 +14,7 @@ class GSPostView(GroupPage):
         self.postId = self.request.get('postId', None)
         if not self.postId:
             raise NoIDError('No ID Specified')
-    
+
     @Lazy
     def isPublic(self):
         assert self.groupInfo.groupObj, 'No group in the groupInfo!'
@@ -32,14 +33,14 @@ class GSPostView(GroupPage):
     def post(self):
         retval = self.messageQuery.post(self.postId)
         if not retval:
-          raise NotFound(self, self.postId, self.request)
+            raise NotFound(self, self.postId, self.request)
         if retval['group_id'] != self.groupInfo.id:
             m = u'You are not authorized to access this post from '\
                 'the group %s' % self.groupInfo.name
             raise Unauthorized(m)
         assert retval
         return retval
-        
+
     @Lazy
     def relatedPosts(self):
         retval = self.messageQuery.topic_post_navigation(self.postId)
@@ -49,4 +50,3 @@ class GSPostView(GroupPage):
     def topicTitle(self):
         retval = self.post.get('subject', '')
         return retval
-

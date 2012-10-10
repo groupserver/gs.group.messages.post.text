@@ -10,44 +10,44 @@ from gs.database import getSession, getTable
 class PostQuery(object):
     def __init__(self, context):
         self.context = context
-        
+
         self.postTable = getTable('post')
         self.hiddenPostTable = getTable('hidden_post')
         self.topicTable = getTable('topic')
-        
+
     def get_hidden_post_details(self, postId):
         s = self.hiddenPostTable.select()
         s = s.order_by(sa.desc(self.hiddenPostTable.c.date_hidden))
         s.append_whereclause(self.hiddenPostTable.c.post_id == postId)
-        
+
         retval = None
         session = getSession()
         r = session.execute(s)
         if r.rowcount >= 1:
             row = r.fetchone()
             retval = {
-                'post_id':      row['post_id'],
-                'date_hidden':  row['date_hidden'],
-                'hiding_user':  row['hiding_user'],
-                'reason':       row['reason']}
+                'post_id': row['post_id'],
+                'date_hidden': row['date_hidden'],
+                'hiding_user': row['hiding_user'],
+                'reason': row['reason']}
         return retval
 
     def hide_post(self, postId, userId, reason):
         now = datetime.now(UTC)
         self.update_post_table(postId, now)
         self.update_hidden_post_table(postId, now, userId, reason)
-        
+
     def update_post_table(self, postId, dt):
         u = self.postTable.update(self.postTable.c.post_id == postId)
         session = getSession()
         d = {'hidden': dt}
         session.execute(u, params=d)
         mark_changed(session)
-    
+
     def update_hidden_post_table(self, postId, dt, userId, reason):
         i = self.hiddenPostTable.insert()
         session = getSession()
-        d = {'post_id': postId, 
+        d = {'post_id': postId,
              'date_hidden': dt,
              'hiding_user': userId,
              'reason': reason}
@@ -58,22 +58,22 @@ class PostQuery(object):
         s1 = sa.select([self.postTable.c.topic_id])
         s1.append_whereclause(self.postTable.c.post_id == postId)
         ss = s1.alias('ss')
-        
+
         s2 = sa.select([self.postTable.c.hidden])
         s2.append_whereclause(self.postTable.c.topic_id == ss.c.topic_id)
-        
+
         session = getSession()
         r = session.execute(s2)
         retval = reduce(and_, [bool(x['hidden']) for x in r], True)
         return retval
-        
+
     def hide_topic(self, postId):
         session = getSession()
         s1 = sa.select([self.postTable.c.topic_id])
         s1.append_whereclause(self.postTable.c.post_id == postId)
         r = session.execute(s1)
         t = r.fetchone()['topic_id']
-        
+
         u = self.topicTable.update(t == self.topicTable.c.topic_id)
         now = datetime.now(UTC)
         d = {'hidden': now}
