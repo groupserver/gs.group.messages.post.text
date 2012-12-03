@@ -1,42 +1,40 @@
-<tal:block>
-  <ul class="navlinks inline-list">
-    <li>
-      <a tal:condition="view/relatedPosts/previous_post_id" 
-        tal:attributes="href view/relatedPosts/first_post_id;
-          title string:First post in ${view/topicTitle};"
-        class="first">First post</a>
-      <span tal:condition="not:view/relatedPosts/previous_post_id" 
-        class="first">First post</span>
-    </li>
-    <li>
-      <a tal:condition="view/relatedPosts/previous_post_id" 
-        tal:attributes="href view/relatedPosts/previous_post_id;
-          title string:Previous post in ${view/topicTitle};"
-        class="prev">Previous post</a>
-      <span tal:condition="not:view/relatedPosts/previous_post_id"
-        class="prev">Previous post</span>
-    </li>
-    <li>
-      <a href="#" 
-        tal:attributes="href string:/r/topic/${view/relatedPosts/last_post_id};
-          title string:Topic: ${view/topicTitle}"
-        class="up">Topic</a>
-    </li>
-    <li>
-      <a tal:condition="view/relatedPosts/next_post_id" 
-        tal:attributes="href view/relatedPosts/next_post_id;
-          title string:Next post in ${view/topicTitle};"
-        class="next">Next post</a>
-      <span tal:condition="not:view/relatedPosts/next_post_id"
-        class="next">Next post</span>
-    </li>
-    <li>
-      <a tal:condition="view/relatedPosts/next_post_id"
-        tal:attributes="href view/relatedPosts/last_post_id;
-          title string:Most recent post in ${view/topicTitle};"
-        class="last">Last post</a>
-      <span tal:condition="not:view/relatedPosts/next_post_id"
-        class="last">Last post</span>                
-    </li>
-  </ul>
-</tal:block>
+<ul class="navlinks inline-list">
+  <li>
+    <a tal:condition="view/relatedPosts/previous_post_id" 
+       tal:attributes="href view/relatedPosts/first_post_id;
+                       title string:First post in ${view/topicTitle};"
+       class="first">First post</a>
+    <span tal:condition="not:view/relatedPosts/previous_post_id" 
+          class="first">First post</span>
+  </li>
+  <li>
+    <a tal:condition="view/relatedPosts/previous_post_id" 
+       tal:attributes="href view/relatedPosts/previous_post_id;
+                       title string:Previous post in ${view/topicTitle};"
+       class="prev">Prev</a>
+    <span tal:condition="not:view/relatedPosts/previous_post_id"
+          class="prev">Prev</span>
+  </li>
+  <li>
+    <a href="#" 
+       tal:attributes="href string:/r/topic/${view/relatedPosts/last_post_id};
+                       title string:Topic: ${view/topicTitle}"
+       class="up">Topic</a>
+  </li>
+  <li>
+    <a tal:condition="view/relatedPosts/next_post_id" 
+       tal:attributes="href view/relatedPosts/next_post_id;
+                       title string:Next post in ${view/topicTitle};"
+       class="next">Next</a>
+    <span tal:condition="not:view/relatedPosts/next_post_id"
+          class="next">Next</span>
+  </li>
+  <li>
+    <a tal:condition="view/relatedPosts/next_post_id"
+       tal:attributes="href view/relatedPosts/last_post_id;
+                       title string:Most recent post in ${view/topicTitle};"
+       class="last">Last post</a>
+    <span tal:condition="not:view/relatedPosts/next_post_id"
+          class="last">Last post</span>                
+  </li>
+</ul>
