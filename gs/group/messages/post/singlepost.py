@@ -30,6 +30,17 @@ class GSPostView(GroupPage):
         return retval
 
     @Lazy
+    def shortTopicName(self):
+        '''The short name of the topic, for the breadcrumb trail.'''
+        ts = self.topicTitle.split(' ')
+        if len(ts) < 4:
+            retval = self.topicName
+        else:
+            retval = ' '.join(ts[:3]) + '&#8230;'
+        assert retval, 'There is no retval'
+        return retval
+
+    @Lazy
     def post(self):
         retval = self.messageQuery.post(self.postId)
         if not retval:

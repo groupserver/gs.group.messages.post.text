@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
   metal:use-macro="context/@@groupserver_site_home_layout/page">
   <head>
-  	<title metal:fill-slot="title">
+        <title metal:fill-slot="title">
       Post in
       <span tal:replace="view/topicTitle">
         Standard Template for a Single Post
@@ -23,14 +23,28 @@
     </tal:block>
   </head>
   <body>
-    <div metal:fill-slot="body" id="single-post-page">
-      <h1>Post in
-        <cite tal:content="view/topicTitle">Topic</cite></h1>
+    <ul metal:fill-slot="breadcrumb">
+      <li><a tal:attributes="title string:${view/siteInfo/name} Homepage"
+             href="/" title="Home">&#8962;</a></li>
+      <li>
+        <a tal:attributes="href view/groupInfo/relativeURL">
+          <strong class="group" 
+                  tal:content="view/groupInfo/name">This group</strong>
+        </a>
+      </li>
+      <li><a class="topic" 
+            tal:attributes="href string:/r/topic/${view/relatedPosts/last_post_id}"
+             tal:content="structure view/shortTopicName">Topic</a></li>
+      <li>Post</li>
+    </ul>
+    <div metal:fill-slot="body" id="gs-group-messages-post">
       <p tal:define="topicTitle view/topicTitle; 
         relatedPosts view/relatedPosts"
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
       </p>
+      <h1>Post in
+        <cite tal:content="view/topicTitle">Topic</cite></h1>
       <p tal:define="post view/post;
                      isPublic view/isPublic"
         tal:replace="structure provider:groupserver.Post">
@@ -51,6 +65,20 @@
         src="/++resource++sharebox-20100721.js">&#160;</script>
       <script type="text/javascript"
         src="/++resource++hide-post-20110415.js">&#160;</script>
+      <script src="/++resource++jquery-ui-1.8.9.custom.min.js" 
+              type="text/javascript">&#160;</script>
+      <script type="text/javascript">
+        var f = {icons: {primary: 'ui-icon-arrowthickstop-1-w'}, text: false};
+        jQuery('.first').button(f);
+        var p = {icons: {primary: 'ui-icon-carat-1-w'}, text: true}
+        jQuery('.prev').button(p);
+        var up = {icons: { primary: "ui-icon-arrowthick-1-n" }, text: false,};
+        jQuery('.up').button(up);
+        var n = {icons: { secondary: "ui-icon-carat-1-e" }, text: true,}
+        jQuery('.next').button(n);
+        var l = {icons: {primary: 'ui-icon-arrowthickstop-1-e'}, text: false};
+        jQuery('.last').button(l);
+      </script>
     </tal:block>
   </body>
 </html>
