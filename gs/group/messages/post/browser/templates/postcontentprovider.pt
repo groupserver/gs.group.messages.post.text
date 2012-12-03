@@ -9,26 +9,24 @@
       <a class="topic entry-title" tal:condition="view/topicName"
         tal:attributes="href string:/r/topic/${view/post/post_id}#post-${view/post/post_id};"
         tal:content="view/topicName">A Topic</a>
-      <span class="author">
-        <strong>From:</strong>
-        <span class="vcard">
-          <a class="fn url" 
-            tal:omit-tag="view/authorInfo/anonymous"
-            tal:attributes="href view/authorInfo/url;
-              title string:Profile of ${view/authorInfo/name};"
-            tal:content="view/authorInfo/name">Me!</a>
-        </span>
-      </span>
-      <span class="posted"
+      <strong class="author vcard">
+        <a class="fn url" 
+           tal:omit-tag="view/authorInfo/anonymous"
+           tal:attributes="href view/authorInfo/url;
+                           title string:Profile of ${view/authorInfo/name};"
+           tal:content="view/authorInfo/name">Me!</a>
+      </strong><!--vcard-->
+      <span class="posted minor"
         tal:define="pd view/post/date;
           d python:change_tz(pd, 'UTC').replace(microsecond=0);
           date python:munge_date(view.context, pd)">
-        <strong>Date:</strong>
+        Posted at
         <abbr class="date updated published"
-          title="Stuff"
-          tal:attributes="title string:${d/isoformat}Z"
-          tal:content="date">Today, Tomorrow, Timaru</abbr>
-      </span>
+              title="Stuff"
+              tal:attributes="title string:${d/isoformat}Z">
+          <em tal:content="date">Today, Tomorrow, Timaru</em>
+        </abbr>
+      </span><!--posted-->
       <tal:block condition="not:view/post/hidden">
         <div class="share-bar"
           tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
@@ -98,7 +96,7 @@ because...;
             </pre>
           </div><!--disclosureShowHide-->
         </div><!--disclosureWidget-->
-      </div><!--email-remainder-->	
+      </div><!--email-remainder-->      
       <div class="fileNotification" 
         tal:condition="view/post/files_metadata"
         tal:define="fms view/post/files_metadata">
