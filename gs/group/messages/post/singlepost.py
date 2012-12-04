@@ -34,7 +34,7 @@ class GSPostView(GroupPage):
         '''The short name of the topic, for the breadcrumb trail.'''
         ts = self.topicTitle.split(' ')
         if len(ts) < 4:
-            retval = self.topicName
+            retval = self.topicTitle
         else:
             retval = ' '.join(ts[:3]) + '&#8230;'
         assert retval, 'There is no retval'

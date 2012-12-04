@@ -33,7 +33,8 @@
         </a>
       </li>
       <li><a class="topic" 
-            tal:attributes="href string:/r/topic/${view/relatedPosts/last_post_id}"
+             tal:attributes="title view/topicTitle;
+                        href string:/r/topic/${view/relatedPosts/last_post_id}"
              tal:content="structure view/shortTopicName">Topic</a></li>
       <li>Post</li>
     </ul>
@@ -70,14 +71,23 @@
       <script type="text/javascript">
         var f = {icons: {primary: 'ui-icon-seek-first'}, text: false};
         jQuery('.first').button(f);
+        jQuery('span.first').button("disable");
+
         var p = {icons: {primary: 'ui-icon-carat-1-w'}, text: true}
         jQuery('.prev').button(p);
+        jQuery('span.prev').button("disable");
+
         var up = {icons: { primary: "ui-icon-arrowthick-1-n" }, text: false,};
         jQuery('.up').button(up);
+        jQuery('span.up').button("disable");
+
         var n = {icons: { secondary: "ui-icon-carat-1-e" }, text: true,}
         jQuery('.next').button(n);
+        jQuery('span.next').button("disable");
+
         var l = {icons: {primary: 'ui-icon-seek-end'}, text: false};
         jQuery('.last').button(l);
+        jQuery('span.last').button("disable");
       </script>
     </tal:block>
   </body>
