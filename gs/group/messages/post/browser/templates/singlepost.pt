@@ -68,7 +68,7 @@
       <script src="/++resource++jquery-ui-1.8.9.custom.min.js" 
               type="text/javascript">&#160;</script>
       <script type="text/javascript">
-        var f = {icons: {primary: 'ui-icon-arrowthickstop-1-w'}, text: false};
+        var f = {icons: {primary: 'ui-icon-seek-first'}, text: false};
         jQuery('.first').button(f);
         var p = {icons: {primary: 'ui-icon-carat-1-w'}, text: true}
         jQuery('.prev').button(p);
@@ -76,7 +76,7 @@
         jQuery('.up').button(up);
         var n = {icons: { secondary: "ui-icon-carat-1-e" }, text: true,}
         jQuery('.next').button(n);
-        var l = {icons: {primary: 'ui-icon-arrowthickstop-1-e'}, text: false};
+        var l = {icons: {primary: 'ui-icon-seek-end'}, text: false};
         jQuery('.last').button(l);
       </script>
     </tal:block>
