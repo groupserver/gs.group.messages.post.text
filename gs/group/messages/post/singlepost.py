@@ -30,6 +30,11 @@ class GSPostView(GroupPage):
         return retval
 
     @Lazy
+    def topicTitle(self):
+        retval = self.post.get('subject', '')
+        return retval
+
+    @Lazy
     def shortTopicName(self):
         '''The short name of the topic, for the breadcrumb trail.'''
         ts = self.topicTitle.split(' ')
@@ -55,9 +60,4 @@ class GSPostView(GroupPage):
     @Lazy
     def relatedPosts(self):
         retval = self.messageQuery.topic_post_navigation(self.postId)
-        return retval
-
-    @Lazy
-    def topicTitle(self):
-        retval = self.post.get('subject', '')
         return retval
