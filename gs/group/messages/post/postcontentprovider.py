@@ -12,6 +12,10 @@ from canhide import can_hide_post
 from gs.cache import cache
 from threading import RLock
 
+
+UTF8 = 'utf-8'
+
+
 class GSPostContentProvider(GroupContentProvider):
     post = None
     __thread_lock = RLock()
@@ -46,7 +50,7 @@ class GSPostContentProvider(GroupContentProvider):
         # See the interface for what is passed in.
         self.__updated = True
         
-        self.showPhoto = self.showPhoto and (not self.post['hidden'])
+        self.showPhoto = self.showPhoto
                   
         self.authored = self.user_authored()
         self.authorInfo = createObject('groupserver.UserFromId',
@@ -117,3 +121,17 @@ class GSPostContentProvider(GroupContentProvider):
         assert retval
         return retval
 
+
+    @Lazy
+    def hiddenSupportEmail(self):
+        m = u'''Hello,
+
+I want to see the post at
+  {url}
+However, it is hidden. I think I should be allowed to see the post because...'''
+        message = quote(m.format(url=self.request.URL))
+        subject = quote('Post Hidden')
+        mailto = 'mailto:{support}?Subject={subj}&body={msg}'
+        retval = mailto.format(support=self.siteInfo.get_support_email(), 
+                               subj=subject, msg=message.encode(UTF8))
+        return retval
