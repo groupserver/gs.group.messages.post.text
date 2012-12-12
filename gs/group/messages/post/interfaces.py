@@ -35,7 +35,7 @@ class IGSPostContentProvider(Interface):
         min=1, default=1)
     topicName = TextLine(title=u"Title of the Topic",
         description=u"""The title of the topic.""",
-        required=False,
+        required=True,
         default=u'')
     # Should really be called "same author" or similar.
     showPhoto = Bool(title=u'Whether to show the photo',
