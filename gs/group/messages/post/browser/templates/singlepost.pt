@@ -63,7 +63,17 @@
     </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">
       <script type="text/javascript"
-        src="/++resource++sharebox-20100721.js">&#160;</script>
+              src="/++resource++sharebox-20121213.js">&#160;</script>
+      <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function(){
+          var public = true;
+          jQuery('.gs-content-js-share').each(function () {
+            shareWidget = GSShareBox(this, public);
+            shareWidget.init();
+          });
+        });
+      </script>
       <script type="text/javascript"
         src="/++resource++hide-post-20110415.js">&#160;</script>
       <script src="/++resource++jquery-ui-1.8.9.custom.min.js" 

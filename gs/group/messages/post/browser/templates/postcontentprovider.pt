@@ -25,16 +25,14 @@
         <em tal:content="date">Today, Tomorrow, Timaru</em>
       </abbr>
     </span><!--posted-->
-    <tal:block condition="not:view/post/hidden">
-      <div class="share-bar"
-           tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
-                           title string:${view/post/subject};
-                           public python:view.isPublic and 1 or 0">
-        &#160;
-      </div><!--share-bar-->
-      <a class="hide-button" tal:condition="view/canHide"
-         href="#">Hide</a>
-    </tal:block>
+    <div class="gs-group-messages-post-buttons" 
+         tal:condition="not:view/post/hidden">
+      <a class="gs-content-js-share"
+         tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
+                         title string:${view/post/subject};
+                         public python:view.isPublic and 1 or 0">Share</a>
+      <a class="hide-button" tal:condition="view/canHide" href="#">Hide</a>
+    </div><!--gs-group-messages-post-buttons-->
   </div><!--email-metadata-->
   <div tal:condition="view/showPhoto"
        tal:define="user view/authorInfo/user"
