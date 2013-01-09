@@ -76,8 +76,6 @@
       </script>
       <script type="text/javascript"
         src="/++resource++hide-post-20110415.js">&#160;</script>
-      <script src="/++resource++jquery-ui-1.8.9.custom.min.js" 
-              type="text/javascript">&#160;</script>
       <script type="text/javascript">
         var f = {icons: {primary: 'ui-icon-seek-first'}, text: false};
         jQuery('.first').button(f);
