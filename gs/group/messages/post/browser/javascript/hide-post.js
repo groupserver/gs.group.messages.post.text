@@ -15,25 +15,22 @@ GSHidePost = function () {
         post = jQuery(this).parents('.hentry');
         postId = post.attr('id');
         postId = postId.slice(5);
-        loading.load('../hide_post.ajax', {'form.postId': postId}, loaded);
-
-        // TODO: Position http://api.jqueryui.com/position/
-        dialog.modal("show");
+        dialog.data('postId', postId);
+        dialog.modal('show');
     };
 
+    var shown = function(event) {
+        var postId = null;
+        postId = jQuery(this).data('postId');
+        loading.load('../hide_post.ajax', {'form.postId': postId}, loaded);
+    };
     var loaded = function(response, status, request) {
-        var icons = {primary: 'ui-icon-trash'};
-        jQuery('#form\\.actions\\.hide').button({icons: icons, text: true});
     };
   
     return {
         init: function () {
-            var hide = {icons: {primary: 'ui-icon-trash'}};
-
-            hideButtons.removeAttr('href').click(showDialog).button(hide);
-
-            
-            dialog.modal({show: false, keyboard: true});
+            hideButtons.click(showDialog);
+            dialog.on('shown', shown);
         }
     };
 }(); // GSHidePost
