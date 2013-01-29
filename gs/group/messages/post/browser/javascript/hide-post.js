@@ -18,7 +18,7 @@ GSHidePost = function () {
         loading.load('../hide_post.ajax', {'form.postId': postId}, loaded);
 
         // TODO: Position http://api.jqueryui.com/position/
-        dialog.dialog("open");
+        dialog.modal("show");
     };
 
     var loaded = function(response, status, request) {
@@ -33,9 +33,7 @@ GSHidePost = function () {
             hideButtons.removeAttr('href').click(showDialog).button(hide);
 
             
-            dialog.dialog({autoOpen: false, closeOnEscape: true, modal: true,
-                           resizable: true, title: "Hide Post",
-                           minWidth: 504}); // 28u
+            dialog.modal({show: false, keyboard: true});
         }
     };
 }(); // GSHidePost
