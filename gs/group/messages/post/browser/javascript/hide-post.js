@@ -25,6 +25,9 @@ GSHidePost = function () {
         loading.load('../hide_post.ajax', {'form.postId': postId}, loaded);
     };
     var loaded = function(response, status, request) {
+        var b = null;
+        b = jQuery('#form\\.actions\\.hide');
+        b.button();
     };
   
     return {
