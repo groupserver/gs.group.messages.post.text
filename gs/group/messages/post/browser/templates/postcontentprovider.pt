@@ -27,11 +27,12 @@
     </span><!--posted-->
     <div class="gs-group-messages-post-buttons btn-toolbar" 
          tal:condition="not:view/post/hidden">
-      <a class="gs-content-js-share btn"
+      <a class="gs-content-js-share btn" role="button"
          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
                          title string:${view/post/subject};
                          public python:view.isPublic and 1 or 0">Share</a>
-      <a class="hide-button btn" tal:condition="view/canHide" href="#">Hide</a>
+      <button class="hide-button btn" role="button" 
+              tal:condition="view/canHide">Hide</button>
     </div><!--gs-group-messages-post-buttons-->
   </div><!--email-metadata-->
   <div tal:condition="view/showPhoto"
