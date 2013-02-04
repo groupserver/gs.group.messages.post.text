@@ -2,9 +2,9 @@
   <a tal:condition="view/relatedPosts/previous_post_id" 
      tal:attributes="href view/relatedPosts/first_post_id;
                      title string:First post in ${view/topicTitle};"
-     class="btn">First post</a>
+     class="btn">First</a>
   <span tal:condition="not:view/relatedPosts/previous_post_id" 
-        class="btn disabled">First post</span>
+        class="btn disabled">First</span>
 
   <a tal:condition="view/relatedPosts/previous_post_id" 
      tal:attributes="href view/relatedPosts/previous_post_id;
@@ -28,7 +28,7 @@
   <a tal:condition="view/relatedPosts/next_post_id"
      tal:attributes="href view/relatedPosts/last_post_id;
                      title string:Most recent post in ${view/topicTitle};"
-     class="btn">Last post</a>
+     class="btn">Last</a>
   <span tal:condition="not:view/relatedPosts/next_post_id"
-        class="btn disabled">Last post</span>                
+        class="btn disabled">Last</span>                
 </div><!--gs-group-messages-post-navigation-->
