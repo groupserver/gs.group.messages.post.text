@@ -30,7 +30,7 @@
     <div class="gs-group-messages-post-buttons btn-toolbar" 
          role="toolbar" aria-label="Post Actions"
          tal:condition="not:view/post/hidden">
-      <a class="gs-content-js-share btn btn-small" role="button" 
+      <a class="gs-content-js-share btn btn-small" role="button" rel="bookmark"
          aria-haspopup="true"         
          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
                          title string:${view/post/subject};
