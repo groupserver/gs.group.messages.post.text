@@ -5,11 +5,9 @@ from zope.component import createObject
 from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
-from Products.XWFCore.XWFUtils import getOption
 from postbody import get_post_intro_and_remainder
 from hiddendetails import HiddenPostInfo
 from canhide import can_hide_post
-from gs.cache import cache
 from threading import RLock
 
 
@@ -20,6 +18,7 @@ class GSPostContentProvider(GroupContentProvider):
     post = None
     __thread_lock = RLock()
     cookedTemplates = {}
+
     def __init__(self, context, request, view):
         GroupContentProvider.__init__(self, context, request, view)
         self.__updated = False
@@ -28,18 +27,18 @@ class GSPostContentProvider(GroupContentProvider):
 
     def update(self):
         """Update the internal state of the post content-provider.
-          
-        This method can be considered the main "setter" for the 
-        content provider; for the most part, information about the post's 
+
+        This method can be considered the main "setter" for the
+        content provider; for the most part, information about the post's
         author is set.
-        
+
         SIDE EFFECTS
           The following attributes are set.
             * "self.__updated"     Set to "True".
             * "self.authorId"      Set to the user-id of the post author.
             * "self.authorName"    Set to the name of the post author.
             * "self.authorExists"  Set to "True" if the author exists.
-            * "self.authored"      Set to "True" if the current user 
+            * "self.authored"      Set to "True" if the current user
                                    authored the post.
             * "self.authorImage"   Set to the URL of the author's image.
             * "self.siteInfo"     Set to an instance of GSSiteInfo.
@@ -49,28 +48,28 @@ class GSPostContentProvider(GroupContentProvider):
         assert self.post
         # See the interface for what is passed in.
         self.__updated = True
-        
+
         self.showPhoto = self.showPhoto
-                  
+
         self.authored = self.user_authored()
         self.authorInfo = createObject('groupserver.UserFromId',
                             self.context, self.post['author_id'])
 
         ir = get_post_intro_and_remainder(self, self.post['body'])
         self.postIntro, self.postRemainder = ir
-        self.cssClass = self.get_cssClass()              
-    
+        self.cssClass = self.get_cssClass()
+
         self.hiddenPostDetails = None
         if self.post['hidden']:
-            self.hiddenPostInfo = HiddenPostInfo(self.context, 
+            self.hiddenPostInfo = HiddenPostInfo(self.context,
                                     self.post['post_id'])
-                                    
-        self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo, 
+
+        self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
                                         self.post)
 
     # @cache('GSPostContentProvider.cooked', lambda x,y: y, 3600)
     def cook_template(self, fname):
-        if self.cookedTemplates.has_key(fname):
+        if fname in self.cookedTemplates:
             return self.cookedTemplates[fname]
 
         cooked = ViewPageTemplateFile(fname)
@@ -80,7 +79,7 @@ class GSPostContentProvider(GroupContentProvider):
                 self.cookedTemplates[fname] = cooked
         finally:
             self.__thread_lock.release()
-        
+
         return cooked
 
     def render(self):
@@ -96,7 +95,7 @@ class GSPostContentProvider(GroupContentProvider):
     #########################################
 
     def get_cssClass(self):
-        assert hasattr(self, 'position') # passed in
+        assert hasattr(self, 'position')  # passed in
         retval = (((self.position % 2) == 0) and 'even ') or 'odd '
         retval += self.post['hidden'] and 'hidden disclosureWidget' or \
           'visible'
@@ -108,19 +107,18 @@ class GSPostContentProvider(GroupContentProvider):
             retval = self.loggedInUser.id == self.post['author_id']
         assert type(retval) == bool
         return retval
-        
+
     def quote(self, msg):
         assert msg
         retval = quote(msg)
         assert retval
         return retval
-        
+
     @Lazy
     def loggedInUser(self):
         retval = createObject('groupserver.LoggedInUser', self.context)
         assert retval
         return retval
-
 
     @Lazy
     def hiddenSupportEmail(self):
@@ -128,10 +126,11 @@ class GSPostContentProvider(GroupContentProvider):
 
 I want to see the post at
   {url}
-However, it is hidden. I think I should be allowed to see the post because...'''
+However, it is hidden. I think I should be allowed to see the post
+because...'''
         message = quote(m.format(url=self.request.URL))
         subject = quote('Post Hidden')
         mailto = 'mailto:{support}?Subject={subj}&body={msg}'
-        retval = mailto.format(support=self.siteInfo.get_support_email(), 
+        retval = mailto.format(support=self.siteInfo.get_support_email(),
                                subj=subject, msg=message.encode(UTF8))
         return retval
