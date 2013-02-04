@@ -16,7 +16,7 @@
                          title string:Profile of ${view/authorInfo/name};"
          tal:content="view/authorInfo/name">Me!</a>
     </strong><!--vcard-->
-    <span class="posted minor"
+    <span class="posted muted"
           tal:define="pd view/post/date;
                       d python:change_tz(pd, 'UTC').replace(microsecond=0);
                       date python:munge_date(view.context, pd)">
@@ -24,7 +24,7 @@
       <abbr class="date updated published"
             title="Stuff"
             tal:attributes="title string:${d/isoformat}Z">
-        <em tal:content="date">Today, Tomorrow, Timaru</em>
+        <strong tal:content="date">Today, Tomorrow, Timaru</strong>
       </abbr>
     </span><!--posted-->
     <div class="gs-group-messages-post-buttons btn-toolbar" 
@@ -44,7 +44,7 @@
        tal:replace="structure provider:groupserver.UserImage"/>
   <div tal:condition="view/post/hidden"
        class="disclosureWidget hidden-post">
-    <p class="minor">
+    <p class="muted">
       <a class="disclosureButton" href="#">Hidden</a>
     </p>
     <div tal:condition="view/post/hidden"
