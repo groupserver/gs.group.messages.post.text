@@ -77,14 +77,14 @@
          tal:content="structure view/postIntro">
       This is the body of the document.
     </pre><!--email-body-->
-    <div class="email-remainder"
+    <div class="email-remainder muted"
          tal:condition="python:view.postRemainder.strip()"
          tal:define="remId string:emailRemainder${view/post/post_id};
                      discloseId string:emailDiscloseButton${view/post/post_id}">
       <div class="disclosureWidget" 
            tal:attributes="id remId">
         <p>
-          <a class="disclosureButton muted" role="button"
+          <a class="disclosureButton" role="button"
              tal:attributes="href string:javascript:showHideDisclosure('${remId}');
                              aria-controls string:${remId}-text;"
              href="#">Rest of post</a>
