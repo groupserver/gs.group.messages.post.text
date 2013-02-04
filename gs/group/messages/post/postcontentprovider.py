@@ -63,6 +63,28 @@ class GSPostContentProvider(GroupContentProvider):
             self.hiddenPostInfo = HiddenPostInfo(self.context,
                                     self.post['post_id'])
 
+        self.mediaFiles = []
+        self.normalFiles = []
+        for fm in self.post['files_metadata']:
+            mt = fm['mime_type']
+            icon = mt.replace('/', '-').replace('.', '-').strip()
+            fm['icon'] = icon
+
+            size = '({0:.1f}KB)'.format(fm['file_size'] / 1024.0)
+            fm['size'] = size
+            # TODO: extend to audio and video
+            if mt[:5] == 'image':
+                url = '/r/img/{file_id}/'.format(**fm)
+                fm['url'] = url
+                s = '/r/file/{file_id}/resize/196/196/{file_name}'
+                src = s.format(**fm)
+                fm['src'] = src
+                self.mediaFiles.append(fm)
+            else:
+                url = '/r/file/{file_id}/{file_name}'.format(**fm)
+                fm['url'] = url
+                self.normalFiles.append(fm)
+
         self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
                                         self.post)
 

@@ -99,41 +99,46 @@
       </div><!--disclosureWidget-->
     </div><!--email-remainder-->      
     <div class="fileNotification" role="list"
-         tal:condition="view/post/files_metadata"
-         tal:define="fms view/post/files_metadata">
-      <tal:block repeat="fm fms">
-        <div class="fileMetadata"
-             tal:define="isImage python:'image' in fm['mime_type']"
-             tal:attributes="role python:'listitem img' if isImage else 'listitem'"
-             role="listitem">
-          <div tal:condition="isImage" class="thumb">
-            <a href="#" tal:attributes="href string:/r/img/${fm/file_id}">
-              <img src="#"
-                   tal:attributes="src string:/r/file/${fm/file_id}/resize/196/196/${fm/file_name}"/>
-            </a>
-          </div><!--thumb-->
-          <div class="info"
-               tal:define="t fm/mime_type; 
-                           iconName python:t.replace('/','-').replace('.','-').strip(); 
-                           img python:(('image' in fm['mime_type']) and 'img') or 'file'">
-            <a href="#" title="foo"
-               tal:attributes="type fm/mime_type;
-                               href string:/r/${img}/${fm/file_id}/${fm/file_name};
-                               class string:fileIcon ${iconName};">&#160;</a>
+         tal:condition="view/post/files_metadata">
+      <div class="normalFileList" tal:condition="view/normalFiles">
+        <div class="info" tal:repeat="fm view/normalFiles" role="listitem"
+             tal:attributes="id fm/file_id">
+          <a href="#" title="foo"
+             tal:attributes="type fm/mime_type;
+                             href fm/url;
+                             class string:fileIcon ${fm/icon};">&#160;</a>
             <a class="file" href="/favicon.ico" 
                type="application/octet-stream"
                tal:attributes="type fm/mime_type;
-                               href string:/r/${img}/${fm/file_id}/${fm/file_name};
-                               class string:fileName ${iconName};"
+                             href fm/url;
+                             class string:fileName ${fm/icon};"
+              tal:content="fm/file_name">Filename</a>
+            <span class="muted" 
+                  tal:attributes="title string:${fm/file_size}B"
+                  tal:content="fm/size">-1</span>
+          </div><!--info-->
+      </div><!--normalFileList-->
+      <div class="mediaFileList" tal:condition="view/mediaFiles">
+        <div tal:repeat="fm view/mediaFiles"
+             class="mediaFile" role="listitem img"
+             tal:attributes="id fm/file_id">
+          <a href="#" class="thumb" tal:attributes="href fm/url">
+            <img src="#"
+                 tal:attributes="src fm/src"/>
+          </a><!--thumb-->
+          <div class="info">
+            <a class="file" href="/favicon.ico" 
+               type="application/octet-stream"
+               class="fileName"
+               tal:attributes="type fm/mime_type;
+                               href fm/url;"
                tal:content="fm/file_name">Filename</a>
-            <span tal:attributes="title string:${fm/file_size}B"
-                  tal:define="k python:u'%.0f'%(fm['file_size']/1024.0)"
-                  class="size muted">(<span class="val" 
-                                            tal:content="k">-1</span>KB)</span>
+            <span class="muted" 
+                  tal:attributes="title string:${fm/file_size}B"
+                  tal:content="fm/size">-1</span>
           </div><!--info-->
         </div><!--fileMetadata-->
-      </tal:block>
+      </div><!--mediaFileList-->
     </div><!--fileNotification-->
   </div><!--email-message-->
 </div><!--hentry-->
-
