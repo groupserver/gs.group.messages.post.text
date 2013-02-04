@@ -1,11 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
   metal:use-macro="context/@@groupserver_site_home_layout/page">
   <head>
-        <title metal:fill-slot="title">
-      Post in
-      <span tal:replace="view/topicTitle">
-        Standard Template for a Single Post
-      </span>:
+    <title metal:fill-slot="title">Post in
+      <span tal:replace="view/topicTitle">Standard Template for 
+        a Single Post</span>:
       <span tal:replace="view/groupInfo/name"/>:
       <span tal:replace="view/siteInfo/name"/>
     </title>
@@ -19,7 +17,7 @@
       <meta name="description" tal:attributes="content view/post/summary"/>
       <link rel="bookmark" title="Group Homepage" href="#"
         tal:attributes="title view/groupInfo/name;
-        href view/groupInfo/relativeURL" />
+        href string:${view/groupInfo/relativeURL}/" />
     </tal:block>
   </head>
   <body>
@@ -27,7 +25,7 @@
       <li><a tal:attributes="title string:${view/siteInfo/name} Homepage"
              href="/" title="Home">&#8962;</a></li>
       <li>
-        <a tal:attributes="href view/groupInfo/relativeURL">
+        <a tal:attributes="href string:${view/groupInfo/relativeURL}/">
           <strong class="group" 
                   tal:content="view/groupInfo/name">This group</strong>
         </a>
@@ -38,7 +36,7 @@
              tal:content="structure view/shortTopicName">Topic</a></li>
       <li>Post</li>
     </ul>
-    <div metal:fill-slot="body" id="gs-group-messages-post">
+    <div metal:fill-slot="body" id="gs-group-messages-post" role="main">
       <p tal:define="topicTitle view/topicTitle; 
         relatedPosts view/relatedPosts"
         tal:replace="structure provider:groupserver.PostNavLinks">
