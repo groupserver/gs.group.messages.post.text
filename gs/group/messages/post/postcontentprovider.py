@@ -10,7 +10,6 @@ from hiddendetails import HiddenPostInfo
 from canhide import can_hide_post
 from threading import RLock
 
-
 UTF8 = 'utf-8'
 
 
@@ -20,7 +19,7 @@ class GSPostContentProvider(GroupContentProvider):
     cookedTemplates = {}
 
     def __init__(self, context, request, view):
-        GroupContentProvider.__init__(self, context, request, view)
+        super(GSPostContentProvider, self).__init__(context, request, view)
         self.__updated = False
         # allow baseclass override
         self.can_hide_post = can_hide_post
