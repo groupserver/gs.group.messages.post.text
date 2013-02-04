@@ -55,8 +55,16 @@
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
       </p>
-      <div id="hide-the-post" title="Hide the Post">
-        <p class="loading">Loading…</p>
+      <div id="hide-the-post" class="modal hide fade"
+           tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" 
+                  aria-hidden="true">×</button>
+          <h3>Hide the Post</h3>
+        </div><!--modal-header-->
+        <div class="modal-body">
+          <p class="loading">Loading…</p>
+        </div><!--modal-body-->
       </div><!--hide-the-post-->
     </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">

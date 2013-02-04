@@ -1,4 +1,4 @@
-<div id="gs-group-messages-post-navigation" class="btn-group" role="navigation">
+<div class="gs-group-messages-post-navigation btn-group" role="navigation">
   <a tal:condition="view/relatedPosts/previous_post_id" 
      tal:attributes="href view/relatedPosts/first_post_id;
                      title string:First post in ${view/topicTitle};"
