@@ -24,7 +24,7 @@
       <abbr class="date updated published"
             title="Stuff"
             tal:attributes="title string:${d/isoformat}Z">
-        <strong tal:content="date">Today, Tomorrow, Timaru</strong>
+        <em tal:content="date">Today, Tomorrow, Timaru</em>
       </abbr>
     </span><!--posted-->
     <div class="gs-group-messages-post-buttons btn-toolbar" 
