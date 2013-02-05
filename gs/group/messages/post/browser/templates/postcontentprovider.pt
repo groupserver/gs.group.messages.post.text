@@ -5,9 +5,10 @@
                   id string:post-${view/post/post_id};
                   aria-labelledby string:post-${view/post/post_id}-title">
   <div class="email-metadata" role="complementary">
-    <a class="topic entry-title" role="heading"
+    <a class="topic entry-title" role="heading" rel="bookmark" 
+       aria-hidden="true"
        tal:attributes="id string:post-${view/post/post_id}-title;
-                       href string:/r/topic/${view/post/post_id}#post-${view/post/post_id};"
+                       href string:/r/post/${view/post/post_id};"
        tal:content="view/topicName">A Topic</a>
     <strong class="author vcard">
       <a class="fn url"
@@ -30,7 +31,7 @@
     <div class="gs-group-messages-post-buttons btn-toolbar" 
          role="toolbar" aria-label="Post Actions"
          tal:condition="not:view/post/hidden">
-      <a class="gs-content-js-share btn btn-small" role="button" rel="bookmark"
+      <a class="gs-content-js-share btn btn-small" role="button"
          aria-haspopup="true"         
          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
                          title string:${view/post/subject};
@@ -39,7 +40,7 @@
               aria-haspopup="true" tal:condition="view/canHide">Hide</button>
     </div><!--gs-group-messages-post-buttons-->
   </div><!--email-metadata-->
-  <div tal:condition="view/showPhoto"
+  <div tal:condition="view/showPhoto" role="complementary"
        tal:define="user view/authorInfo/user"
        tal:replace="structure provider:groupserver.UserImage"/>
   <div tal:condition="view/post/hidden"
@@ -73,10 +74,10 @@
     </div><!--hidden-msg-->
   </div><!--hidden-post-->
   <div tal:condition="not:view/post/hidden" class="email-message" >
-    <pre class="email-body entry-content" 
+    <pre class="entry-content" 
          tal:content="structure view/postIntro">
       This is the body of the document.
-    </pre><!--email-body-->
+    </pre><!--entry-content-->
     <div class="email-remainder muted"
          tal:condition="python:view.postRemainder.strip()"
          tal:define="remId string:emailRemainder${view/post/post_id};
@@ -101,43 +102,42 @@
     <div class="fileNotification" role="list"
          tal:condition="view/post/files_metadata">
       <div class="normalFileList" tal:condition="view/normalFiles">
-        <div class="info" tal:repeat="fm view/normalFiles" role="listitem"
-             tal:attributes="id fm/file_id">
+        <div class="info hmedia" tal:repeat="fm view/normalFiles" 
+             role="listitem" tal:attributes="id fm/file_id">
           <a href="#" title="foo"
              tal:attributes="type fm/mime_type;
                              href fm/url;
                              class string:fileIcon ${fm/icon};">&#160;</a>
-            <a class="file" href="/favicon.ico" 
-               type="application/octet-stream"
-               tal:attributes="type fm/mime_type;
+          <a class="enclosure" type="application/octet-stream"
+             tal:attributes="type fm/mime_type;
                              href fm/url;
                              class string:fileName ${fm/icon};"
-              tal:content="fm/file_name">Filename</a>
-            <span class="muted" 
-                  tal:attributes="title string:${fm/file_size}B"
-                  tal:content="fm/size">-1</span>
-          </div><!--info-->
+             href="#"><span class="fn" 
+                            tal:content="fm/file_name">Filename</span>
+                       <span class="muted" 
+                             tal:attributes="title string:${fm/file_size}B"
+                             tal:content="fm/size">-1</span></a>
+        </div><!--info-->
       </div><!--normalFileList-->
       <div class="mediaFileList" tal:condition="view/mediaFiles">
         <div tal:repeat="fm view/mediaFiles"
-             class="mediaFile" role="listitem img"
+             class="hmedia" role="listitem img"
              tal:attributes="id fm/file_id">
           <a href="#" class="thumb" tal:attributes="href fm/url">
             <img src="#"
                  tal:attributes="src fm/src"/>
           </a><!--thumb-->
           <div class="info">
-            <a class="file" href="/favicon.ico" 
-               type="application/octet-stream"
-               class="fileName"
+            <a class="enclosure" type="application/octet-stream"
                tal:attributes="type fm/mime_type;
                                href fm/url;"
-               tal:content="fm/file_name">Filename</a>
-            <span class="muted" 
-                  tal:attributes="title string:${fm/file_size}B"
-                  tal:content="fm/size">-1</span>
+               href="#"><span class="fn" 
+                              tal:content="fm/file_name">Filename</span>
+                         <span class="muted" 
+                               tal:attributes="title string:${fm/file_size}B"
+                               tal:content="fm/size">-1</span></a>
           </div><!--info-->
-        </div><!--fileMetadata-->
+        </div><!--hmedia-->
       </div><!--mediaFileList-->
     </div><!--fileNotification-->
   </div><!--email-message-->
