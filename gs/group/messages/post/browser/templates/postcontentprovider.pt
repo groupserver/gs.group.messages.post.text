@@ -44,11 +44,13 @@
        tal:define="user view/authorInfo/user"
        tal:replace="structure provider:groupserver.UserImage"/>
   <div tal:condition="view/post/hidden"
+       tal:define="dshId string:post-${view/post/post_id}-dsh"
        class="disclosureWidget hidden-post">
     <p class="muted">
-      <a class="disclosureButton" href="#">Hidden</a>
+      <a class="disclosureButton" href="#" role="button" 
+         tal:attributes="aria-controls dshId">Hidden</a>
     </p>
-    <div tal:condition="view/post/hidden"
+    <div tal:attributes="id dshId"
          class="hidden-msg disclosureShowHide" style="display:none;">
       <p class="vcard">
         Sorry, this post is hidden.
@@ -78,26 +80,24 @@
          tal:content="structure view/postIntro">
       This is the body of the document.
     </pre><!--entry-content-->
-    <div class="email-remainder muted"
+    <div class="email-remainder muted disclosureWidget"
          tal:condition="python:view.postRemainder.strip()"
          tal:define="remId string:emailRemainder${view/post/post_id};
-                     discloseId string:emailDiscloseButton${view/post/post_id}">
-      <div class="disclosureWidget" 
-           tal:attributes="id remId">
-        <p>
-          <a class="disclosureButton" role="button"
-             tal:attributes="href string:javascript:showHideDisclosure('${remId}');
-                             aria-controls string:${remId}-text;"
-             href="#">Rest of post</a>
-        </p>
-        <div class="disclosureShowHide" style="display:none;"
-             tal:attributes="id string:${remId}-text">
-          <pre tal:content="structure view/postRemainder">
-            This is the remainder of the email, with such things as 
-            the footer.
-          </pre>
-        </div><!--disclosureShowHide-->
-      </div><!--disclosureWidget-->
+                     discloseId string:emailDiscloseButton${view/post/post_id};
+                     dshId string:${remId}-text"
+         tal:attributes="id remId">
+      <p>
+        <a class="disclosureButton" role="button"
+           tal:attributes="aria-controls dshId;"
+           href="#">Rest of post</a>
+      </p>
+      <div class="disclosureShowHide" style="display:none;"
+           tal:attributes="id dshId">
+        <pre tal:content="structure view/postRemainder">
+          This is the remainder of the email, with such things as 
+          the footer.
+        </pre>
+      </div><!--disclosureShowHide-->
     </div><!--email-remainder-->      
     <div class="fileNotification" role="list"
          tal:condition="view/post/files_metadata">
