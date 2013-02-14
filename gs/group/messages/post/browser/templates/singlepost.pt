@@ -69,19 +69,11 @@
     </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">
       <script type="text/javascript"
-              src="/++resource++sharebox-20121213.js">&#160;</script>
-      <script type="text/javascript">
-        jQuery.noConflict();
-        jQuery(document).ready(function(){
-          var public = true;
-          jQuery('.gs-content-js-share').each(function () {
-            shareWidget = GSShareBox(this, public);
-            shareWidget.init();
-          });
-        });
-      </script>
+              src="/++resource++gs-group-messages-post-share-20130114.js"
+              defer="true">&#160;</script>
       <script type="text/javascript"
-        src="/++resource++hide-post-20110415.js">&#160;</script>
+              defer="true"
+              src="/++resource++hide-post-20110415.js">&#160;</script>
     </tal:block>
   </body>
 </html>
