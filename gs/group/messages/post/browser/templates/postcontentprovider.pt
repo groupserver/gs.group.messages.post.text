@@ -5,11 +5,6 @@
                   id string:post-${view/post/post_id};
                   aria-labelledby string:post-${view/post/post_id}-title">
   <div class="email-metadata" role="complementary">
-    <a class="topic entry-title" role="heading" rel="bookmark" 
-       aria-hidden="true"
-       tal:attributes="id string:post-${view/post/post_id}-title;
-                       href string:/r/post/${view/post/post_id};"
-       tal:content="view/topicName">A Topic</a>
     <strong class="author vcard">
       <a class="fn url"
          tal:omit-tag="view/authorInfo/anonymous"
@@ -17,6 +12,11 @@
                          title string:Profile of ${view/authorInfo/name};"
          tal:content="view/authorInfo/name">Me!</a>
     </strong><!--vcard-->
+    <a class="topic entry-title" role="heading" rel="bookmark" 
+       aria-hidden="true"
+       tal:attributes="id string:post-${view/post/post_id}-title;
+                       href string:/r/post/${view/post/post_id};"
+       tal:content="view/topicName">A Topic</a>
     <span class="posted muted"
           tal:define="pd view/post/date;
                       d python:change_tz(pd, 'UTC').replace(microsecond=0);
