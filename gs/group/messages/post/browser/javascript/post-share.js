@@ -1,14 +1,17 @@
 jQuery.noConflict();
 
-function init_post_share() {
-    var isPublic = true;
-    jQuery('.gs-content-js-share').each(function () {
+function gs_group_messages_post_share_init() {
+    var isPublic = false, shareWidget = null;
+
+    jQuery('.gs-content-js-share').each(function() {
+        // TODO: make isPublic not sux. This is the one topic-specific part.
+        isPublic = Boolean(Number(jQuery(this).attr('public')));
         shareWidget = GSShareBox(this, isPublic);
         shareWidget.init();
     });
 }
 
-jQuery(window).load(function(){
+jQuery(window).load(function () {
     gsJsLoader.with_module('/++resource++gs-content-js-sharebox-min-20130114.js',
-                           init_post_share);
+                           gs_group_messages_post_share_init);
 });
