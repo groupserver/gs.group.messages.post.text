@@ -17,7 +17,7 @@
        tal:attributes="id string:post-${view/post/post_id}-title;
                        href string:/r/post/${view/post/post_id};"
        tal:content="view/topicName">A Topic</a>
-    <span class="posted muted"
+    <span class="posted muted small"
           tal:define="pd view/post/date;
                       d python:change_tz(pd, 'UTC').replace(microsecond=0);
                       date python:munge_date(view.context, pd)">
@@ -86,7 +86,7 @@
                      discloseId string:emailDiscloseButton${view/post/post_id};
                      dshId string:${remId}-text"
          tal:attributes="id remId">
-      <p>
+      <p class="small">
         <a class="disclosureButton" role="button"
            tal:attributes="aria-controls dshId;"
            href="#">Rest of post</a>
@@ -125,9 +125,9 @@
              tal:attributes="id fm/file_id">
           <a href="#" class="thumb" tal:attributes="href fm/url">
             <img src="#"
-                 tal:attributes="src fm/src"/>
+                 tal:attributes="src string:${fm/src}/resize/190/190/${fm/file_name}"/>
           </a><!--thumb-->
-          <div class="info">
+          <div class="info small">
             <a class="enclosure" type="application/octet-stream"
                tal:attributes="type fm/mime_type;
                                href fm/url;"

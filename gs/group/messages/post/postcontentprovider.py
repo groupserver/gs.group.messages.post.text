@@ -70,13 +70,13 @@ class GSPostContentProvider(GroupContentProvider):
             icon = mt.replace('/', '-').replace('.', '-').strip()
             fm['icon'] = icon
 
-            size = '({0:.1f}KB)'.format(fm['file_size'] / 1024.0)
+            size = '{0:.1f}kb'.format(fm['file_size'] / 1024.0)
             fm['size'] = size
             # TODO: extend to audio and video
             if mt[:5] == 'image':
                 url = '/r/img/{file_id}/'.format(**fm)
                 fm['url'] = url
-                s = '/r/file/{file_id}/resize/196/196/{file_name}'
+                s = '/r/file/{file_id}'
                 src = s.format(**fm)
                 fm['src'] = src
                 self.mediaFiles.append(fm)
