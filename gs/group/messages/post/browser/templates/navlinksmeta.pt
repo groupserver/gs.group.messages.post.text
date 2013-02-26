@@ -10,7 +10,7 @@
 
   <link rel="up" href="#" 
       tal:attributes="title view/topicTitle; 
-        href string:/r/topic/${view/relatedPosts/last_post_id}" />
+        href string:${view/groupInfo/relativeURL}/messages/topic/${view/relatedPosts/last_post_id}" />
 
   <link rel="next" 
     tal:condition="view/relatedPosts/next_post_id"

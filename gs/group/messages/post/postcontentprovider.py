@@ -74,8 +74,9 @@ class GSPostContentProvider(GroupContentProvider):
             fm['size'] = size
             # TODO: extend to audio and video
             if mt[:5] == 'image':
-                url = '/r/img/{file_id}/'.format(**fm)
-                fm['url'] = url
+                url = '{0}/messages/image/{1}'
+                fm['url'] = url.format(self.groupInfo.relativeURL, 
+                                       fm['file_id'])
                 s = '/r/file/{file_id}'
                 src = s.format(**fm)
                 fm['src'] = src
