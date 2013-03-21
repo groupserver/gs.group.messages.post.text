@@ -58,10 +58,14 @@
     class=".hide.HidePost" 
     permission="zope2.View" />
 
-  <!---->
+  <!-- JavaScript resources -->
   <browser:resource 
     name="hide-post-20110415.js"
     file="browser/javascript/hide-post.js"
+    permission="zope2.Public"/>
+  <browser:resource 
+    name="hide-post-min-20110415.js"
+    file="browser/javascript/hide-post-min.js"
     permission="zope2.Public"/>
   <browser:resource 
     name="gs-group-messages-post-share-20130114.js"
