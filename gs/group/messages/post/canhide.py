@@ -1,5 +1,5 @@
 # coding=utf-8
-from gs.group.member.base.utils import user_admin_of_group
+from gs.group.member.base import user_admin_of_group
 
 
 def can_hide_post(userInfo, groupInfo, postInfo):
