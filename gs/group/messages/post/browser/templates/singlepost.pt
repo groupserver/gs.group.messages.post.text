@@ -69,7 +69,7 @@
     </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">
       <script type="text/javascript"
-              src="/++resource++gs-group-messages-post-share-20130114.js"
+              src="/++resource++gs-group-messages-post-share-min-20130114.js"
               defer="true">&#160;</script>
       <script type="text/javascript"
               defer="true"
