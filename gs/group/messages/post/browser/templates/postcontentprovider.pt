@@ -105,26 +105,21 @@
         <div class="info hmedia" tal:repeat="fm view/normalFiles" 
              role="listitem" tal:attributes="id fm/file_id">
           <a class="icon-alone" href="#"
-             tal:attributes="href fm/url; title fm/file_name">
+             tal:attributes="href fm/url; title fm/file_name; 
+                             type fm/mime_type">
             <span aria-hidden="true" data-icon="&#x1f3a8;"
                   tal:attributes="data-icon fm/icon"></span>
             <span class="screen-reader-text">File type:
               <span tal:content="fm/mime_type">application/octet-stream</span>
             </span>
           </a>
-          <a href="#" title="foo"
-             tal:attributes="type fm/mime_type;
-                             href fm/url;
-                             class string:fileIcon ${fm/icon};">&#160;</a>
           <a class="enclosure" type="application/octet-stream"
-             tal:attributes="type fm/mime_type;
-                             href fm/url;
-                             class string:fileName ${fm/icon};"
-             href="#"><span class="fn" 
-                            tal:content="fm/file_name">Filename</span>
-                       <span class="muted" 
-                             tal:attributes="title string:${fm/file_size}B"
-                             tal:content="fm/size">-1</span></a>
+             tal:attributes="type fm/mime_type; href fm/url; title fm/file_name"
+             href="#">
+            <span class="fn" tal:content="fm/file_name">Filename</span>
+            <span class="size muted" 
+                  tal:attributes="title string:${fm/file_size}B"
+                  tal:content="fm/size">-1</span></a>
         </div><!--info-->
       </div><!--normalFileList-->
       <div class="mediaFileList" tal:condition="view/mediaFiles">
