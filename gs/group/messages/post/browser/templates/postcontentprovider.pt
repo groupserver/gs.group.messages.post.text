@@ -104,6 +104,14 @@
       <div class="normalFileList" tal:condition="view/normalFiles">
         <div class="info hmedia" tal:repeat="fm view/normalFiles" 
              role="listitem" tal:attributes="id fm/file_id">
+          <a class="icon-alone" href="#"
+             tal:attributes="href fm/url; title fm/file_name">
+            <span aria-hidden="true" data-icon="&#x1f3a8;"
+                  tal:attributes="data-icon fm/icon"></span>
+            <span class="screen-reader-text">File type:
+              <span tal:content="fm/mime_type">application/octet-stream</span>
+            </span>
+          </a>
           <a href="#" title="foo"
              tal:attributes="type fm/mime_type;
                              href fm/url;

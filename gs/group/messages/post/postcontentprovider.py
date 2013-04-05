@@ -1,10 +1,11 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from urllib import quote
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
+from gs.group.messages.base import get_icon
 from postbody import get_post_intro_and_remainder
 from hiddendetails import HiddenPostInfo
 from canhide import can_hide_post
@@ -66,24 +67,23 @@ class GSPostContentProvider(GroupContentProvider):
         self.mediaFiles = []
         self.normalFiles = []
         for fm in self.post['files_metadata']:
-            mt = fm['mime_type']
-            icon = mt.replace('/', '-').replace('.', '-').strip()
-            fm['icon'] = icon
-
+            fm['icon'] = get_icon(fm['mime_type'])
             size = '{0:.1f}kb'.format(fm['file_size'] / 1024.0)
             fm['size'] = size
-            # TODO: extend to audio and video
-            if mt[:5] == 'image':
+            # TODO: Extend to audio <https://redmine.iopen.net/issues/416>
+            # TODO: Extend to video <https://redmine.iopen.net/issues/333>
+            if fm['mime_type'][:5] == 'image':
                 url = '{0}/messages/image/{1}'
-                fm['url'] = url.format(self.groupInfo.relativeURL, 
+                fm['url'] = url.format(self.groupInfo.relativeURL,
                                        fm['file_id'])
-                s = '/r/file/{file_id}'
-                src = s.format(**fm)
-                fm['src'] = src
+                s = '{0}/files/f/{1}/{2}'
+                fm['src'] = s.format(self.groupInfo.relativeURL, fm['file_id'],
+                                        fm['file_name'])
                 self.mediaFiles.append(fm)
             else:
-                url = '/r/file/{file_id}/{file_name}'.format(**fm)
-                fm['url'] = url
+                url = '{0}/files/f/{1}/{2}'
+                fm['url'] = url.format(self.groupInfo.relativeURL, fm['file_id'],
+                                        fm['file_name'])
                 self.normalFiles.append(fm)
 
         self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
