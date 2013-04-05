@@ -22,8 +22,13 @@
   </head>
   <body>
     <ul metal:fill-slot="breadcrumb">
-      <li><a tal:attributes="title string:${view/siteInfo/name} Homepage"
-             href="/" title="Home">&#8962;</a></li>
+      <li>
+        <a tal:attributes="title string:${view/siteInfo/name} Homepage"
+             href="/" title="Home" class="icon-alone">
+          <span aria-hidden="true" data-icon="&#x2302;"></span>
+          <span class="screen-reader-text">Site home page</span>
+        </a>
+      </li>
       <li>
         <a tal:attributes="href string:${view/groupInfo/relativeURL}/">
           <strong class="group" 
