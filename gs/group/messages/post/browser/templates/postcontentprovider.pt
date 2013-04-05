@@ -32,12 +32,17 @@
          role="toolbar" aria-label="Post Actions"
          tal:condition="not:view/post/hidden">
       <a class="gs-content-js-share btn btn-small" role="button"
-         aria-haspopup="true"         
+         aria-haspopup="true" data-icon="&#xe001;"
          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
                          title string:${view/post/subject};
                          public python:view.isPublic and 1 or 0">Share</a>
-      <button class="hide-button btn btn-small" role="button" 
-              aria-haspopup="true" tal:condition="view/canHide">Hide</button>
+      <button class="hide-button btn btn-small" role="button" title="Hide"
+              aria-haspopup="true" tal:condition="view/canHide">
+        <div class="icon-alone">
+          <span aria-hidden="true" data-icon="&#x1f5d1;"></span>
+          <span class="screen-reader-text">Hide</span>
+        </div>
+      </button>
     </div><!--gs-group-messages-post-buttons-->
   </div><!--email-metadata-->
   <div tal:condition="view/showPhoto" role="complementary"
