@@ -82,8 +82,8 @@ class GSPostContentProvider(GroupContentProvider):
                 self.mediaFiles.append(fm)
             else:
                 url = '{0}/files/f/{1}/{2}'
-                fm['url'] = url.format(self.groupInfo.relativeURL, fm['file_id'],
-                                        fm['file_name'])
+                fm['url'] = url.format(self.groupInfo.relativeURL,
+                                        fm['file_id'], fm['file_name'])
                 self.normalFiles.append(fm)
 
         self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
