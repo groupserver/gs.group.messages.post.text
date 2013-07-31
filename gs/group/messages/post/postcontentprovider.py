@@ -119,8 +119,8 @@ class GSPostContentProvider(GroupContentProvider):
     def get_cssClass(self):
         assert hasattr(self, 'position')  # passed in
         retval = 'even' if ((self.position % 2) == 0) else 'odd'
-        retval += 'hidden-post disclosureWidget' if self.post['hidden'] else \
-                    'visible-post'
+        retval += ' hidden-post disclosureWidget' if self.post['hidden'] else \
+                    ' visible-post'
         return retval
 
     def user_authored(self):
