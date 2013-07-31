@@ -1,10 +1,10 @@
 <form enctype="multipart/form-data"  method="post" action="."
-  id="hide-post-dialog-content" tal:attributes="action request/URL">
+      id="hide-post-dialog-content" tal:attributes="action request/URL">
   <!--Messages-->
   <!--tal:block 
-    define="errors view/errors; status view/status; widgets view/widgets"
-    content="structure provider:groupserver.FormStatusMessage"
-    metal:fill-slot="messages">&#160;</tal:block-->
+      define="errors view/errors; status view/status; widgets view/widgets"
+      content="structure provider:groupserver.FormStatusMessage"
+      metal:fill-slot="messages">&#160;</tal:block-->
   <!--Explanation-->
   <p>
     To hide this post add a reason below and click the
