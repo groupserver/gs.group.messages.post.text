@@ -1,14 +1,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-  metal:use-macro="context/@@groupserver_site_home_layout/page">
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="gs.group.messages.post"
+      metal:use-macro="context/@@groupserver_layout/page">
   <head>
     <title metal:fill-slot="title">Post in
-      <span tal:replace="view/topicTitle">Standard Template for 
+      <span tal:replace="view/topicTitle">Standard Template for
         a Single Post</span>:
       <span tal:replace="view/groupInfo/name"/>:
       <span tal:replace="view/siteInfo/name"/>
     </title>
     <tal:block metal:fill-slot="metadata">
-      <tal:block define="topicTitle view/topicTitle; 
+      <tal:block define="topicTitle view/topicTitle;
         relatedPosts view/relatedPosts;
         pageTemplateFileName string:browser/templates/navlinksmeta.pt"
         replace="structure provider:groupserver.PostNavLinks">
@@ -31,18 +35,18 @@
       </li>
       <li>
         <a tal:attributes="href string:${view/groupInfo/relativeURL}/">
-          <strong class="group" 
+          <strong class="group"
                   tal:content="view/groupInfo/name">This group</strong>
         </a>
       </li>
-      <li><a class="topic" 
+      <li><a class="topic"
              tal:attributes="title view/topicTitle;
                         href string:${view/groupInfo/relativeURL}/messages/topic/${view/relatedPosts/last_post_id}"
              tal:content="structure view/shortTopicName">Topic</a></li>
       <li>Post</li>
     </ul>
     <div metal:fill-slot="body" id="gs-group-messages-post" role="main">
-      <p tal:define="topicTitle view/topicTitle; 
+      <p tal:define="topicTitle view/topicTitle;
         relatedPosts view/relatedPosts"
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
@@ -55,7 +59,7 @@
         The email message is rendered by the Post content provider,
         not by this page.
       </p>
-      <p tal:define="topicTitle view/topicTitle; 
+      <p tal:define="topicTitle view/topicTitle;
         relatedPosts view/relatedPosts"
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
@@ -63,7 +67,7 @@
       <div id="hide-the-post" class="modal hide fade"
            tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" 
+          <button type="button" class="close" data-dismiss="modal"
                   aria-hidden="true">×</button>
           <h3>Hide the Post</h3>
         </div><!--modal-header-->
@@ -82,4 +86,3 @@
     </tal:block>
   </body>
 </html>
-

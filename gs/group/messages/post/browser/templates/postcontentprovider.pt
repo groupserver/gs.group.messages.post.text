@@ -1,9 +1,11 @@
-<div role="article"
-  tal:define="munge_date python:modules['Products.XWFCore.XWFUtils'].munge_date;
-              change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;"
-  tal:attributes="class string:hentry ${view/cssClass}; 
-                  id string:post-${view/post/post_id};
-                  aria-labelledby string:post-${view/post/post_id}-title">
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     role="article"
+     tal:define="munge_date python:modules['Products.XWFCore.XWFUtils'].munge_date;
+                 change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;"
+     tal:attributes="class string:hentry ${view/cssClass};
+                     id string:post-${view/post/post_id};
+                     aria-labelledby string:post-${view/post/post_id}-title">
   <div class="email-metadata" role="complementary">
     <strong class="author vcard">
       <a class="fn url"
@@ -12,7 +14,7 @@
                          title string:Profile of ${view/authorInfo/name};"
          tal:content="view/authorInfo/name">Me!</a>
     </strong><!--vcard-->
-    <a class="topic entry-title" role="heading" rel="bookmark" 
+    <a class="topic entry-title" role="heading" rel="bookmark"
        aria-hidden="true"
        tal:attributes="id string:post-${view/post/post_id}-title;
                        href string:/r/post/${view/post/post_id};"
@@ -28,7 +30,7 @@
         <em tal:content="date">Today, Tomorrow, Timaru</em>
       </abbr>
     </span><!--posted-->
-    <div class="gs-group-messages-post-buttons btn-toolbar" 
+    <div class="gs-group-messages-post-buttons btn-toolbar"
          role="toolbar" aria-label="Post Actions"
          tal:condition="not:view/post/hidden">
       <a class="gs-content-js-share btn btn-small" role="button"
@@ -52,18 +54,18 @@
        tal:define="dshId string:post-${view/post/post_id}-dsh"
        class="disclosureWidget hidden-post">
     <p class="muted">
-      <a class="disclosureButton" href="#" role="button" 
+      <a class="disclosureButton" href="#" role="button"
          tal:attributes="aria-controls dshId">Hidden</a>
     </p>
     <div tal:attributes="id dshId"
          class="hidden-msg disclosureShowHide" style="display:none;">
       <p class="vcard">
         Sorry, this post is hidden.
-        The reason that 
+        The reason that
         <a class="fn"  href="#"
-           tal:define="u view/hiddenPostInfo/adminInfo" 
+           tal:define="u view/hiddenPostInfo/adminInfo"
            tal:attributes="href u/url"
-           tal:content="u/name">an admin</a> 
+           tal:content="u/name">an admin</a>
         gave for hiding the post is as follows.
       </p><!--vcard-->
       <blockquote>
@@ -75,13 +77,13 @@
         If you think you should be able to see the post
         <a href="#"
            tal:attributes="href view/hiddenSupportEmail"
-           class="email">email support</a> 
+           class="email">email support</a>
         and we will see what we can do to help.
       </p>
     </div><!--hidden-msg-->
   </div><!--hidden-post-->
-  <div tal:condition="not:view/post/hidden" class="email-message" >
-    <pre class="entry-content" 
+  <div tal:condition="not:view/post/hidden" class="email-message">
+    <pre class="entry-content"
          tal:content="structure view/postIntro">
       This is the body of the document.
     </pre><!--entry-content-->
@@ -99,39 +101,40 @@
       <div class="disclosureShowHide" style="display:none;"
            tal:attributes="id dshId">
         <pre tal:content="structure view/postRemainder">
-          This is the remainder of the email, with such things as 
+          This is the remainder of the email, with such things as
           the footer.
         </pre>
       </div><!--disclosureShowHide-->
-    </div><!--email-remainder-->      
+    </div><!--email-remainder-->
     <div class="fileNotification" role="list"
          tal:condition="view/post/files_metadata">
       <div class="normalFileList" tal:condition="view/normalFiles">
-        <div class="info hmedia" tal:repeat="fm view/normalFiles" 
+        <div class="info hmedia" tal:repeat="fm view/normalFiles"
              role="listitem" tal:attributes="id fm/file_id">
           <a class="icon-alone" href="#"
-             tal:attributes="href fm/url; title fm/file_name; 
+             tal:attributes="href fm/url; title fm/file_name;
                              type fm/mime_type">
             <span aria-hidden="true" data-icon="&#x1f3a8;"
                   tal:attributes="data-icon fm/icon"></span>
             <span class="screen-reader-text">File type:
-              <span tal:content="fm/mime_type">application/octet-stream</span>
+            <span tal:content="fm/mime_type">application/octet-stream</span>
             </span>
           </a>
           <a class="enclosure" type="application/octet-stream"
              tal:attributes="type fm/mime_type; href fm/url; title fm/file_name"
              href="#">
             <span class="fn" tal:content="fm/file_name">Filename</span>
-            <span class="size muted" 
+            <span class="size muted"
                   tal:attributes="title string:${fm/file_size}B"
-                  tal:content="fm/size">-1</span></a>
+                  tal:content="fm/size">-1</span>
+          </a>
         </div><!--info-->
       </div><!--normalFileList-->
       <div class="mediaFileList" tal:condition="view/mediaFiles">
         <div tal:repeat="fm view/mediaFiles"
              class="hmedia" role="listitem img"
              tal:attributes="id fm/file_id">
-          <a href="#" class="thumb" 
+          <a href="#" class="thumb"
              tal:attributes="href fm/url"
              tal:define="fileId fm/file_id;
                          alt string:The posted image ${fm/file_name};
@@ -144,11 +147,11 @@
             <a class="enclosure" type="application/octet-stream"
                tal:attributes="type fm/mime_type;
                                href fm/url;"
-               href="#"><span class="fn" 
+               href="#"><span class="fn"
                               tal:content="fm/file_name">Filename</span>
-                         <span class="muted" 
-                               tal:attributes="title string:${fm/file_size}B"
-                               tal:content="fm/size">-1</span></a>
+            <span class="muted"
+                  tal:attributes="title string:${fm/file_size}B"
+                  tal:content="fm/size">-1</span></a>
           </div><!--info-->
         </div><!--hmedia-->
       </div><!--mediaFileList-->
