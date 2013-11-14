@@ -5,24 +5,26 @@
   xmlns:sqlos="http://namespaces.sqlobject.org/sqlos"
   xmlns:five="http://namespaces.zope.org/five">
 
+  <include package="zope.viewlet" file="meta.zcml" />
+
   <class class=".traverse.GSPostTraversal">
     <implements interface="zope.publisher.interfaces.IPublishTraverse" />
   </class>
-  <browser:page 
-    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder" 
+  <browser:page
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
     name="post"
     class=".traverse.GSPostTraversal"
     permission="zope2.View" />
-    
-  <browser:page 
-    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder" 
+
+  <browser:page
+    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
     name="gspost"
     class=".singlepost.GSPostView"
     template="browser/templates/singlepost.pt"
     permission="zope2.Public" />
 
   <!--Navigation Links -->
-  <interface 
+  <interface
     interface=".interfaces.INavLinksContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
   <class class=".navlinks.NavLinks">
@@ -33,9 +35,9 @@
     factory=".navlinks.NavLinks"
     provides="zope.contentprovider.interfaces.IContentProvider"
     name="groupserver.PostNavLinks"/>
-    
+
   <!-- Post Content Provider -->
-  <interface 
+  <interface
     interface=".interfaces.IGSPostContentProvider"
     type="zope.contentprovider.interfaces.ITALNamespaceData"/>
   <class class=".postcontentprovider.GSPostContentProvider">
@@ -52,26 +54,26 @@
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
 
-  <browser:page 
+  <browser:page
     for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
     name="hide_post.ajax"
-    class=".hide.HidePost" 
+    class=".hide.HidePost"
     permission="zope2.View" />
 
   <!-- JavaScript resources -->
-  <browser:resource 
+  <browser:resource
     name="hide-post-20110415.js"
     file="browser/javascript/hide-post.js"
     permission="zope2.Public"/>
-  <browser:resource 
+  <browser:resource
     name="hide-post-min-20110415.js"
     file="browser/javascript/hide-post-min.js"
     permission="zope2.Public"/>
-  <browser:resource 
+  <browser:resource
     name="gs-group-messages-post-share-20130114.js"
     file="browser/javascript/post-share.js"
     permission="zope2.Public"/>
-  <browser:resource 
+  <browser:resource
     name="gs-group-messages-post-share-min-20130114.js"
     file="browser/javascript/post-share-min.js"
     permission="zope2.Public"/>
@@ -87,6 +89,5 @@
     template="browser/templates/help-hide.pt"
     permission="zope.Public"
     weight="15" />
-    
-</configure>
 
+</configure>
