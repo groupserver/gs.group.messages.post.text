@@ -1,3 +1,15 @@
+// Sharing a post
+//
+// Copyright © 2013 OnlineGroups.net and Contributors.
+// All Rights Reserved.
+//
+// This software is subject to the provisions of the Zope Public License,
+// Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+// THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+// WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+// FOR A PARTICULAR PURPOSE.
+//
 jQuery.noConflict();
 
 function gs_group_messages_post_share_init() {
@@ -12,6 +24,6 @@ function gs_group_messages_post_share_init() {
 }
 
 jQuery(window).load(function () {
-    gsJsLoader.with_module('/++resource++gs-content-js-sharebox-min-20130305.js',
+    gsJsLoader.with_module('/++resource++gs-content-js-sharebox-min-20131114.js',
                            gs_group_messages_post_share_init);
 });
