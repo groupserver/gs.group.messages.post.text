@@ -1,7 +1,7 @@
 <form enctype="multipart/form-data"  method="post" action="."
       id="hide-post-dialog-content" tal:attributes="action request/URL">
   <!--Messages-->
-  <!--tal:block 
+  <!--tal:block
       define="errors view/errors; status view/status; widgets view/widgets"
       content="structure provider:groupserver.FormStatusMessage"
       metal:fill-slot="messages">&#160;</tal:block-->
@@ -26,4 +26,3 @@
     </tal:block>
   </div><!--buttons-->
 </form><!--hide-post-dialog-content-->
-
