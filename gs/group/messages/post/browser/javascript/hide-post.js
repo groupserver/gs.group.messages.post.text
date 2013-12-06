@@ -1,10 +1,9 @@
 jQuery.noConflict();
-var GSHidePost = function() {
-    var hideButtons = jQuery('.hide-button'), dialog = jQuery('#hide-the-post')
-        loading = jQuery('#hide-the-post .loading');
+function GSHidePost(hideButtonsSelector, dialogSelector, loadingSelector) {
+    var hideButtons=null, dialog=null, loading=null, URL= '../hide_post.ajax';
 
     function showDialog(event) {
-        var post = null, postId = '';
+        var post=null, postId='';
         
         // Get the position of the post (hentry) that contains the
         // hide button that has been clicked.
@@ -13,18 +12,26 @@ var GSHidePost = function() {
         postId = postId.slice(5);
         dialog.data('postId', postId);
         dialog.modal('show');
-    };
+    }
 
     function shown(event) {
-        var postId = null;
+        var postId=null;
         postId = jQuery(this).data('postId');
-        loading.load('../hide_post.ajax', {'form.postId': postId}, loaded);
-    };
+        loading.load(URL, {'form.postId': postId}, loaded);
+    }
+
     function loaded(response, status, request) {
         var b = null;
         b = jQuery('#form\\.actions\\.hide');
         b.button();
-    };
+    }
+
+    function setup() {
+        hideButtons = jQuery(hideButtonsSelector);
+        dialog = jQuery(dialogSelector);
+        loading = jQuery(loadingSelector);
+    }
+    setup();  // Note: automatic execution
   
     return {
         init: function () {
@@ -32,8 +39,11 @@ var GSHidePost = function() {
             dialog.on('shown', shown);
         }
     };
-}(); // GSHidePost
+};  // GSHidePost
 
 jQuery(window).load( function () {
-    GSHidePost.init()
+    var hider=null;
+    hider = GSHidePost('.hide-button', '#hide-the-post', 
+                       '#hide-the-post-loading');
+    hider.init();
 });

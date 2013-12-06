@@ -1,6 +1,7 @@
-jQuery.noConflict();var GSHidePost=function(){var e=jQuery(".hide-button"),c=jQuery("#hide-the-post");
-loading=jQuery("#hide-the-post .loading");function a(h){var g=null,f="";g=jQuery(this).parents(".hentry");
-f=g.attr("id");f=f.slice(5);c.data("postId",f);c.modal("show")}function d(g){var f=null;
-f=jQuery(this).data("postId");loading.load("../hide_post.ajax",{"form.postId":f},b)
-}function b(h,g,i){var f=null;f=jQuery("#form\\.actions\\.hide");f.button()}return{init:function(){e.click(a);
-c.on("shown",d)}}}();jQuery(window).load(function(){GSHidePost.init()});
+jQuery.noConflict();function GSHidePost(g,f,e){var c=null,h=null,b=null,i="../hide_post.ajax";
+function j(n){var m=null,l="";m=jQuery(this).parents(".hentry");l=m.attr("id");l=l.slice(5);
+h.data("postId",l);h.modal("show")}function k(m){var l=null;l=jQuery(this).data("postId");
+b.load(i,{"form.postId":l},d)}function d(n,m,o){var l=null;l=jQuery("#form\\.actions\\.hide");
+l.button()}function a(){c=jQuery(g);h=jQuery(f);b=jQuery(e)}a();return{init:function(){c.click(j);
+h.on("shown",k)}}}jQuery(window).load(function(){var a=null;a=GSHidePost(".hide-button","#hide-the-post","#hide-the-post-loading");
+a.init()});
