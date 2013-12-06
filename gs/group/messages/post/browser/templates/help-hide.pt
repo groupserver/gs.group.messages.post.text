@@ -1,24 +1,24 @@
 <div class="section" id="gs-group-messages-hide">
   <h2>Hide a Post</h2>
   <p>
-    You and the administrators of a group can hide the posts you have 
+    You and the administrators of a group can hide the posts you have
     made.
     To hide a post carry out the following steps.
   </p>
   <ol>
     <li><a href="/p">Log in,</a> if necessary.</li>
-    <li>View 
-      <a href="#gs-group-messages-post">the post on the web.</a></li>
+    <li>View
+    <a href="#gs-group-messages-post">the post on the web.</a></li>
     <li>Click the <samp class="link">Hide post</samp> link.
-      The <cite>Hide</cite> form will be shown.</li>
+    The <cite>Hide</cite> form will be shown.</li>
     <li>Enter the reason for hiding the post in the
-      <samp class="entry">Reason</samp> entry.</li>
+    <samp class="entry">Reason</samp> entry.</li>
     <li>Click the <samp class="button">Hide</samp> button.
-      The post will be hidden, and you be shown the hidden post in
-      the topic.
+    The post will be hidden, and you be shown the hidden post in
+    the topic.
   </ol>
   <p>
-    Some information about the post is still available after it has 
+    Some information about the post is still available after it has
     been hidden.
     <a href="#gs-group-messages-hide-visible">The table below</a>
     details what can be seen and what is hidden.
@@ -39,12 +39,12 @@
         <td>
           Some of the post on the web is hidden.
           <a href="#gs-group-messages-post-metadata">The information
-            about the post</a>
+          about the post</a>
           is <strong>visible.</strong>
           This includes who made the post, and when the post was made.
-          However, 
-          <a href="#gs-group-messages-post-body">the body of the 
-            post</a>
+          However,
+          <a href="#gs-group-messages-post-body">the body of the
+          post</a>
           is <strong>hidden.</strong>
         </td>
       </tr>
@@ -72,12 +72,11 @@
         <th>Reason</th>
         <td>
           The reason the post was hidden is <strong>visible</strong>
-          to 
+          to
           <a href="#gs-group-messages-privacy">those that could see the
-            post previously.</a>
+          post previously.</a>
         </td>
       </tr>
     </tbody>
   </table><!--gs-group-messages-hide-visible-->
 </div><!--gs-group-messages-hide-->
-

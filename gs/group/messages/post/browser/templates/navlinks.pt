@@ -1,20 +1,20 @@
 <div class="gs-group-messages-post-navigation btn-group" role="navigation">
-  <a tal:condition="view/relatedPosts/previous_post_id" 
+  <a tal:condition="view/relatedPosts/previous_post_id"
      tal:attributes="href view/relatedPosts/first_post_id;
                      title string:First post in ${view/topicTitle};"
      class="btn" data-icon="&#x25c3;">First</a>
-  <span tal:condition="not:view/relatedPosts/previous_post_id" 
+  <span tal:condition="not:view/relatedPosts/previous_post_id"
         class="btn disabled"
         data-icon="&#x25c3;">First</span>
 
-  <a tal:condition="view/relatedPosts/previous_post_id" 
+  <a tal:condition="view/relatedPosts/previous_post_id"
      tal:attributes="href view/relatedPosts/previous_post_id;
                      title string:Previous post in ${view/topicTitle};"
      class="btn" data-icon="&#x25c3;">Prev</a>
   <span tal:condition="not:view/relatedPosts/previous_post_id"
         class="btn disabled" data-icon="&#x25c3;">Prev</span>
 
-  <a href="#" 
+  <a href="#"
      tal:attributes="href string:${view/groupInfo/relativeURL}/messages/topic/${view/relatedPosts/last_post_id};
                      title string:Topic: ${view/topicTitle}"
      class="btn icon-alone">
@@ -22,7 +22,7 @@
     <span class="screen-reader-text">Topic</span>
   </a>
 
-  <a tal:condition="view/relatedPosts/next_post_id" 
+  <a tal:condition="view/relatedPosts/next_post_id"
      tal:attributes="href view/relatedPosts/next_post_id;
                      title string:Next post in ${view/topicTitle};"
      class="btn" data-icon-after="&#x25b9;">Next</a>
