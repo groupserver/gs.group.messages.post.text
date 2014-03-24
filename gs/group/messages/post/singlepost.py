@@ -1,11 +1,25 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.publisher.interfaces import NotFound
 from zope.security.interfaces import Unauthorized
 from zope.cachedescriptors.property import Lazy
 from Products.XWFMailingListManager.queries import MessageQuery
 from Products.GSGroup.utils import is_public
 from gs.group.base.page import GroupPage
-from error import NoIDError
+from .error import NoIDError
 
 
 class GSPostView(GroupPage):
@@ -51,9 +65,9 @@ class GSPostView(GroupPage):
         if not retval:
             raise NotFound(self, self.postId, self.request)
         if retval['group_id'] != self.groupInfo.id:
-            m = u'You are not authorized to access this post from '\
-                'the group %s' % self.groupInfo.name
-            raise Unauthorized(m)
+            m = 'You are not authorized to access this post from the group {0}'
+            msg = m.format(self.groupInfo.name)
+            raise Unauthorized(msg)
         assert retval
         return retval
 

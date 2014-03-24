@@ -1,74 +1,93 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.interface import Interface
 from zope.schema import TextLine, ASCIILine, Field, Int, Bool, Text
+from gs.core import to_ascii
+
 
 class INavLinksContentProvider(Interface):
-    topicTitle = TextLine(title=u"Title of the Topic",
-        description=u'The title of the topic.',
-        required=True)
-                     
-    relatedPosts = Field(title=u'Related Posts',
-        description=u'The posts in the same topic.',
+    topicTitle = TextLine(title="Title of the Topic",
+        description='The title of the topic.',
         required=True)
 
-    pageTemplateFileName = ASCIILine(title=u"Page Template File Name",
-        description=u"""The name of the ZPT file
+    relatedPosts = Field(title='Related Posts',
+        description='The posts in the same topic.',
+        required=True)
+
+    pageTemplateFileName = ASCIILine(title="Page Template File Name",
+        description="""The name of the ZPT file
         that is used to render the post.""",
         required=False,
-        default='browser/templates/navlinks.pt')
+        default=to_ascii('browser/templates/navlinks.pt'))
+
 
 class IGSPostContentProvider(Interface):
     """The Groupserver Post Content Provider Interface
-      
+
       This interface defines the fields that must be set up, normally using
       TAL, before creating a "GSPostContentProvider" instance. See the
       latter for an example."""
-    post = Field(title=u"Email Message Instance",
-        description=u"The email instance to display",
-        required=True, 
+    post = Field(title="Email Message Instance",
+        description="The email instance to display",
+        required=True,
         readonly=False)
-    position = Int(title=u"Position of the Post",
-        description=u"""The position of the post in the topic.
-        This is mostly used for determining the background 
+    position = Int(title="Position of the Post",
+        description="""The position of the post in the topic.
+        This is mostly used for determining the background
         colour of the post.""",
         required=False,
         min=1, default=1)
-    topicName = TextLine(title=u"Title of the Topic",
-        description=u"""The title of the topic.""",
+    topicName = TextLine(title="Title of the Topic",
+        description="""The title of the topic.""",
         required=True,
-        default=u'')
+        default='')
     # Should really be called "same author" or similar.
-    showPhoto = Bool(title=u'Whether to show the photo',
-        description=u"""Determines if the author's photo
+    showPhoto = Bool(title='Whether to show the photo',
+        description="""Determines if the author's photo
         should be shown.""",
         required=False,
         default=True)
 
-    isPublic = Bool(title=u"Is the group public?",
-        description=u"""Whether or not the group in which this post is
+    isPublic = Bool(title="Is the group public?",
+        description="""Whether or not the group in which this post is
           displayed is public""",
         required=True)
-    
-    pageTemplateFileName = ASCIILine(title=u"Page Template File Name",
-        description=u'The name of the ZPT file that is used to render '\
-            u'the post.',
+
+    pageTemplateFileName = ASCIILine(title="Page Template File Name",
+        description='The name of the ZPT file that is used to render '
+            'the post.',
         required=False,
-        default="browser/templates/postcontentprovider.pt")
+        default=to_ascii("browser/templates/postcontentprovider.pt"))
 
 # Used for some utilities
+
+
 class IMarkupEmail(Interface):
     pass
+
 
 class IWrapEmail(Interface):
     pass
 
 
 class IHide(Interface):
-    postId = TextLine(title=u'Post Identifier',
-      description=u'The identifier of the post that is to be hidden',
-      required=True)
-    
-    reason = Text(title=u'Reason',
-      description=u'The reason the post needs to be hidden.',
+    postId = TextLine(title='Post Identifier',
+      description='The identifier of the post that is to be hidden',
       required=True)
 
+    reason = Text(title='Reason',
+      description='The reason the post needs to be hidden.',
+      required=True)

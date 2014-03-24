@@ -1,4 +1,19 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
+from threading import RLock
 from urllib import quote
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
@@ -6,10 +21,9 @@ from zope.contentprovider.interfaces import UpdateNotCalled
 from zope.app.pagetemplate import ViewPageTemplateFile
 from gs.group.base.contentprovider import GroupContentProvider
 from gs.group.messages.base import get_icon
-from postbody import get_post_intro_and_remainder
-from hiddendetails import HiddenPostInfo
-from canhide import can_hide_post
-from threading import RLock
+from .canhide import can_hide_post
+from .postbody import get_post_intro_and_remainder
+from .hiddendetails import HiddenPostInfo
 
 UTF8 = 'utf-8'
 
@@ -143,7 +157,7 @@ class GSPostContentProvider(GroupContentProvider):
 
     @Lazy
     def hiddenSupportEmail(self):
-        m = u'''Hello,
+        m = '''Hello,
 
 I want to see the post at
   {url}

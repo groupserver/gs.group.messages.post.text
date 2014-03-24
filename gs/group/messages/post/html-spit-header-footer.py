@@ -8,13 +8,13 @@ scrubber = Scrubber(autolink=False)
 scrubber.allowed_tags = set((
     'a', 'abbr', 'acronym', 'b', 'bdo', 'big', 'blockquote', 'br',
     'center', 'cite', 'code',
-    'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em', 
+    'dd', 'del', 'dfn', 'div', 'dl', 'dt', 'em',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'ins',
     'kbd', 'li', 'ol', 'param', 'pre', 'p', 'q',
     's', 'samp', 'small', 'span', 'strike', 'strong', 'sub', 'sup',
     'table', 'tbody', 'td', 'th', 'thead', 'tr', 'tt', 'ul', 'u',
     'var', 'wbr',
-)) 
+))
 scrubber.disallowed_tags_save_content = set((
     'blink', 'body', 'html','font',
 ))
@@ -56,7 +56,7 @@ def split_html_message(messageText, tolerance = {
         words_per_line - when we are guessing based on text patterns looking for short lines, how many words per line shal we consider suspicious?
         paranoia       - when we need to make a guess about wheter to keep or to snip. such as when looking for organic signoffNodess by line length, how many hints need to match before we are convinced.
   """
-  
+
   if isinstance(tolerance, int):
     tolerance = {
       'comment'        : tolerance,
@@ -79,7 +79,7 @@ def split_html_message(messageText, tolerance = {
   # Now we basically loop / walk our way through the tree.
   # element next gives us the child of element OR the element's nearest neighbour.
   while element:
-   
+
     #scrubber doesn't reliably strip doctype declarations, but we sure as hell don't want them
     if isinstance(element, BeautifulSoup.Declaration):
         declaration_type = str(element).split()[0]
@@ -99,7 +99,7 @@ def split_html_message(messageText, tolerance = {
       else:
         footer_found = True
         #print 'footer found -- '  + str(element)
-    
+
     #now we know enough about what's nearby, whip this guy out of the dom
     if footer_found:
       footerNodes.append(element)
@@ -113,16 +113,16 @@ def split_html_message(messageText, tolerance = {
     else:
       element = element.next
 
-  
+
   #Stringify the footer nodes and pull them out of the tree
   for node in footerNodes:
     footerText += str(node)
     node.extract()
-  
+
   #let's remove any trailing empty tags.
   dom = strip_trailing_rubbish(dom)
   # ok quick sanity check
-  # make sure we didn't accidentally nuke the whole document 
+  # make sure we didn't accidentally nuke the whole document
   if len(dom.text.strip()) < 1:
     dom = strip_empty_tags(BeautifulSoup.BeautifulSoup(messageText.strip()))
 
@@ -130,14 +130,14 @@ def split_html_message(messageText, tolerance = {
   # it will have been nuked when the footer was identified
   # but some people /clients put stuff above the bottomquote / footer
   # This is fiendishly hard to identify as it containts things like
- 
+
   # we'll start at the top again and rock down the tree looking for short lines and doing other sniffing
   # see : is_signoff()
 
-  element = dom.contents[0] 
+  element = dom.contents[0]
   while element:
     top = is_signoff(element, tolerance)
-    if top:      
+    if top:
       break
     else:
       element = element.next
@@ -153,17 +153,17 @@ def split_html_message(messageText, tolerance = {
       top = top.parent.nextSibling
     else:
       top = top.next
-    
+
 
   if len(signoffNodes) > 0:
     for node in signoffNodes:
       signoffText += str(node)
       node.extract()
-  
+
 
   dom = strip_trailing_rubbish(dom)
   # just for readability lets poke these into vars before returning them
-  
+
   # because we are paranoid, another sanity check
   # if len(dom.text.strip()) < 1:
   mainText = scrubber.scrub(dom.prettify())
@@ -177,15 +177,15 @@ def split_html_message(messageText, tolerance = {
 
 def is_first(node):
   '''
-  As with the last node, knowing that our element is _NOT_ the first significant element 
+  As with the last node, knowing that our element is _NOT_ the first significant element
   in the tree helps us be more certain that we have a true matches.
-  Some messages start with quotes to give the message context, these run the risk of being 
+  Some messages start with quotes to give the message context, these run the risk of being
   identified as bottom quotes.
 
   returns True if there is nothing above the BeautifulSoup node except opening markup,
 
   WARNING: because we are recursively walking down the tree and this method is walking back up it,
-  if you just chuck it in a node.next loop it'll correctly identify an element as first, the loop will then drop 
+  if you just chuck it in a node.next loop it'll correctly identify an element as first, the loop will then drop
   into it and the whole goose will be cooked!
   '''
 
@@ -216,15 +216,15 @@ def is_footer(soupnode, tolerance):
   <div class="moz-signature">
   <blockquote>  > but we need to be a bit paranoid about this, you might legitimately be quoting someone
   <blockquote type="cite" cite="mid:4C988CBF.6000809@onlinegroups.net">  > we can be pretty sure about this one
-  
+
   "On 22/09/2010, at 11:25 , Dan Randow wrote:"
   "On Dec 6, 2011, at 12:33 AM, Dan Randow wrote:"
   "----- Reply message -----"
-  <br> --    \(at least 2)\ 
+  <br> --    \(at least 2)\
 
   From: bla bla bla
-  To: Bla bla bla 
-  Sent (on): 
+  To: Bla bla bla
+  Sent (on):
     etc...
     In a variety of orders and markups.
 
@@ -238,8 +238,8 @@ def is_footer(soupnode, tolerance):
     #start with the most obvious - do we have a known footer class
     if soupnode.get('class'):
       if soupnode['class'] in footer_classes:
-        return True      
-    
+        return True
+
     elif soupnode.name == 'blockquote':
       #ipad uses blockquote for inline replys as well as end of message quoting so we need to snoop the blockquote a bit.
       # lets see how many linebreaks there are. if lots then it can be snipped.
@@ -249,14 +249,14 @@ def is_footer(soupnode, tolerance):
         return True
       else:
         return False
-    
+
     elif soupnode.name == 'hr':
       if is_last(soupnode):
         return True
 
       #yahoo mail starts with hr then has some From: To: style stuff which we will make a bit more generic.
       i = 1
-  
+
       while i < tolerance['seek']:
         if isinstance(soupnode.next, BeautifulSoup.NavigableString):
           if any(string in soupnode.next.upper().strip() for string in email_heads ):
@@ -266,15 +266,15 @@ def is_footer(soupnode, tolerance):
 
     else:
       return False
-    
+
   elif isinstance(soupnode, BeautifulSoup.NavigableString):
     stripped_line = soupnode.string.strip()
     stripped_line_upper = stripped_line.upper()
     #If we get a certain number of &gt;'s in a row, we might have hit gold
-    
+
     if stripped_line[:4] == '&gt;':
       #find the next br. If there's a &gt; right before it then we're got a run of 'em
-      i = 1 
+      i = 1
       while i < tolerance['comment']:
         #find the node before the next br
         if soupnode.findNextSibling('br'):
@@ -293,18 +293,18 @@ def is_footer(soupnode, tolerance):
       #Generic reply text
       return True
     elif stripped_line_upper.startswith('ON') and ( stripped_line_upper[3:4].isdigit() or stripped_line_upper[3:6] in dates):
-      # iOS mail style reply..  ON 23 DEC yourmom wrote: 
+      # iOS mail style reply..  ON 23 DEC yourmom wrote:
       return True
     else:
       return False
 
   else:
-    return False 
+    return False
 
 def is_last(node):
   '''
   For added certainty, sometimes it's nice to know when you are the last significant thing on the page.
-  returns True if the BeautifulSoup node fed to it has nothing after it in it's tree except br tags and empty lines 
+  returns True if the BeautifulSoup node fed to it has nothing after it in it's tree except br tags and empty lines
   '''
 
   safe_tail = False
@@ -321,7 +321,7 @@ def is_last(node):
   #ok lets get down to business
   if not node.nextSibling or safe_tail:
     if not node.next:
-      #ok then it really is the last one, in reality though node.next is likely to be a child of the last element 
+      #ok then it really is the last one, in reality though node.next is likely to be a child of the last element
       return True
 
     #we need every object going to check if it's in the parent node
@@ -336,7 +336,7 @@ def is_last(node):
         return True
       else:
         return False
-    
+
 
   return False
 
@@ -346,22 +346,22 @@ def is_signoff(element, tolerance):
   This is fiendishly hard to identify as it containts things like
   'Cheers<br>Bob<br><br><a>bob@bob.com</a><br>0211 358 763 etc'
 
-  we can't reliably pattern this, we can say it's a bunch of 1 or 2 word 
+  we can't reliably pattern this, we can say it's a bunch of 1 or 2 word
   lines at the end of the message with <br>s and stuff everywhere
-  So we'll walk the tree and see what we can find. 
+  So we'll walk the tree and see what we can find.
 
   param:  element. The BeautifulSoup element to start with
   param:  tolerance. The tolerance settings from split_html_message()
   return: False if nothing found, Otherwise a element representing where to _start_ the signoff
           Note, this might not be the element that was passed in if backtracking discovers something or we decide to extract the parent element.
   '''
-  
+
   # It would be nice an efficient to walk backwards but man, it's a real pain
-  # to figure out where you are. There could be no siblings because you are in a p tag 
-  # or simply because you are in the head. 
+  # to figure out where you are. There could be no siblings because you are in a p tag
+  # or simply because you are in the head.
 
   paranoiascore = 0 # we need to get a score >= tolerence['paranoia'] to make the call that this can be snipped
-  
+
   # there are couple ways we could be in the snipping zone
   # 1 - a div or p containing multiple br's with a small amount of words (lots of siblings for each NavigableString)
   # 2 - a whole stack of p tags or divs (no siblings for each NavigableString except inline elements )
@@ -374,13 +374,13 @@ def is_signoff(element, tolerance):
     if not (0 < wordcount <= tolerance['words_per_line']):
       #this just takes care of any OBVIOUSLY too long strings quickly.
       return False
-    
+
     # ok we have a short string BUT consider this
-    # <div>blah blah vdskjh sdkjusdjk dsjkias <a>hi there</a> blash bah </div> 
+    # <div>blah blah vdskjh sdkjusdjk dsjkias <a>hi there</a> blash bah </div>
     # we've got 2 strings with only 2 words in them there. Because of inline elements!
     # so we cant trust our current wordcount just yet...  Damnit :)
     # see get_line_length() for spaghetti
-    
+
     start = element #lets keep the element var as is so we can refer to it later if we need to
 
     lineone  = get_line_length(start, tolerance)
@@ -398,14 +398,14 @@ def is_signoff(element, tolerance):
       nextstring = get_line_length(lineone['stop'].next, tolerance)['stop']
       while isinstance(nextstring, BeautifulSoup.Tag) or (isinstance(nextstring, BeautifulSoup.NavigableString) and nextstring.strip() == ''):
         nextstring = nextstring.next
-     
-      linetwo = get_line_length(nextstring, tolerance)  
+
+      linetwo = get_line_length(nextstring, tolerance)
       if linetwo and 0 < linetwo['count'] <= tolerance['words_per_line']:
         paranoiascore += 1
     else:
       # there was no stop! this means it's the bottom of the tree!
       paranoiascore += 1
-     
+
     # get_position is expensive, so only run it if we arent already over the paranoia boundry
     if paranoiascore < tolerance['paranoia'] and get_position(start) > .75:
       paranoiascore += 1
@@ -464,10 +464,10 @@ def get_line_length(start, tolerance):
     if isinstance(stop, BeautifulSoup.NavigableString) and \
     not stop.nextSibling and (not stop.parent.name.upper() in inline_elements):
       # deal with the common single string in a block element <div>hey guys</div>
-      shortlinewords += stop.strip() + ' ' 
+      shortlinewords += stop.strip() + ' '
       break
     elif isinstance(stop, BeautifulSoup.NavigableString):
-      shortlinewords += stop.strip() + ' ' 
+      shortlinewords += stop.strip() + ' '
       stop = stop.next
     elif isinstance(stop, BeautifulSoup.Tag) and \
     (stop.name == 'br' or (not stop.name.upper() in inline_elements)):
@@ -476,37 +476,37 @@ def get_line_length(start, tolerance):
       stop = stop.next
     else:
       return False
-  
+
   length = len(shortlinewords.split())
   return {'count' : length , 'string' : shortlinewords, 'stop' : stop }
 
 def get_position(node):
   '''
-  returns a decimal <= 1 representing how far thorough the tree the node is. 
+  returns a decimal <= 1 representing how far thorough the tree the node is.
   param: node - a BeautifulSoup node object
   '''
   top = node
-  i = 0 
+  i = 0
   #quickly jump up the tree
   while top.parent:
     top = top.parent
   while top.previousSibling:
     top = top.previousSibling
-  
+
   top = top.contents[0]
   while top:
-    i += 1 
+    i += 1
     if top == node:
       position = i
     top = top.next
 
   # print type(position)
   # print type(i)
-  
+
   return float(position) / float(i)
 
 def strip_trailing_rubbish(dom):
-  ''' 
+  '''
   remove any trailing empty tags. and whitespace.
   param: dom, the Erroneously named BeautifulSoup tree or part thereof
   return: the same tree with trailing rubbish removed
@@ -526,9 +526,9 @@ def strip_trailing_rubbish(dom):
     (node.name == 'div' or node.name == 'p') and \
     (not node.contents) or \
     (str(node) is None or not str(node).strip()):
-      
-      
-      #print str(node) + ' is empty tag 
+
+
+      #print str(node) + ' is empty tag
       prev = node.previous
       node.extract()
       node = prev
@@ -557,12 +557,12 @@ def strip_empty_tags(dom):
           element.extract()
           extracted += 1
       element = element.next
-    
+
     if extracted == 0:
       # rinse and repeat till we have them all
-      break  
+      break
   return dom
- 
+
 ####################################################
 #testing rubbish
 
@@ -590,7 +590,7 @@ def runone():
   file = 'canterburyissues-hotmail-quote.html'
   #file = 'testlast.html'
 
-  
+
 
   f = open('html-email-corpus/'+file , 'r')
   n = open ('scrubbed-html-email-corpus/'+file, 'a')

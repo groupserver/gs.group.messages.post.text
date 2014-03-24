@@ -1,11 +1,25 @@
-# coding=utf-8
-from zope.component import getMultiAdapter
-from gs.group.base.page import GroupPage
-from error import NoIDError
-
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 SUBSYSTEM = 'gs.group.messages.post'
-import logging
-log = logging.getLogger(SUBSYSTEM)
+from logging import getLogger
+log = getLogger(SUBSYSTEM)
+from zope.component import getMultiAdapter
+from gs.core import to_ascii
+from gs.group.base.page import GroupPage
+from .error import NoIDError
 
 
 class GSPostTraversal(GroupPage):
@@ -24,10 +38,11 @@ class GSPostTraversal(GroupPage):
         try:
             retval = getMultiAdapter((self.context, self.request),
                                         name="gspost")()
-        except NoIDError, n:  # lint:ok
-            uri = '%s/messages/topics.html' % self.groupInfo.url
-            m = 'No post ID in <%s>. Going to <%s>' % \
-                (self.request.URL, uri)
-            log.info(m)
+        except NoIDError as n:  # lint:ok
+            u = '{0}/messages/topics.html'.format(self.groupInfo.url)
+            m = 'No post ID in <{0}>. Going to <{1}>'
+            msg = m.format(self.request.URL, u)
+            log.info(msg)
+            uri = to_ascii(u)
             retval = self.request.RESPONSE.redirect(uri)
         return retval

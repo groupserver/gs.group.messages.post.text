@@ -1,4 +1,18 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+from __future__ import absolute_import, unicode_literals
 from zope.publisher.interfaces import NotFound
 from zope.formlib import form
 from zope.cachedescriptors.property import Lazy
@@ -9,13 +23,14 @@ _ = MessageFactory('groupserver')
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.XWFMailingListManager.queries import MessageQuery
 from gs.group.base.form import GroupForm
-from interfaces import IHide
-from queries import PostQuery
-from canhide import can_hide_post
+from .interfaces import IHide
+from .queries import PostQuery
+from .canhide import can_hide_post
+
 
 class HidePost(GroupForm):
     form_fields = form.Fields(IHide)
-    label = _(u'Hide a Post')
+    label = _('Hide a Post')
     pageTemplateFileName = 'browser/templates/hide.pt'
     template = ZopeTwoPageTemplateFile(pageTemplateFileName)
 
@@ -31,14 +46,14 @@ class HidePost(GroupForm):
             m = 'You are not allowed to hide the post %s in %s (%s)' %\
                 (data['postId'], self.groupInfo.name, self.groupInfo.id)
             raise Unauthorized(m)
-        self.postQuery.hide_post(data['postId'], self.loggedInUser.id, 
+        self.postQuery.hide_post(data['postId'], self.loggedInUser.id,
                                     data['reason'])
         if self.postQuery.all_posts_in_topic_hidden(data['postId']):
             self.postQuery.hide_topic(data['postId'])
-        self.status = u'Hidden the post.'
+        self.status = _('Hidden the post.')
         uri = '/r/topic/%s#post-%s' % (data['postId'], data['postId'])
         self.request.RESPONSE.redirect(uri)
-    
+
         # --=mpj17=-- There is a potential for an information leak with
         # post hiding. If the post is hidden and the topic contains a
         # visible post then the contents of the hidden post can be
@@ -47,12 +62,12 @@ class HidePost(GroupForm):
         # must be in the hidden post. Lets consider fixing this issue
         # when we deal to Ticket 224: Optimise Search Performance
         # <https://projects.iopen.net/groupserver/ticket/224>.
-    
+
     def handle_failure(self, action, data, errors):
         if len(errors) == 1:
-            self.status = _(u'<p>There is an error:</p>')
+            self.status = _('<p>There is an error:</p>')
         else:
-            self.status = _(u'<p>There are errors:</p>')
+            self.status = _('<p>There are errors:</p>')
 
     @Lazy
     def postQuery(self):
@@ -78,11 +93,10 @@ class HidePost(GroupForm):
     def get_post(self, postId):
         retval = self.messageQuery.post(postId)
         if not retval:
-          raise NotFound(self, postId, self.request)
+            raise NotFound(self, postId, self.request)
         if retval['group_id'] != self.groupInfo.id:
-            m = u'You are not authorized to access this post from '\
+            m = 'You are not authorized to access this post from '\
                 'the group %s' % self.groupInfo.name
             raise Unauthorized(m)
         assert retval
         return retval
-
