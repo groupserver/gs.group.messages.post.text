@@ -81,11 +81,11 @@
     </div><!--single-post-page-->
     <tal:block metal:fill-slot="javascript">
       <script type="text/javascript"
-              src="/++resource++gs-group-messages-post-share-min-20131114.js"
-              defer="true">&#160;</script>
+              src="/++resource++gs-group-messages-post-share-min-20140327.js"
+              defer="defer"> </script>
       <script type="text/javascript"
-              src="/++resource++gs-group-messages-post-hide-min-20131206.js"
-              defer="true">&#160;</script>
+              src="/++resource++gs-group-messages-post-hide-min-20140327.js"
+              defer="defer"> </script>
     </tal:block>
   </body>
 </html>

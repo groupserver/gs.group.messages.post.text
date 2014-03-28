@@ -81,20 +81,20 @@
     permission="zope2.Public"/>
 
   <browser:resource
-    name="gs-group-messages-post-hide-20131206.js"
+    name="gs-group-messages-post-hide-20140327.js"
     file="browser/javascript/hide-post.js"
     permission="zope2.Public"/>
   <browser:resource
-    name="gs-group-messages-post-hide-min-20131206.js"
+    name="gs-group-messages-post-hide-min-20140327.js"
     file="browser/javascript/hide-post-min.js"
     permission="zope2.Public"/>
 
   <browser:resource
-    name="gs-group-messages-post-share-20131114.js"
+    name="gs-group-messages-post-share-20140327.js"
     file="browser/javascript/post-share.js"
     permission="zope2.Public"/>
   <browser:resource
-    name="gs-group-messages-post-share-min-20131114.js"
+    name="gs-group-messages-post-share-min-20140327.js"
     file="browser/javascript/post-share-min.js"
     permission="zope2.Public"/>
 
