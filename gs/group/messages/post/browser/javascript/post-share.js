@@ -25,6 +25,6 @@ function gs_group_messages_post_share_init() {
 }
 
 jQuery(window).load(function () {
-    gsJsLoader.with_module('/++resource++gs-content-js-sharebox-min-20131114.js',
+    gsJsLoader.with_module('/++resource++gs-content-js-sharebox-min-20140327.js',
                            gs_group_messages_post_share_init);
 });
