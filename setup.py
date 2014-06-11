@@ -12,11 +12,17 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+import codecs
 import os
 from setuptools import setup, find_packages
 from version import get_version
 
 version = get_version()
+
+with codecs.open('README.txt', encoding='utf-8') as f:
+    long_description = f.read()
+with codecs.open(os.path.join("docs", "HISTORY.txt"), encoding='utf-8') as f:
+    long_description += '\n' + f.read()
 
 setup(name='gs.group.messages.post',
     version=version,
@@ -34,10 +40,12 @@ setup(name='gs.group.messages.post',
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
       ],
-    keywords='groupserver message post',
-    author='Michael JasonSmith',
-    author_email='mpj17@onlinegroups.net',
-    url='http://groupserver.org/',
+    keywords='groupserver, message, email, post',
+    author='Richard Waid',
+    author_email='richard@onlinegroups.net',
+    maintainer='Michael JasonSmith',
+    maintainer_email='mpj17@onlinegroups.net',
+    url='https://source.iopen.net/groupserver/gs.group.messages.post/',
     license='ZPL 2.1',
     packages=find_packages(exclude=['ez_setup']),
     namespace_packages=['gs', 'gs.group', 'gs.group.messages'],
@@ -68,12 +76,12 @@ setup(name='gs.group.messages.post',
         'gs.group.base',
         'gs.group.member.base',
         'gs.group.messages.base',
+        'gs.group.privacy',
         'gs.content.js.sharebox[zope]',
         'gs.content.layout',
         'gs.help',
         'gs.errormesg',
         'Products.XWFMailingListManager',
-        'Products.GSGroup',
     ],
     entry_points="""
     # -*- Entry points: -*-
