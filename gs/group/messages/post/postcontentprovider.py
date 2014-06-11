@@ -14,7 +14,11 @@
 ##############################################################################
 from __future__ import absolute_import, unicode_literals
 from threading import RLock
-from urllib import quote
+import sys
+if (sys.version_info >= (3, )):
+    from urllib.parse import quote
+else:
+    from urllib import quote  # lint:ok
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.contentprovider.interfaces import UpdateNotCalled
@@ -24,7 +28,6 @@ from gs.group.messages.base import get_icon
 from .canhide import can_hide_post
 from .postbody import get_post_intro_and_remainder
 from .hiddendetails import HiddenPostInfo
-
 UTF8 = 'utf-8'
 
 
@@ -68,7 +71,7 @@ class GSPostContentProvider(GroupContentProvider):
         self.authored = self.user_authored()
         self.authorInfo = createObject('groupserver.UserFromId',
                             self.context, self.post['author_id'])
-
+        # Note: This function caches.
         ir = get_post_intro_and_remainder(self, self.post['body'])
         self.postIntro, self.postRemainder = ir
         self.cssClass = self.get_cssClass()
@@ -103,7 +106,6 @@ class GSPostContentProvider(GroupContentProvider):
         self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
                                         self.post)
 
-    # @cache('GSPostContentProvider.cooked', lambda x,y: y, 3600)
     def cook_template(self, fname):
         if fname in self.cookedTemplates:
             return self.cookedTemplates[fname]
