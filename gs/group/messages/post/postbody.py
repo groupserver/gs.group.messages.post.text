@@ -17,8 +17,8 @@ from re import compile as re_compile, I as re_I, M as re_M, U as re_U
 from cgi import escape as cgi_escape
 from textwrap import TextWrapper
 from zope.component import getUtility
-from Products.GSGroup.utils import *
 from gs.cache import cache
+from gs.group.privacy import get_visibility, PERM_ANN
 from .interfaces import IMarkupEmail, IWrapEmail
 
 # this is currently the hard limit on the number of word's we will process.
@@ -74,11 +74,16 @@ def markup_www(contentProvider, word, substituted, substituted_words):
 
 
 def markup_email_address(contentProvider, word, substituted, substituted_words):
+    '''Markup an email address.
+
+Some people become upset if their email address is shown to the general public.
+To people becoming upset the email address is redacted (obscured) if, and only
+if, Anonymous can view the message. In all other cases the email address is
+shown.'''
     retval = word
     if not(substituted) and email_matcher.match(word):
-        groupInfo = contentProvider.groupInfo
-
-        if get_visibility(groupInfo.groupObj) == PERM_ANN:
+        messages = contentProvider.groupInfo.groupObj.messages
+        if get_visibility(messages) == PERM_ANN:
             # The messages in the group are visibile to the anonymous user,
             #   so obfuscate (redact) any email addresses in the post.
             retval = email_matcher.sub('&lt;email obscured&gt;', word)
