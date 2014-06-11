@@ -17,8 +17,8 @@ from zope.publisher.interfaces import NotFound
 from zope.security.interfaces import Unauthorized
 from zope.cachedescriptors.property import Lazy
 from Products.XWFMailingListManager.queries import MessageQuery
-from Products.GSGroup.utils import is_public
 from gs.group.base.page import GroupPage
+from gs.group.privacy import GroupVisibility
 from .error import NoIDError
 
 
@@ -32,7 +32,7 @@ class GSPostView(GroupPage):
     @Lazy
     def isPublic(self):
         assert self.groupInfo.groupObj, 'No group in the groupInfo!'
-        retval = is_public(self.groupInfo.groupObj)
+        retval = GroupVisibility(self.groupInfo).isPublic
         assert type(retval) == bool
         return retval
 
