@@ -4,17 +4,19 @@ SET CLIENT_MIN_MESSAGES = WARNING;
 
 CREATE TABLE post (
     post_id           TEXT                     PRIMARY KEY,
+    --=mpj17= The topic_id does not reference the topic-table. Why?
+    -- Is it to make adding the post and topic easier?
     topic_id          TEXT                     NOT NULL,
     group_id          TEXT                     NOT NULL,
     site_id           TEXT                     NOT NULL,
     user_id           TEXT                     NOT NULL,
     in_reply_to       TEXT                     NOT NULL DEFAULT ''::TEXT,
     subject           TEXT                     NOT NULL DEFAULT ''::TEXT,
-    date              TIMESTAMP WITH TIME ZONE NOT NULL,
+    date              TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     body              TEXT                     NOT NULL DEFAULT ''::TEXT,
     htmlbody          TEXT                     NOT NULL DEFAULT ''::TEXT,
     header            TEXT                     NOT NULL,
-    has_attachments   BOOLEAN                  NOT NULL,
+    has_attachments   BOOLEAN                  NOT NULL DEFAULT FALSE,
     hidden            TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     fts_vectors       tsvector -- PostgreSQL dependency
 );
