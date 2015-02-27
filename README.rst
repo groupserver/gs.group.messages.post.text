@@ -7,7 +7,7 @@ The core code for displaying a post
 
 :Author: `Michael JasonSmith`_
 :Contact: Michael JasonSmith <mpj17@onlinegroups.net>
-:Date: 2013-03-19
+:Date: 2015-02-27
 :Organization: `GroupServer.org`_
 :Copyright: This document is licensed under a
   `Creative Commons Attribution-Share Alike 3.0 New Zealand License`_
@@ -34,8 +34,12 @@ provides:
 Resources
 =========
 
-- Code repository: https://source.iopen.net/groupserver/gs.group.messages.post
-- Questions and comments to http://groupserver.org/groups/development
+- Code repository:
+  https://github.com/groupserver/gs.group.messages.post/
+- Translations:
+  https://www.transifex.com/projects/p/gs-group-messages-post/
+- Questions and comments to
+  http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
 
 .. _GroupServer: http://groupserver.org/

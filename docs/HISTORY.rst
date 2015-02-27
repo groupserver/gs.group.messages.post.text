@@ -10,7 +10,8 @@ Changelog
 * Adding support for Transifex_
 
 .. _GitHub: https:/github.com/groupserver/gs.group.messages.post/
-.. _Transifex: https://www.transifex.com/projects/p/gs-group-messages-post/
+.. _Transifex:
+   https://www.transifex.com/projects/p/gs-group-messages-post/
 
 3.3.0 (2014-06-11)
 ------------------
