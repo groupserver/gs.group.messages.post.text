@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
-# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# Copyright © 2011, 2012, 2013, 2014, 2015 OnlineGroups.net and
+# Contributors.
+#
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,26 +13,25 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.publisher.interfaces import NotFound
 from zope.formlib import form
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from zope.security.interfaces import Unauthorized
-from zope.i18nmessageid import MessageFactory
-_ = MessageFactory('groupserver')
 from Products.Five.browser.pagetemplatefile import ZopeTwoPageTemplateFile
 from Products.XWFMailingListManager.queries import MessageQuery
 from gs.group.base.form import GroupForm
 from .interfaces import IHide
 from .queries import PostQuery
 from .canhide import can_hide_post
+from . import GSMessageFactory as _
 
 
 class HidePost(GroupForm):
     form_fields = form.Fields(IHide)
-    label = _('Hide a Post')
+    label = _('hide-label', 'Hide a post')
     pageTemplateFileName = 'browser/templates/hide.pt'
     template = ZopeTwoPageTemplateFile(pageTemplateFileName)
 
@@ -38,19 +39,21 @@ class HidePost(GroupForm):
         GroupForm.__init__(self, context, request)
         self.can_hide_post = can_hide_post
 
-    @form.action(label=_('Hide'), failure='handle_failure')
+    @form.action(label=_('hide-button', 'Hide'), name='hide',
+                 failure='handle_failure')
     def handle_hide(self, action, data):
         postInfo = self.get_post(data['postId'])
-        if not(self.can_hide_post(self.loggedInUser, self.groupInfo, postInfo)):
+        if not(self.can_hide_post(self.loggedInUser, self.groupInfo,
+                                  postInfo)):
             # Do not try and hack the URL.
             m = 'You are not allowed to hide the post %s in %s (%s)' %\
                 (data['postId'], self.groupInfo.name, self.groupInfo.id)
             raise Unauthorized(m)
         self.postQuery.hide_post(data['postId'], self.loggedInUser.id,
-                                    data['reason'])
+                                 data['reason'])
         if self.postQuery.all_posts_in_topic_hidden(data['postId']):
             self.postQuery.hide_topic(data['postId'])
-        self.status = _('Hidden the post.')
+        self.status = _('status-hidden', 'Hidden the post.')
         uri = '/r/topic/%s#post-%s' % (data['postId'], data['postId'])
         self.request.RESPONSE.redirect(uri)
 
@@ -65,9 +68,10 @@ class HidePost(GroupForm):
 
     def handle_failure(self, action, data, errors):
         if len(errors) == 1:
-            self.status = _('<p>There is an error:</p>')
+            s = _('error', 'There is an error:')
         else:
-            self.status = _('<p>There are errors:</p>')
+            s = _('errors', 'There are errors:')
+        self.status = '<p>{0}</p>'.format(s)
 
     @Lazy
     def postQuery(self):

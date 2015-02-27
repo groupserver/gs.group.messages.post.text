@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
@@ -46,7 +46,7 @@ class HiddenPostInfo(object):
     @Lazy
     def adminInfo(self):
         retval = createObject('groupserver.UserFromId', self.context,
-                                self.hiddenPostDetails['hiding_user'])
+                              self.hiddenPostDetails['hiding_user'])
         return retval
 
     @Lazy

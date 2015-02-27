@@ -28,6 +28,7 @@ from gs.group.messages.base import get_icon
 from .canhide import can_hide_post
 from .postbody import get_post_intro_and_remainder
 from .hiddendetails import HiddenPostInfo
+from . import GSMessageFactory as _
 UTF8 = 'utf-8'
 
 
@@ -160,15 +161,19 @@ class GSPostContentProvider(GroupContentProvider):
 
     @Lazy
     def hiddenSupportEmail(self):
-        m = '''Hello,
+        m = _('support-post-hidden-message',
+              '''Hello,
 
 I want to see the post at
-  {url}
+  ${url}
 However, it is hidden. I think I should be allowed to see the post
-because...'''
-        message = quote(m.format(url=self.request.URL))
-        subject = quote('Post Hidden')
+because...''',
+              mapping={'url': self.request.URL})
+
+        message = quote(m.encode(UTF8))
+        s = _('support-post-hidden-subject', 'Post hidden')
+        subject = quote(s.encode(UTF8))
         mailto = 'mailto:{support}?Subject={subj}&body={msg}'
         retval = mailto.format(support=self.siteInfo.get_support_email(),
-                               subj=subject, msg=message.encode(UTF8))
+                               subj=subject, msg=message)
         return retval

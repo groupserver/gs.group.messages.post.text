@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.publisher.interfaces import NotFound
 from zope.security.interfaces import Unauthorized
@@ -65,7 +65,8 @@ class GSPostView(GroupPage):
         if not retval:
             raise NotFound(self, self.postId, self.request)
         if retval['group_id'] != self.groupInfo.id:
-            m = 'You are not authorized to access this post from the group {0}'
+            m = 'You are not authorized to access this post from the '\
+                'group {0}'
             msg = m.format(self.groupInfo.name)
             raise Unauthorized(msg)
         assert retval
