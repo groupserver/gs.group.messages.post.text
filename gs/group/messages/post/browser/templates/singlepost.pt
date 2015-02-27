@@ -30,7 +30,8 @@
         <a tal:attributes="title string:${view/siteInfo/name} Homepage"
              href="/" title="Home" class="icon-alone">
           <span aria-hidden="true" data-icon="&#x2302;"></span>
-          <span class="screen-reader-text">Site home page</span>
+          <span class="screen-reader-text"
+                i18n:translate="site-home-link">Site home page</span>
         </a>
       </li>
       <li>
@@ -69,11 +70,13 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"
                   aria-hidden="true">×</button>
-          <h3>Hide the Post</h3>
+          <h3 i18n:translate="hide-the-post-title">Hide the post</h3>
         </div><!--modal-header-->
         <div class="modal-body">
-          <div id="hide-the-post-loading">
-            <span data-icon="&#xe619;" aria-hidden="true"
+          <div id="hide-the-post-loading"
+               i18n:translate="hide-the-post-loading">
+            <span i18n:name="loadingIcon" data-icon="&#xe619;"
+                  aria-hidden="true"
                   class="loading"> </span >Loading…
           </div>
         </div><!--modal-body-->

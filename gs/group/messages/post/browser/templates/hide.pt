@@ -1,4 +1,7 @@
-<form enctype="multipart/form-data"  method="post" action="."
+<form xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="gs.group.messages.post"
+      enctype="multipart/form-data"  method="post" action="."
       id="hide-post-dialog-content" tal:attributes="action request/URL">
   <!--Messages-->
   <!--tal:block
@@ -6,7 +9,7 @@
       content="structure provider:groupserver.FormStatusMessage"
       metal:fill-slot="messages">&#160;</tal:block-->
   <!--Explanation-->
-  <p>
+  <p i18n:translate="hide-dialog-instructions">
     To hide this post add a reason below and click the
     <samp class="button">Hide</samp> button.
     Everyone will see the reason the post was hidden, but the

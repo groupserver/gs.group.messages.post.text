@@ -1,4 +1,5 @@
-<entry tal:define="post python:options['post'];
+<entry xmlns:tal="http://xml.zope.org/namespaces/tal"
+       tal:define="post python:options['post'];
                    postId python:post['post_id'];
                    authorInfo python:options['authorInfo'];
                    authored python:options['authored'];

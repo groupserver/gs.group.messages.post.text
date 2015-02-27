@@ -1,4 +1,4 @@
-<tal:block>
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal">
   <link rel="first"
         tal:condition="view/relatedPosts/previous_post_id"
         tal:attributes="title string:First post in ${view/topicTitle};

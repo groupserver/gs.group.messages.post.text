@@ -1,8 +1,11 @@
 <div xmlns="http://www.w3.org/1999/xhtml"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="gs.group.messages.post"
      role="article"
-     tal:define="munge_date python:modules['Products.XWFCore.XWFUtils'].munge_date;
-                 change_tz python:modules['Products.XWFCore.XWFUtils'].change_timezone;"
+     tal:define="m python:modules['Products.XWFCore.XWFUtils'];
+                 munge_date python:m.munge_date;
+                 change_tz python:m.change_timezone;"
      tal:attributes="class string:hentry ${view/cssClass};
                      id string:post-${view/post/post_id};
                      aria-labelledby string:post-${view/post/post_id}-title">
@@ -22,13 +25,14 @@
     <span class="posted muted small"
           tal:define="pd view/post/date;
                       d python:change_tz(pd, 'UTC').replace(microsecond=0);
-                      date python:munge_date(view.context, pd)">
+                      date python:munge_date(view.context, pd)"
+          i18n:translate="post-date">
       Posted at
-      <abbr class="date updated published"
+      <time i18n:name="dateTime" class="date updated published"
             title="Stuff"
-            tal:attributes="title string:${d/isoformat}Z">
+            tal:attributes="datetime ${d/isoformat}">
         <em tal:content="date">Today, Tomorrow, Timaru</em>
-      </abbr>
+      </time>
     </span><!--posted-->
     <div class="gs-group-messages-post-buttons btn-toolbar"
          role="toolbar" aria-label="Post Actions"
@@ -37,12 +41,14 @@
          aria-haspopup="true" data-icon="&#xe001;"
          tal:attributes="href string:${view/siteInfo/url}/r/post/${view/post/post_id};
                          title string:${view/post/subject};
-                         public python:view.isPublic and 1 or 0">Share</a>
+                         public python:view.isPublic and 1 or 0"
+         i18n:translate="share-button">Share</a>
       <button class="hide-button btn btn-small" role="button" title="Hide"
               aria-haspopup="true" tal:condition="view/canHide">
         <div class="icon-alone">
           <span aria-hidden="true" data-icon="&#x1f5d1;"></span>
-          <span class="screen-reader-text">Hide</span>
+          <span class="screen-reader-text"
+                i18n:translate="hide-button">Hide</span>
         </div>
       </button>
     </div><!--gs-group-messages-post-buttons-->
@@ -59,10 +65,10 @@
     </p>
     <div tal:attributes="id dshId"
          class="hidden-msg disclosureShowHide" style="display:none;">
-      <p class="vcard">
+      <p class="vcard" i18n:translate="hidden-post">
         Sorry, this post is hidden.
         The reason that
-        <a class="fn"  href="#"
+        <a class="fn" href="#" i18n:name="theAuthor"
            tal:define="u view/hiddenPostInfo/adminInfo"
            tal:attributes="href u/url"
            tal:content="u/name">an admin</a>
@@ -96,7 +102,8 @@
       <p class="small">
         <a class="disclosureButton" role="button"
            tal:attributes="aria-controls dshId;"
-           href="#">Rest of post</a>
+           href="#"
+           i18n:translate="rest-of-post-button">Rest of post</a>
       </p>
       <div class="disclosureShowHide" style="display:none;"
            tal:attributes="id dshId">
@@ -116,8 +123,10 @@
                              type fm/mime_type">
             <span aria-hidden="true" data-icon="&#x1f3a8;"
                   tal:attributes="data-icon fm/icon"></span>
-            <span class="screen-reader-text">File type:
-            <span tal:content="fm/mime_type">application/octet-stream</span>
+            <span class="screen-reader-text"
+                  i18n:translate="file-type">File type:
+              <span i18n:name="mimeType"
+                    tal:content="fm/mime_type">application/octet-stream</span>
             </span>
           </a>
           <a class="enclosure" type="application/octet-stream"
