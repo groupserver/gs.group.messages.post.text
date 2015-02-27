@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,8 +11,8 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
-from __future__ import absolute_import, unicode_literals
+############################################################################
+from __future__ import absolute_import, division, unicode_literals
 from threading import RLock
 import sys
 if (sys.version_info >= (3, )):
@@ -70,7 +70,8 @@ class GSPostContentProvider(GroupContentProvider):
 
         self.authored = self.user_authored()
         self.authorInfo = createObject('groupserver.UserFromId',
-                            self.context, self.post['author_id'])
+                                       self.context,
+                                       self.post['author_id'])
         # Note: This function caches.
         ir = get_post_intro_and_remainder(self, self.post['body'])
         self.postIntro, self.postRemainder = ir
@@ -79,7 +80,7 @@ class GSPostContentProvider(GroupContentProvider):
         self.hiddenPostDetails = None
         if self.post['hidden']:
             self.hiddenPostInfo = HiddenPostInfo(self.context,
-                                    self.post['post_id'])
+                                                 self.post['post_id'])
 
         self.mediaFiles = []
         self.normalFiles = []
@@ -94,17 +95,17 @@ class GSPostContentProvider(GroupContentProvider):
                 fm['url'] = url.format(self.groupInfo.relativeURL,
                                        fm['file_id'])
                 s = '{0}/files/f/{1}/{2}'
-                fm['src'] = s.format(self.groupInfo.relativeURL, fm['file_id'],
-                                        fm['file_name'])
+                fm['src'] = s.format(self.groupInfo.relativeURL,
+                                     fm['file_id'], fm['file_name'])
                 self.mediaFiles.append(fm)
             else:
                 url = '{0}/files/f/{1}/{2}'
                 fm['url'] = url.format(self.groupInfo.relativeURL,
-                                        fm['file_id'], fm['file_name'])
+                                       fm['file_id'], fm['file_name'])
                 self.normalFiles.append(fm)
 
         self.canHide = self.can_hide_post(self.loggedInUser, self.groupInfo,
-                                        self.post)
+                                          self.post)
 
     def cook_template(self, fname):
         if fname in self.cookedTemplates:

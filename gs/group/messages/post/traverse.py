@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-##############################################################################
+############################################################################
 #
 # Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
 # All Rights Reserved.
@@ -11,7 +11,7 @@
 # WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
 # FOR A PARTICULAR PURPOSE.
 #
-##############################################################################
+############################################################################
 from __future__ import absolute_import, unicode_literals
 SUBSYSTEM = 'gs.group.messages.post'
 from logging import getLogger
@@ -37,7 +37,7 @@ class GSPostTraversal(GroupPage):
         # <https://projects.iopen.net/groupserver/ticket/316>
         try:
             retval = getMultiAdapter((self.context, self.request),
-                                        name="gspost")()
+                                     name="gspost")()
         except NoIDError as n:  # lint:ok
             u = '{0}/messages/topics.html'.format(self.groupInfo.url)
             m = 'No post ID in <{0}>. Going to <{1}>'
