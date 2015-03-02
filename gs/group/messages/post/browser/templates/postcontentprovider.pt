@@ -30,7 +30,7 @@
       Posted at
       <time i18n:name="dateTime" class="date updated published"
             title="Stuff"
-            tal:attributes="datetime ${d/isoformat}">
+            tal:attributes="datetime d/isoformat">
         <em tal:content="date">Today, Tomorrow, Timaru</em>
       </time>
     </span><!--posted-->
