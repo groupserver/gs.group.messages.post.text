@@ -28,10 +28,10 @@
                       date python:munge_date(view.context, pd)"
           i18n:translate="post-date">
       Posted at
-      <time i18n:name="dateTime" class="date updated published"
-            tal:attributes="datetime d/isoformat">
-        <em tal:content="date">Today, Tomorrow, Timaru</em>
-      </time>
+      <em i18n:name="dateTime"
+          class="date updated published">
+        <time tal:attributes="datetime d/isoformat"
+              tal:content="date">Today, Tomorrow, Timaru</time></em>
     </span><!--posted-->
     <div class="gs-group-messages-post-buttons btn-toolbar"
          role="toolbar" aria-label="Post Actions"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-02-27 22:52+0000\n"
+"POT-Creation-Date: 2015-03-02 23:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "errors"
 msgstr ""
 
 #. Default: "File type: ${mimeType}"
-#: ./browser/templates/postcontentprovider.pt:128
+#: ./browser/templates/postcontentprovider.pt:127
 msgid "file-type"
 msgstr ""
 
@@ -38,12 +38,12 @@ msgid "first-button"
 msgstr ""
 
 #. Default: "Sorry, this post is hidden. The reason that ${theAuthor} gave for hiding the post is as follows."
-#: ./browser/templates/postcontentprovider.pt:71
+#: ./browser/templates/postcontentprovider.pt:70
 msgid "hidden-post"
 msgstr ""
 
 #. Default: "Hide"
-#: ./browser/templates/postcontentprovider.pt:50
+#: ./browser/templates/postcontentprovider.pt:49
 #: ./hide.py:42
 msgid "hide-button"
 msgstr ""
@@ -99,12 +99,12 @@ msgid "previous-button"
 msgstr ""
 
 #. Default: "Rest of post"
-#: ./browser/templates/postcontentprovider.pt:103
+#: ./browser/templates/postcontentprovider.pt:102
 msgid "rest-of-post-button"
 msgstr ""
 
 #. Default: "Share"
-#: ./browser/templates/postcontentprovider.pt:40
+#: ./browser/templates/postcontentprovider.pt:39
 msgid "share-button"
 msgstr ""
 
