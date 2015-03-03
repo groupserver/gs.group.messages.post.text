@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2015-03-02 23:54+0000\n"
-"PO-Revision-Date: 2015-02-27 14:56-0800\n"
+"POT-Creation-Date: 2015-03-03 01:54+0000\n"
+"PO-Revision-Date: 2015-03-02 17:54-0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,12 +66,12 @@ msgid "hide-reason-help"
 msgstr "The reason the post needs to be hidden."
 
 #. Default: "${loadingIcon}Loading…"
-#: ./browser/templates/singlepost.pt:78
+#: ./browser/templates/singlepost.pt:82
 msgid "hide-the-post-loading"
 msgstr "${loadingIcon} Loading…"
 
 #. Default: "Hide the post"
-#: ./browser/templates/singlepost.pt:73
+#: ./browser/templates/singlepost.pt:77
 msgid "hide-the-post-title"
 msgstr "Hide the post"
 
@@ -89,6 +89,11 @@ msgstr "Next"
 #: ./browser/templates/postcontentprovider.pt:31
 msgid "post-date"
 msgstr "Posted at ${dateTime}"
+
+#. Default: "Post in ${topic}"
+#: ./browser/templates/singlepost.pt:58
+msgid "post-title"
+msgstr "Post in ${topic}"
 
 #. Default: "Prev"
 #: ./browser/templates/navlinks.pt:14

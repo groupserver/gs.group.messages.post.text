@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gs.group.messages.post\n"
-"POT-Creation-Date: 2015-03-02 23:54+0000\n"
+"POT-Creation-Date: 2015-03-03 01:54+0000\n"
 "PO-Revision-Date: 2015-02-27 23:01+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/gs-group-messages-post/language/fr/)\n"
@@ -72,12 +72,12 @@ msgid "hide-reason-help"
 msgstr ""
 
 #. Default: "${loadingIcon}Loading…"
-#: ./browser/templates/singlepost.pt:78
+#: ./browser/templates/singlepost.pt:82
 msgid "hide-the-post-loading"
 msgstr ""
 
 #. Default: "Hide the post"
-#: ./browser/templates/singlepost.pt:73
+#: ./browser/templates/singlepost.pt:77
 msgid "hide-the-post-title"
 msgstr ""
 
@@ -94,6 +94,11 @@ msgstr ""
 #. Default: "Posted at ${dateTime}"
 #: ./browser/templates/postcontentprovider.pt:31
 msgid "post-date"
+msgstr ""
+
+#. Default: "Post in ${topic}"
+#: ./browser/templates/singlepost.pt:58
+msgid "post-title"
 msgstr ""
 
 #. Default: "Prev"
