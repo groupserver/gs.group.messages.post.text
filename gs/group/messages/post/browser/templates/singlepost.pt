@@ -52,8 +52,12 @@
         tal:replace="structure provider:groupserver.PostNavLinks">
         The intra-topic navigation links, for going between posts
       </p>
-      <h1>Post in
-        <cite tal:content="view/topicTitle">Topic</cite></h1>
+      <div id="gs-group-messages-post-heading">
+        <h1 i18n:translate="post-title">
+          Post in
+          <cite i18n:name="topic" tal:content="view/topicTitle">Topic</cite>
+        </h1>
+      </div>
       <p tal:define="post view/post;
                      isPublic view/isPublic"
         tal:replace="structure provider:groupserver.Post">
