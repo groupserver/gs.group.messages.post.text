@@ -1,6 +1,12 @@
 Changelog
 =========
 
+3.4.2 (2015-04-16)
+------------------
+
+* Switching from ``<object>`` to ``<iframe>`` for YouTube and
+  Vimeo videos
+
 3.4.1 (2015-03-11)
 ------------------
 
@@ -141,4 +147,4 @@ Changelog
 Initial version. Prior to the creation of this product the posts
 were rendered by ``Products.XWFMailingListManager``.
 
-..  LocalWords:  Changelog
+..  LocalWords:  Changelog iframe
