@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2012, 2013, 2014 OnlineGroups.net and Contributors.
+# Copyright © 2012, 2013, 2014, 2015 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -31,12 +31,13 @@ email_matcher = re_compile(r".*?([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,4}).*?",
 uri_matcher = re_compile("(?i)(http://|https://)(.+?)(\&lt;|\&gt;"
                             "|\)|\]|\}|\"|\'|$|\s)")
 www_matcher = re_compile("""(?i)(www\..+)""")
-youtube_matcher = re_compile("(?:http://)?(?:www.)?youtu(?:be)?.(?:[a-z])"
-                                "{2,3}(?:[a-z/?=]+)([a-zA-Z0-9-_]{11})"
-                                "(?:[a-z0-9?&-_=]+)?")
+youtube_matcher = re_compile(
+    "<?(?:https?:\/\/)?(?:www\.)?youtu(?:be)?\.(?:[a-z]){2,3}(?:[a-z/?=]+)"
+    "([a-zA-Z0-9-_]{11})(?:\?[a-z0-9&-_=]+)?>?")
 splashcast_matcher = re_compile("(?i)(http://www.splashcastmedia.com/"
                                     "web_watch/\?code\=)(.*)($|\s)")
-vimeo_matcher = re_compile("""(?i)(http://)(.*)vimeo.com/(.*)($|\s)""")
+vimeo_matcher = re_compile(
+    "(?i)(?:https?:\/\/)(?:.*)vimeo.com\/(.*)(?:$|\s)")
 bold_matcher = re_compile("""(\*.*\*)""")
 
 # The following expression is based on the one inside the
@@ -106,14 +107,10 @@ def markup_youtube(contentProvider, word, substituted, substituted_words):
     if word in substituted_words:
         return word
 
-    word = youtube_matcher.sub('<div class="markup-youtube"><object '
-            'width="425" height="344"><param name="movie" '
-            'value="http://youtube.com/v/\g<1>'
-            '&amp;hl=en&amp;fs=1"></param><param name="allowFullScreen" '
-            'value="true"></param><embed src="http://youtube.com/v/\g<1>'
-            '&amp;hl=en&amp;fs=1" type="application/x-shockwave-flash" '
-            'allowfullscreen="true" width="425" height="344">'
-            '</embed></object></div>', word)
+    word = youtube_matcher.sub(
+        '\n<iframe width="462" height="260" '
+        'src="https://www.youtube.com/embed/\g<1>" frameborder="0" '
+        'allowfullscreen="allowfullscreen"></iframe>\n', word)
     return word
 
 
@@ -127,18 +124,11 @@ def markup_vimeo(contentProvider, word, substituted, substituted_words):
     if word in substituted_words:
         return word
 
-    word = vimeo_matcher.sub('<object width="400" height="265"><param '
-            'name="allowfullscreen" value="true" /><param '
-            'name="allowscriptaccess" value="always" /><param name="movie" '
-            'value="http://vimeo.com/moogaloop.swf?clip_id=\g<3>&amp;'
-            'server=vimeo.com&amp;show_title=1&amp;show_byline=1'
-            '&amp;show_portrait=0&amp;color=&amp;fullscreen=1" />'
-            '<embed src="http://vimeo.com/moogaloop.swf?clip_id=\g<3>'
-            '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;'
-            'show_portrait=0&amp;color=&amp;fullscreen=1" '
-            'type="application/x-shockwave-flash" allowfullscreen="true" '
-            'allowscriptaccess="always" width="400" height="265">'
-            '</embed></object>\g<4>', word)
+    word = vimeo_matcher.sub(
+        '\n<iframe src="https://player.vimeo.com/video/\g<1>?'
+        'color=ffffff&title=0&byline=0&badge=0" width="462" height="260" '
+        'frameborder="0" allowfullscreen="allowfullscreen"></iframe>\n', word)
+
     return word
 
 
