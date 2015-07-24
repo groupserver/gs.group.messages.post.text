@@ -29,13 +29,13 @@ EMAIL_WORD_LIMIT = 5000
 email_matcher = re_compile(r".*?([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,4}).*?",
                            re_I | re_M | re_U)
 uri_matcher = re_compile("(?i)(http://|https://)(.+?)(\&lt;|\&gt;"
-                            "|\)|\]|\}|\"|\'|$|\s)")
+                         "|\)|\]|\}|\"|\'|$|\s)")
 www_matcher = re_compile("""(?i)(www\..+)""")
 youtube_matcher = re_compile(
     "<?(?:https?:\/\/)?(?:www\.)?youtu(?:be)?\.(?:[a-z]){2,3}(?:[a-z/?=]+)"
     "([a-zA-Z0-9-_]{11})(?:\?[a-z0-9&-_=]+)?>?")
 splashcast_matcher = re_compile("(?i)(http://www.splashcastmedia.com/"
-                                    "web_watch/\?code\=)(.*)($|\s)")
+                                "web_watch/\?code\=)(.*)($|\s)")
 vimeo_matcher = re_compile(
     "(?i)(?:https?:\/\/)(?:.*)vimeo.com\/(.*)(?:$|\s)")
 bold_matcher = re_compile("""(\*.*\*)""")
@@ -142,11 +142,12 @@ def markup_splashcast(contentProvider, word, substituted, substituted_words):
     if word in substituted_words:
         return word
 
-    word = splashcast_matcher.sub('<div class="markup-splashcast"><embed '
-            'src="http://web.splashcast.net/go/skin/\g<2>'
-            '/sz/wide" wmode="Transparent" width="380" height="416" '
-            'allowFullScreen="true" '
-            'type="application/x-shockwave-flash" /></div>\g<3>', word)
+    word = splashcast_matcher.sub(
+        '<div class="markup-splashcast"><embed '
+        'src="http://web.splashcast.net/go/skin/\g<2>'
+        '/sz/wide" wmode="Transparent" width="380" height="416" '
+        'allowFullScreen="true" '
+        'type="application/x-shockwave-flash" /></div>\g<3>', word)
     return word
 
 
@@ -181,9 +182,9 @@ def wrap_message(messageText, width=79):
         "Presentation/Tofu/MailingListManager/lscripts".
 
     """
-    email_wrapper = TextWrapper(width=width, expand_tabs=False,
-                          replace_whitespace=False, break_on_hyphens=False,
-                          break_long_words=False)
+    email_wrapper = TextWrapper(
+        width=width, expand_tabs=False, replace_whitespace=False, break_on_hyphens=False,
+        break_long_words=False)
     email_wrapper.wordsep_re = splitExp
     filledLines = [email_wrapper.fill(l) for l in messageText.split('\n')]
     retval = '\n'.join(filledLines)
@@ -191,7 +192,7 @@ def wrap_message(messageText, width=79):
 
 
 def split_message(messageText, max_consecutive_comment=12,
-  max_consecutive_whitespace=3):
+                  max_consecutive_whitespace=3):
     """Split the message into main body and the footer.
 
     Email messages often contain a footer at the bottom, which
@@ -233,8 +234,8 @@ def split_message(messageText, max_consecutive_comment=12,
 
     for line in slines:
         if ((line[:2] == '--') or (line[:2] == '==')
-            or (line[:2] == '__') or (line[:2] == '~~')
-            or (line[:3] == '- -')):
+                or (line[:2] == '__') or (line[:2] == '~~')
+                or (line[:3] == '- -')):
             bodystart = True
 
         # if we've started on the body, just append to body
@@ -255,8 +256,7 @@ def split_message(messageText, max_consecutive_comment=12,
             body.append(line)
             bodystart = True
 
-        if len(line) > 3 and (line[:4] == '&gt;'
-                                or line.lower().find('wrote:') != -1):
+        if len(line) > 3 and (line[:4] == '&gt;' or line.lower().find('wrote:') != -1):
             consecutive_comment += 1
         else:
             consecutive_comment = 0
@@ -273,8 +273,7 @@ def split_message(messageText, max_consecutive_comment=12,
     trim = True
 
     for line in intro[::-1]:
-        prevLine = intro.index(line) == 0 and '' \
-                    or intro[intro.index(line) - 1]
+        prevLine = intro.index(line) == 0 and '' or intro[intro.index(line) - 1]
         if len(intro) < 5:
             trim = False
         if len(line) > 3:
@@ -290,7 +289,7 @@ def split_message(messageText, max_consecutive_comment=12,
         elif ((trim) and (len(line.strip()) > 0)
               and (len(line.strip().split()) == 1)
               and ((len(prevLine.strip()) == 0)
-                    or len(prevLine.strip().split()) == 1)):
+              or len(prevLine.strip().split()) == 1)):
             # IF we are trimming, and the line has non-whitepsace
             #   characters AND there is only one word on the line,
             #   AND the previous line does NOT have any significant text
@@ -344,7 +343,7 @@ def markup_email(contentProvider, text):
             if char.isspace():
                 if curr_word:
                     markedUpWord = markup_word(contentProvider, curr_word,
-                                                substituted_words)
+                                               substituted_words)
                     curr_word = ''
                     out_text += markedUpWord
                     word_count += 1
@@ -357,7 +356,7 @@ def markup_email(contentProvider, text):
                 curr_word += char
         if curr_word:
             markedUpWord = markup_word(contentProvider, curr_word,
-                                        substituted_words)
+                                       substituted_words)
             out_text += markedUpWord
         retval = out_text.strip()
     return retval
@@ -398,10 +397,10 @@ def get_mail_body(contentProvider, text):
 
 
 @cache('gs.group.messages.post.postintroremainder',
-             lambda contentProvider, text: ':'.join(
-                 (str(contentProvider.post['post_id']),
-                  str((get_visibility(contentProvider.groupInfo.groupObj))))
-             ), 3600)
+       lambda contentProvider, text: ':'.join(
+           (str(contentProvider.post['post_id']),
+            str((get_visibility(contentProvider.groupInfo.groupObj))))
+       ), 3600)
 def get_post_intro_and_remainder(contentProvider, text):
     """Get the introduction and remainder text of the formatted post
 
