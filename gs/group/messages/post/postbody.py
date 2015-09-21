@@ -12,7 +12,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ############################################################################
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, unicode_literals, print_function
 from re import compile as re_compile, I as re_I, M as re_M, U as re_U
 from cgi import escape as cgi_escape
 from textwrap import TextWrapper
@@ -159,7 +159,7 @@ def markup_bold(contentProvider, word, substituted, substituted_words):
         # Do not substitute if the word has already been marked-up
         return word
 
-    word = bold_matcher.sub('<strong>\g<1></strong>',
+    word = bold_matcher.sub('<b>\g<1></b>',
                             word)
     return word
 
