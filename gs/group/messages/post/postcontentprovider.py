@@ -173,7 +173,7 @@ because...''',
         message = quote(m.encode(UTF8))
         s = _('support-post-hidden-subject', 'Post hidden')
         subject = quote(s.encode(UTF8))
-        mailto = 'mailto:{support}?Subject={subj}&body={msg}'
+        mailto = 'mailto:{support}?subject={subj}&body={msg}'
         retval = mailto.format(support=self.siteInfo.get_support_email(),
                                subj=subject, msg=message)
         return retval
