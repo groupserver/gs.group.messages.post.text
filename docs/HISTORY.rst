@@ -4,6 +4,7 @@ Changelog
 3.4.4 (2015-09-21)
 ------------------
 
+* [DE] Updating the product metadata, thanks to Cousin Clara
 * Using ``subject`` rather than ``Subject`` in ``mailto:`` URIs
 
 3.4.3 (2015-07-24)
