@@ -59,7 +59,8 @@
         </h1>
       </div>
       <p tal:define="post view/post;
-                     isPublic view/isPublic"
+                     isPublic view/isPublic;
+                     showRemainder python:True"
         tal:replace="structure provider:groupserver.Post">
         The email message is rendered by the Post content provider,
         not by this page.

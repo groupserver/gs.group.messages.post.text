@@ -75,6 +75,12 @@ class IGSPostContentProvider(Interface):
           displayed is public""",
         required=True)
 
+    showRemainder = Bool(
+        title='Show the remainder',
+        description='True if the bottom-quoting should be shown',
+        required=False,
+        default=False)
+
     pageTemplateFileName = ASCIILine(
         title="Page Template File Name",
         description='The name of the ZPT file that is used to render '

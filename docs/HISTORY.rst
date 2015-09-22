@@ -1,9 +1,11 @@
 Changelog
 =========
 
-3.4.4 (2015-09-21)
+3.5.0 (2015-09-21)
 ------------------
 
+* Showing the *Rest of post* by default when viewing a single
+  post
 * [DE] Updating the product metadata, thanks to Cousin Clara
 * Using ``subject`` rather than ``Subject`` in ``mailto:`` URIs
 
