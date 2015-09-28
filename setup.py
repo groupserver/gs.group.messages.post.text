@@ -19,7 +19,7 @@ import os
 from setuptools import setup, find_packages
 from version import get_version
 
-name = 'gs.group.messages.post'
+name = 'gs.group.messages.post.base'
 version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
