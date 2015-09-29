@@ -66,31 +66,6 @@
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
 
-  <browser:page
-    for="Products.XWFMailingListManager.interfaces.IGSMessagesFolder"
-    name="hide_post.ajax"
-    class=".hide.HidePost"
-    permission="zope2.View" />
-
-  <!-- JavaScript resources -->
-  <browser:resource
-    name="hide-post-20110415.js"
-    file="browser/javascript/hide-post.js"
-    permission="zope2.Public"/>
-  <browser:resource
-    name="hide-post-min-20110415.js"
-    file="browser/javascript/hide-post.js"
-    permission="zope2.Public"/>
-
-  <browser:resource
-    name="gs-group-messages-post-hide-20140327.js"
-    file="browser/javascript/hide-post.js"
-    permission="zope2.Public"/>
-  <browser:resource
-    name="gs-group-messages-post-hide-min-20140327.js"
-    file="browser/javascript/hide-post-min.js"
-    permission="zope2.Public"/>
-
   <browser:resource
     name="gs-group-messages-post-share-20140327.js"
     file="browser/javascript/post-share.js"
@@ -106,10 +81,5 @@
     template="browser/templates/help.pt"
     permission="zope.Public"
     weight="12" />
-  <browser:viewlet name="gs-group-messages-hide"
-    manager="gs.help.interfaces.IUserHelp"
-    template="browser/templates/help-hide.pt"
-    permission="zope.Public"
-    weight="15" />
 
 </configure>

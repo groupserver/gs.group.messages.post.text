@@ -1,6 +1,6 @@
-==========================
-``gs.group.messages.post``
-==========================
+===============================
+``gs.group.messages.post.base``
+===============================
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The core code for displaying a post
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -35,7 +35,7 @@ Resources
 =========
 
 - Code repository:
-  https://github.com/groupserver/gs.group.messages.post/
+  https://github.com/groupserver/gs.group.messages.post.base/
 - Translations:
   https://www.transifex.com/projects/p/gs-group-messages-post/
 - Questions and comments to

@@ -14,9 +14,8 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from zope.interface import Interface
-from zope.schema import TextLine, ASCIILine, Field, Int, Bool, Text
+from zope.schema import TextLine, ASCIILine, Field, Int, Bool
 from gs.core import to_ascii
-from . import GSMessageFactory as _
 
 
 class INavLinksContentProvider(Interface):
@@ -97,16 +96,3 @@ class IMarkupEmail(Interface):
 
 class IWrapEmail(Interface):
     pass
-
-
-class IHide(Interface):
-    postId = TextLine(
-        title='Post Identifier',
-        description='The identifier of the post that is to be hidden',
-        required=True)
-
-    reason = Text(
-        title=_('hide-reason', 'Reason'),
-        description=_('hide-reason-help',
-                      'The reason the post needs to be hidden.'),
-        required=True)
