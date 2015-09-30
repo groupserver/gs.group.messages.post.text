@@ -19,7 +19,7 @@ import os
 from setuptools import setup, find_packages
 from version import get_version
 
-name = 'gs.group.messages.post.base'
+name = 'gs.group.messages.post.text'
 version = get_version()
 
 with codecs.open('README.rst', encoding='utf-8') as f:
@@ -31,7 +31,7 @@ with codecs.open(os.path.join("docs", "HISTORY.rst"),
 setup(
     name=name,
     version=version,
-    description="Posts made to a GroupServer Group",
+    description="The plain-text view of a post made to a GroupServer group",
     long_description=long_description,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
