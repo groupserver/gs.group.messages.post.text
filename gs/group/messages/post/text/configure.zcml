@@ -17,38 +17,9 @@
   <i18n:registerTranslations directory="locales" />
   <include package="zope.viewlet" file="meta.zcml" />
 
-  <!-- Post Content Provider -->
-  <interface
-    interface=".interfaces.IGSPostContentProvider"
-    type="zope.contentprovider.interfaces.ITALNamespaceData"/>
-  <class class=".postcontentprovider.GSPostContentProvider">
-    <implements interface=".interfaces.IGSPostContentProvider"/>
-  </class>
-  <adapter
-    for="zope.interface.Interface zope.publisher.interfaces.browser.IDefaultBrowserLayer zope.interface.Interface"
-    factory=".postcontentprovider.GSPostContentProvider"
-    provides="zope.contentprovider.interfaces.IContentProvider"
-    name="groupserver.Post"/>
-
   <utility component=".postbody.markup_email"
            provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
-
-  <browser:resource
-    name="gs-group-messages-post-share-20140327.js"
-    file="browser/javascript/post-share.js"
-    permission="zope2.Public"/>
-  <browser:resource
-    name="gs-group-messages-post-share-min-20140327.js"
-    file="browser/javascript/post-share-min.js"
-    permission="zope2.Public"/>
-
-  <!--Help-->
-  <browser:viewlet name="gs-group-messages-topic-post"
-    manager="gs.help.interfaces.IUserHelp"
-    template="browser/templates/help.pt"
-    permission="zope.Public"
-    weight="12" />
 
 </configure>
