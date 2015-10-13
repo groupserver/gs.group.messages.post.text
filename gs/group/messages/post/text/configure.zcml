@@ -17,6 +17,15 @@
   <i18n:registerTranslations directory="locales" />
   <include package="zope.viewlet" file="meta.zcml" />
 
+  <browser:viewlet
+    name="gs-group-messages-post-text"
+    manager="gs.group.messages.post.base.interfaces.IBody"
+    class=".viewlet.TextPostViewlet"
+    template="browser/templates/post.pt"
+    permission="zope2.View"
+    weight="10"
+    title="Plain text body" />
+
   <utility component=".postbody.markup_email"
            provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
