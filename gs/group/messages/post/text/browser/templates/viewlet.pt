@@ -3,7 +3,7 @@
   xmlns:tal="http://xml.zope.org/namespaces/tal"
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   class="gs-group-messages-post-text"
-  i18n:domain="gs.group.messages.post">
+  i18n:domain="gs.group.messages.post.text">
   <pre class="entry-content"
        tal:content="structure view/postIntro">
     This is the body of the document.
@@ -83,4 +83,4 @@
       </div><!--hmedia-->
     </div><!--mediaFileList-->
   </div><!--fileNotification-->
-</div><!--email-message-->
+</div><!--gs-group-messages-post-text-->
