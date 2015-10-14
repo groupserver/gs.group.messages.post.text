@@ -25,6 +25,7 @@ class TextPostViewlet(PostViewlet):
 
     @property
     def show(self):
-        retval = self.manager.post.hidden
+        # Use self.manager.psot because PostViewlet.update() has not been called yet
+        retval = not self.manager.post['hidden']
         assert type(retval) == bool, 'self.manager.post.hidden is not a Boolean'
         return retval
