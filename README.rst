@@ -19,8 +19,10 @@ The plain-text view of a post made to a GroupServer group
 Introduction
 ============
 
-This is the code for displaying the plain-text version of a post
-(messages with the ``text/plain`` MIME type).
+This product displays the plain-text version of a post (messages
+with the ``text/plain`` MIME type). It supplies the viewlet
+``gs-group-messages-post-text`` that slots into the body area of
+the post.
 
 Resources
 =========
@@ -28,7 +30,7 @@ Resources
 - Code repository:
   https://github.com/groupserver/gs.group.messages.post.text/
 - Translations:
-  https://www.transifex.com/projects/p/gs-group-messages-post/
+  https://www.transifex.com/groupserver/gs-group-messages-post-text/
 - Questions and comments to
   http://groupserver.org/groups/development
 - Report bugs at https://redmine.iopen.net/projects/groupserver
