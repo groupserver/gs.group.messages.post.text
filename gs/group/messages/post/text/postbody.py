@@ -305,9 +305,13 @@ def split_message(messageText, max_consecutive_comment=12,
         rintro = rintro + body
         body = []
 
-    intro = '\n'.join(rintro)
+    intro = '\n'.join(rintro).strip()
     body = '\n'.join(body)
-    retval = (intro.strip(), body)
+    # If we have snipped too much
+    if not intro:
+        intro = body
+        body = ''
+    retval = (intro, body)
     assert retval
     assert len(retval) == 2
     return retval
