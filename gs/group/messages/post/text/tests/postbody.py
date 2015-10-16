@@ -14,7 +14,7 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from unittest import TestCase
-from gs.group.messages.post.postbody import (
+from gs.group.messages.post.text.postbody import (
     markup_youtube, markup_vimeo)
 
 
@@ -37,14 +37,14 @@ class YouTubeTest(TestCase):
         self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
 
     def test_youtu_be(self):
-        'Test http://youtube.com'
+        'Test http://youtu.be'
         url = self.construct_url('http://youtu.be')
         r = markup_youtube(None, url, [], [])
         self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
 
     def test_https_youtube_com(self):
         'Test https://youtube.com'
-        url = self.construct_url('http://youtube.com')
+        url = self.construct_url('https://youtube.com')
         r = markup_youtube(None, url, [], [])
         self.assertEqual('\n<iframe', r[:8])
         self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
@@ -56,8 +56,8 @@ class YouTubeTest(TestCase):
         self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
 
     def test_https_youtu_be(self):
-        'Test https://youtube.com'
-        url = self.construct_url('http://youtu.be')
+        'Test https://youtu.be'
+        url = self.construct_url('https://youtu.be')
         r = markup_youtube(None, url, [], [])
         self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
 

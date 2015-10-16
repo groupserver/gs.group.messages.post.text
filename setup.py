@@ -90,6 +90,9 @@ setup(
         'gs.errormesg',
         'Products.XWFMailingListManager',
     ],
+    tests_require=['mock', ],
+    test_suite="{0}.tests.test_all".format(name),
+    extras_require={'docs': ['Sphinx'], },
     entry_points="""
     # -*- Entry points: -*-
     """,)
