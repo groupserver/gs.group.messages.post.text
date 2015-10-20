@@ -192,63 +192,52 @@ def wrap_message(messageText, width=79):
     return retval
 
 
-SplitMessage = namedtuple('SplitMessage', ['body', 'remainder'])
+#: The 2-tuple containing the strings representing
+#:
+#: * The main body of the message (``intro``) and
+#: * The rest of the message, including the bottom-quoting and the footer (``remainder``).
+SplitMessage = namedtuple('SplitMessage', ['intro', 'remainder'])
 
 
-def split_message(messageText, max_consecutive_comment=12,
-                  max_consecutive_whitespace=3):
+def split_message(messageText, max_consecutive_comment=12, max_consecutive_whitespace=3):
     """Split the message into main body and the footer.
 
-    Email messages often contain a footer at the bottom, which
-    identifies the user, and who they work for. However, GroupServer
-    has lovely profiles which do this, so normally we want to snip
-    the footer, to reduce clutter.
+:param str messageText: The text to process.
+:param int max_consecutive_comment: The maximum number of lines of quoting to allow before snipping.
+:param int max_consecutive_whitespace: The maximum number of lines that just contain whitespace to
+    allow before snipping.
+:returns: 2-tuple, containing the strings representing the main-body of the message, and the footer.
+:rtype: :class:`SplitMessage`
 
-    In addition, many users only write a short piece of text at the
-    top of the email, while the remainder of the message consists
-    of all the previous posts. This method also removes the
-    "bottom quoting".
+Email messages often contain a footer at the bottom, which identifies the user, and who they work
+for. However, GroupServer has lovely profiles which do this, so normally we want to snip the footer,
+to reduce clutter.
 
-    ARGUMENTS
-        "messageText" The text to process.
-        "max_consecutive_comment"    The maximum number of lines
-            of quoting to allow before snipping.
-        "max_consecutive_whitespace" The maximum number of lines
-            that just contain whitespace to allow before snipping.
+In addition, many users only write a short piece of text at the top of the email, while the
+remainder of the message consists of all the previous posts. This method also removes the
+*bottom quoting*.
 
-    RETURNS
-        2-tuple, containing the strings representing the main-body
-        of the message, and the footer.
-
-    SIDE EFFECTS
-        None.
-
-    NOTE
-        Originally a stand-alone script in
-        "Presentation/Tofu/MailingListManager/lscripts".
-    """
-    slines = messageText.split('\n')
-
+Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscripts``."""
     intro = []
-    body = []
+    remainder = []
     i = 1
-    bodystart = False
+    remainder_start = False
     consecutive_comment = 0
     consecutive_whitespace = 0
 
-    for line in slines:
+    for line in messageText.split('\n'):
         if ((line[:2] == '--') or (line[:2] == '==')
                 or (line[:2] == '__') or (line[:2] == '~~')
                 or (line[:3] == '- -')):
-            bodystart = True
+            remainder_start = True
 
-        # if we've started on the body, just append to body
-        if bodystart:
-            body.append(line)
+        # if we've started on the remainder, just append to remainder
+        if remainder_start:
+            remainder.append(line)
         # count comments, but don't penalise top quoting as badly
         elif consecutive_comment >= max_consecutive_comment and i > 25:
-            body.append(line)
-            bodystart = True
+            remainder.append(line)
+            remainder_start = True
         # if we've got less than 15 lines, just put it in the intro
         elif (i <= 15):
             intro.append(line)
@@ -257,10 +246,11 @@ def split_message(messageText, max_consecutive_comment=12,
         elif consecutive_whitespace <= max_consecutive_whitespace:
             intro.append(line)
         else:
-            body.append(line)
-            bodystart = True
+            remainder.append(line)
+            remainder_start = True
 
-        if len(line) > 3 and ((line[:4] == '&gt;') or (line.lower().find('wrote:') != -1)):
+        if len(line) > 3 and ((line[:4] == '&gt;') or (line[:2] == '> ')
+                              or (line.lower().find('wrote:') != -1)):
             consecutive_comment += 1
         else:
             consecutive_comment = 0
@@ -276,21 +266,24 @@ def split_message(messageText, max_consecutive_comment=12,
     rintro = []
     trim = True
 
-    for line in intro[::-1]:
-        prevLine = intro.index(line) == 0 and '' or intro[intro.index(line) - 1]
+    for i, line in enumerate(intro[::-1]):
+        prevLine = intro[intro.index(line) - 1] if (i != 0) else ''
+
         if len(intro) < 5:
             trim = False
+
         if len(line) > 3:
             ls = line[:4]
         elif line.strip():
             ls = line.strip()[0]
         else:
             ls = ''
-        if trim and (ls == '&gt;' or ls == ''):
-            body.insert(0, line)
+
+        if trim and ((ls == '&gt;') or (ls[:2] == '> ') or (ls == '')):
+            remainder.insert(0, line)
         elif trim and (line.find('wrote:') > 2):
-            body.insert(0, line)
-        elif ((trim) and (len(line.strip()) > 0)
+            remainder.insert(0, line)
+        elif (trim and (len(line.strip()) > 0)
               and (len(line.strip().split()) == 1)
               and ((len(prevLine.strip()) == 0)
               or len(prevLine.strip().split()) == 1)):
@@ -298,24 +291,24 @@ def split_message(messageText, max_consecutive_comment=12,
             #   characters AND there is only one word on the line,
             #   AND the previous line does NOT have any significant text
             # THEN add it to the snipped-text.
-            body.insert(0, line)
+            remainder.insert(0, line)
         else:
             trim = False
             rintro.insert(0, line)
 
     # Do not snip, if we will only snip a single line of
     #  actual content
-    if(len(body) == 1):
-        rintro = rintro + body
-        body = []
+    if(len(remainder) == 1):
+        rintro = rintro + remainder
+        remainder = []
 
     intro = '\n'.join(rintro).strip()
-    body = '\n'.join(body)
+    remainder = '\n'.join(remainder)
     # If we have snipped too much
     if not intro:
-        intro = body
-        body = ''
-    retval = SplitMessage(intro, body)
+        intro = remainder
+        remainder = ''
+    retval = SplitMessage(intro, remainder)
     return retval
 
 standard_markup_functions = (markup_email_address, markup_youtube,
