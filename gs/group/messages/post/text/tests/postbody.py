@@ -102,17 +102,71 @@ Piranha Brothers, Dug and Dinsdale \u2014 after one the of most
 extraordinary trials in British legal history \u2014 were sentenced to
 400 years imprisonment for crimes of violence.'''
 
+        self.ftr = '\n\n--\nEthel the frog'
+
+    def create_ftr(self, sep):
+        retval = self.ftr.replace('-', sep)
+        return retval
+
+    def assertSplit(self, body, footer, splitMessage):
+        self.assertEqual(2, len(splitMessage), 'split-message instance is not of lengh 2')
+        self.assertEqual(splitMessage.body, splitMessage[0])
+        self.assertEqual(splitMessage.remainder, splitMessage[1])
+        self.assertEqual(body.strip(), splitMessage.body.strip(), 'Bodies do not match')
+        self.assertEqual(footer.strip(), splitMessage.remainder.strip(), 'Footer does not match')
+
     def test_no_split(self):
         'Test when there is no split'
         r = split_message(self.msg)
-        self.assertEqual(2, len(r))
-        self.assertEqual(self.msg, r.body)
-        self.assertEqual('', r.remainder)
+        self.assertSplit(self.msg, '', r)
 
-    def test_split(self):
-        'Test a simple split'
-        ftr = '\n\n--\nEthel the frog'
+    def test_footer(self):
+        'Test a split of a footer'
+        m = self.msg + self.ftr
+        r = split_message(m)
+        self.assertSplit(self.msg, self.ftr, r)
+
+    def test_footer_twiddle(self):
+        'Test a split of a footer when ``~`` is used as the seperator'
+        ftr = self.create_ftr('~')
         m = self.msg + ftr
         r = split_message(m)
-        self.assertEqual(self.msg, r.body)
-        self.assertEqual(ftr.strip(), r.remainder.strip())
+        self.assertSplit(self.msg, ftr, r)
+
+    def test_footer_equal(self):
+        'Test a split of a footer when ``=`` is used as the seperator'
+        ftr = self.create_ftr('=')
+        m = self.msg + ftr
+        r = split_message(m)
+        self.assertSplit(self.msg, ftr, r)
+
+    def test_footer_underscore(self):
+        'Test a split of a footer when ``_`` is used as the seperator'
+        ftr = self.create_ftr('_')
+        m = self.msg + ftr
+        r = split_message(m)
+        self.assertSplit(self.msg, ftr, r)
+
+    def test_footer_dash_space(self):
+        'Test a split of a footer when ``- -`` is used as the seperator'
+        ftr = self.ftr.replace('--', '- -')
+        m = self.msg + ftr
+        r = split_message(m)
+        self.assertSplit(self.msg, ftr, r)
+
+    def test_quote_inline(self):
+        'Test that an inline quote is left at the start of the message'
+        start = 'Someone wrote:\n> Je ne ecrit pas français.\n\n'
+        msg = start + self.msg
+
+        r = split_message(msg)
+        self.assertSplit(msg, '', r)
+
+    def test_quote_inline_footer(self):
+        'Test that an inline quote is left at the start of the message, but the footer is removed'
+        start = 'Someone wrote:\n> Je ne ecrit pas français.\n\n'
+        body = start + self.msg
+        msg = body + self.ftr
+
+        r = split_message(msg)
+        self.assertSplit(body, self.ftr, r)
