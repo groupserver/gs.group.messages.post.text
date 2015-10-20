@@ -95,9 +95,24 @@ class VimeoTest(TestCase):
 
 
 class SplitMessageTest(TestCase):
+    def setUp(self):
+        self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
+Gangland. Last Tuesday a reign of terror was ended when the notorious
+Piranha Brothers, Dug and Dinsdale \u2014 after one the of most
+extraordinary trials in British legal history \u2014 were sentenced to
+400 years imprisonment for crimes of violence.'''
+
     def test_no_split(self):
-        t = 'I am a fish.\nI like to swim in the sea'
-        r = split_message(t)
+        'Test when there is no split'
+        r = split_message(self.msg)
         self.assertEqual(2, len(r))
-        self.assertEqual(t, r[0])
-        self.assertEqual('', r[1])
+        self.assertEqual(self.msg, r.body)
+        self.assertEqual('', r.remainder)
+
+    def test_split(self):
+        'Test a simple split'
+        ftr = '\n\n--\nEthel the frog'
+        m = self.msg + ftr
+        r = split_message(m)
+        self.assertEqual(self.msg, r.body)
+        self.assertEqual(ftr.strip(), r.remainder.strip())
