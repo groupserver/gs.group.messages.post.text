@@ -13,8 +13,9 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
-from re import compile as re_compile, I as re_I, M as re_M, U as re_U
+from collections import namedtuple
 from cgi import escape as cgi_escape
+from re import compile as re_compile, I as re_I, M as re_M, U as re_U
 from textwrap import TextWrapper
 from zope.component import getUtility
 from gs.cache import cache
@@ -191,6 +192,9 @@ def wrap_message(messageText, width=79):
     return retval
 
 
+SplitMessage = namedtuple('SplitMessage', ['body', 'remainder'])
+
+
 def split_message(messageText, max_consecutive_comment=12,
                   max_consecutive_whitespace=3):
     """Split the message into main body and the footer.
@@ -311,9 +315,7 @@ def split_message(messageText, max_consecutive_comment=12,
     if not intro:
         intro = body
         body = ''
-    retval = (intro, body)
-    assert retval
-    assert len(retval) == 2
+    retval = SplitMessage(intro, body)
     return retval
 
 standard_markup_functions = (markup_email_address, markup_youtube,
