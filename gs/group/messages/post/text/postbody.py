@@ -256,7 +256,7 @@ def split_message(messageText, max_consecutive_comment=12,
             body.append(line)
             bodystart = True
 
-        if len(line) > 3 and (line[:4] == '&gt;' or line.lower().find('wrote:') != -1):
+        if len(line) > 3 and ((line[:4] == '&gt;') or (line.lower().find('wrote:') != -1)):
             consecutive_comment += 1
         else:
             consecutive_comment = 0
@@ -284,7 +284,7 @@ def split_message(messageText, max_consecutive_comment=12,
             ls = ''
         if trim and (ls == '&gt;' or ls == ''):
             body.insert(0, line)
-        elif trim and line.find('wrote:') > 2:
+        elif trim and (line.find('wrote:') > 2):
             body.insert(0, line)
         elif ((trim) and (len(line.strip()) > 0)
               and (len(line.strip().split()) == 1)

@@ -15,7 +15,7 @@
 from __future__ import absolute_import, unicode_literals
 from unittest import TestCase
 from gs.group.messages.post.text.postbody import (
-    markup_youtube, markup_vimeo)
+    markup_youtube, markup_vimeo, split_message)
 
 
 class YouTubeTest(TestCase):
@@ -92,3 +92,12 @@ class VimeoTest(TestCase):
         url = self.construct_url('https://www.vimeo.com')
         r = markup_vimeo(None, url, [], [])
         self.assertIn('src="https://player.vimeo.com/video/118019156?', r)
+
+
+class SplitMessageTest(TestCase):
+    def test_no_split(self):
+        t = 'I am a fish.\nI like to swim in the sea'
+        r = split_message(t)
+        self.assertEqual(2, len(r))
+        self.assertEqual(t, r[0])
+        self.assertEqual('', r[1])
