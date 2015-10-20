@@ -232,12 +232,11 @@ remainder of the message consists of all the previous posts. This method also re
 Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscripts``."""
     intro = []
     remainder = []
-    i = 1
     remainder_start = False
     consecutive_comment = 0
     consecutive_whitespace = 0
 
-    for line in messageText.split('\n'):
+    for i, line in enumerate(messageText.split('\n'), 1):
         if ((line[:2] == '--') or (line[:2] == '==') or (line[:2] == '__') or (line[:2] == '~~')
                 or (line[:3] == '- -') or postByRE.match(line)):
             remainder_start = True
@@ -270,8 +269,6 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
             consecutive_whitespace = 0
         else:
             consecutive_whitespace += 1
-
-        i += 1
 
     # Backtrack through the post, in reverse order
     rintro = []
