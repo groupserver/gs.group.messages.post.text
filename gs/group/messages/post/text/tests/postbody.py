@@ -192,17 +192,26 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
-        with codecs.open('piranah-body.txt', 'r', encoding='utf-8') as infile:
-            body = infile.read()
-        with codecs.open('piranah-end.txt', 'r', encoding='utf-8') as infile:
-            end = infile.read()
+        with codecs.open('piranah.txt', 'r', encoding='utf-8') as infile:
+            msg = infile.read()
         # One of the lines
         #     On  9/17/2015 11:14 AM, Dinsdale Piranha
         # is expected to move from the footer to the body
-        splitEnd = end.split('\n')
-        expectedBody = body + '\n' + splitEnd[0]
-        expectedEnd = '\n'.join(splitEnd[1:])
-        msg = '\n'.join((body, end))
+        splitMsg = msg.split('\n')
+        expectedBody = '\n'.join(splitMsg[:12])
+        expectedEnd = '\n'.join(splitMsg[12:])
         r = split_message(msg)
-        self.maxDiff = None
+        self.assertSplit(expectedBody, expectedEnd, r)
+
+    def test_long_lines(self):
+        '''Test a post by Kathleen Murphy to the St Paul Issue Forum, which has long lines.
+<http://forums.e-democracy.org/r/post/7pQkztAeqn1IW8yvLEmXX6>'''
+
+        with codecs.open('edem-spif-kathleenmurpy.txt', 'r', encoding='utf-8') as infile:
+            msg = infile.read()
+        r = split_message(msg)
+        splitMsg = msg.split('\n')
+        expectedBody = '\n'.join(splitMsg[:6])
+        expectedEnd = '\n'.join(splitMsg[6:])
+        r = split_message(msg)
         self.assertSplit(expectedBody, expectedEnd, r)

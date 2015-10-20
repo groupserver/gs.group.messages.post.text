@@ -251,7 +251,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
         # if we've got less than 15 lines, just put it in the intro
         elif (i <= 15):
             intro.append(line)
-        elif (len(line) > 3 and line[:4] != '&gt;'):
+        elif (len(line) > 3 and ((line[:4] != '&gt;') or line[:2] != '> ')):
             intro.append(line)
         elif consecutive_whitespace <= max_consecutive_whitespace:
             intro.append(line)
@@ -273,20 +273,13 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
     # Backtrack through the post, in reverse order
     rintro = []
     trim = True
-
     for i, line in enumerate(intro[::-1]):
         prevLine = intro[intro.index(line) - 1] if (i != 0) else ''
 
         if len(intro) < 5:
             trim = False
 
-        if len(line) > 3:
-            ls = line[:4]
-        elif line.strip():
-            ls = line.strip()[0]
-        else:
-            ls = ''
-
+        ls = line[:4] if len(line) > 3 else ''
         if trim and ((ls == '&gt;') or (ls[:2] == '> ') or (ls == '')):
             remainder.insert(0, line)
         elif trim and (line.find('wrote:') > 2):
