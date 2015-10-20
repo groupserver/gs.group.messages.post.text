@@ -194,9 +194,21 @@ def wrap_message(messageText, width=79):
 
 #: The 2-tuple containing the strings representing
 #:
-#: * The main body of the message (``intro``) and
-#: * The rest of the message, including the bottom-quoting and the footer (``remainder``).
+#: 0. The main body of the message (``intro``) and
+#: 1. The rest of the message, including the bottom-quoting and the footer (``remainder``).
 SplitMessage = namedtuple('SplitMessage', ['intro', 'remainder'])
+
+#: The regular expression for the **title** **element** **contents.** For example,
+#: ``Post by Dinsdale Piranha: Violence: British gangland: Ethel the Frog``. If we see this then
+#: an email client, such as Mozilla Thunderbird, has decided to bottom quote, and convert the
+#: contents of the ``<head>`` element to plain text. This would be fine if it was just the
+#: ``<title>`` element, but it will be followed by some rather ugly CSS from some ``<style>``
+#: elements.
+#:
+#: The four components seperated by a colon are the author-name, topic-name, group name, and
+#: site name. *At least* three groups sperated by colons are expected, but there could be more if
+#: any name contains a colon itself.
+postByRE = re_compile('Post by (.*:){3,}')
 
 
 def split_message(messageText, max_consecutive_comment=12, max_consecutive_whitespace=3):
@@ -226,9 +238,8 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
     consecutive_whitespace = 0
 
     for line in messageText.split('\n'):
-        if ((line[:2] == '--') or (line[:2] == '==')
-                or (line[:2] == '__') or (line[:2] == '~~')
-                or (line[:3] == '- -')):
+        if ((line[:2] == '--') or (line[:2] == '==') or (line[:2] == '__') or (line[:2] == '~~')
+                or (line[:3] == '- -') or postByRE.match(line)):
             remainder_start = True
 
         # if we've started on the remainder, just append to remainder

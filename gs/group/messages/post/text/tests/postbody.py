@@ -13,6 +13,7 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals
+import codecs
 from unittest import TestCase
 from gs.group.messages.post.text.postbody import (
     markup_youtube, markup_vimeo, split_message)
@@ -187,5 +188,21 @@ extraordinary trials in British legal history \u2014 were sentenced to
         end = self.bottomQuoting.replace('Some', '-- Some')
         msg = body + end
         r = split_message(msg, max_consecutive_comment=1)
-        self.maxDiff = None
         self.assertSplit(body, end, r)
+
+    def test_bottom_quote_ugly(self):
+        'Test when good quotes go bad'
+        with codecs.open('piranah-body.txt', 'r', encoding='utf-8') as infile:
+            body = infile.read()
+        with codecs.open('piranah-end.txt', 'r', encoding='utf-8') as infile:
+            end = infile.read()
+        # One of the lines
+        #     On  9/17/2015 11:14 AM, Dinsdale Piranha
+        # is expected to move from the footer to the body
+        splitEnd = end.split('\n')
+        expectedBody = body + '\n' + splitEnd[0]
+        expectedEnd = '\n'.join(splitEnd[1:])
+        msg = '\n'.join((body, end))
+        r = split_message(msg)
+        self.maxDiff = None
+        self.assertSplit(expectedBody, expectedEnd, r)
