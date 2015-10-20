@@ -95,6 +95,8 @@ class VimeoTest(TestCase):
 
 
 class SplitMessageTest(TestCase):
+    # longMessage = True
+
     def setUp(self):
         self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
 Gangland. Last Tuesday a reign of terror was ended when the notorious
@@ -103,17 +105,19 @@ extraordinary trials in British legal history \u2014 were sentenced to
 400 years imprisonment for crimes of violence.'''
 
         self.ftr = '\n\n--\nEthel the frog'
+        self.bottomQuoting = '\n\nSomeone wrote:\n> Je ne ecrit pas français.\n> Desole.\n'
 
     def create_ftr(self, sep):
         retval = self.ftr.replace('-', sep)
         return retval
 
-    def assertSplit(self, body, footer, splitMessage):
-        self.assertEqual(2, len(splitMessage), 'split-message instance is not of lengh 2')
-        self.assertEqual(splitMessage.body, splitMessage[0])
+    def assertSplit(self, intro, footer, splitMessage):
+        self.assertEqual(2, len(splitMessage), 'splitMessage instance is not of lengh 2')
+        self.assertEqual(splitMessage.intro, splitMessage[0])
         self.assertEqual(splitMessage.remainder, splitMessage[1])
-        self.assertEqual(body.strip(), splitMessage.body.strip(), 'Bodies do not match')
-        self.assertEqual(footer.strip(), splitMessage.remainder.strip(), 'Footer does not match')
+        self.assertMultiLineEqual(intro.strip(), splitMessage.intro.strip(), 'Bodies do not match')
+        self.assertMultiLineEqual(footer.strip(), splitMessage.remainder.strip(),
+                                  'Footer does not match')
 
     def test_no_split(self):
         'Test when there is no split'
@@ -158,7 +162,6 @@ extraordinary trials in British legal history \u2014 were sentenced to
         'Test that an inline quote is left at the start of the message'
         start = 'Someone wrote:\n> Je ne ecrit pas français.\n\n'
         msg = start + self.msg
-
         r = split_message(msg)
         self.assertSplit(msg, '', r)
 
@@ -167,6 +170,13 @@ extraordinary trials in British legal history \u2014 were sentenced to
         start = 'Someone wrote:\n> Je ne ecrit pas français.\n\n'
         body = start + self.msg
         msg = body + self.ftr
-
         r = split_message(msg)
         self.assertSplit(body, self.ftr, r)
+
+    def test_bottom_quote_angle(self):
+        'Test bottom quoting when it uses angle brackets'
+        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        msg = body + self.bottomQuoting
+        r = split_message(msg, max_consecutive_comment=1)
+        self.maxDiff = None
+        self.assertSplit(body, self.bottomQuoting, r)
