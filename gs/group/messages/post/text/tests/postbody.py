@@ -95,7 +95,7 @@ class VimeoTest(TestCase):
 
 
 class SplitMessageTest(TestCase):
-    # longMessage = True
+    longMessage = True
 
     def setUp(self):
         self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
@@ -180,3 +180,12 @@ extraordinary trials in British legal history \u2014 were sentenced to
         r = split_message(msg, max_consecutive_comment=1)
         self.maxDiff = None
         self.assertSplit(body, self.bottomQuoting, r)
+
+    def test_bottom_quote_dash(self):
+        'Test bottom quoting when it uses an initial dash'
+        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        end = self.bottomQuoting.replace('Some', '-- Some')
+        msg = body + end
+        r = split_message(msg, max_consecutive_comment=1)
+        self.maxDiff = None
+        self.assertSplit(body, end, r)
