@@ -14,6 +14,7 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 import codecs
+from contextlib import contextmanager
 import os
 from pkg_resources import resource_filename
 from unittest import TestCase
@@ -99,6 +100,14 @@ class VimeoTest(TestCase):
 
 class SplitMessageTest(TestCase):
     longMessage = True
+
+    @staticmethod
+    @contextmanager
+    def open_test_file(filename):
+        testname = os.path.join('tests', filename)
+        fullname = resource_filename('gs.group.messages.post.text', testname)
+        with codecs.open(fullname, 'r', encoding='utf-8') as infile:
+            yield infile
 
     def setUp(self):
         self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
@@ -194,9 +203,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
-        filename = resource_filename('gs.group.messages.post.text',
-                                     os.path.join('tests', 'piranah.txt'))
-        with codecs.open(filename, 'r', encoding='utf-8') as infile:
+        with self.open_test_file('piranah.txt') as infile:
             msg = infile.read()
         # One of the lines
         #     On  9/17/2015 11:14 AM, Dinsdale Piranha
@@ -210,9 +217,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_long_lines(self):
         '''Test a post by Kathleen Murphy to the St Paul Issue Forum, which has long lines.
 <http://forums.e-democracy.org/r/post/7pQkztAeqn1IW8yvLEmXX6>'''
-        filename = resource_filename('gs.group.messages.post.text',
-                                     os.path.join('tests', 'edem-spif-kathleenmurpy.txt'))
-        with codecs.open(filename, 'r', encoding='utf-8') as infile:
+        with self.open_test_file('edem-spif-kathleenmurpy.txt') as infile:
             msg = infile.read()
         splitMsg = msg.split('\n')
         expectedBody = '\n'.join(splitMsg[:6])
@@ -223,9 +228,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_steve(self):
         '''Test a post from Steve to GroupServer development
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
-        filename = resource_filename('gs.group.messages.post.text',
-                                     os.path.join('tests', 'groupserver-devel-steve.txt'))
-        with codecs.open(filename, 'r', encoding='utf-8') as infile:
+        with self.open_test_file('groupserver-devel-steve.txt') as infile:
             msg = infile.read()
         r = split_message(msg)
         splitMsg = msg.split('\n')
