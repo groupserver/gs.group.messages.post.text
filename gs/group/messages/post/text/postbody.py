@@ -245,7 +245,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
         if remainder_start:
             remainder.append(line)
         # count comments, but don't penalise top quoting as badly
-        elif consecutive_comment >= max_consecutive_comment and i > 25:
+        elif (consecutive_comment >= max_consecutive_comment) and (i > 25):
             remainder.append(line)
             remainder_start = True
         # if we've got less than 15 lines, just put it in the intro
@@ -254,7 +254,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
         elif (len(line) > 3) and ((line[:4] != '&gt;') or (line[:2] != '> ')):
             intro.append(line)
         elif consecutive_whitespace < max_consecutive_whitespace:
-            # The +1 is needed because of how we count the lines
+            # It is < (rather than <=) because of how we count the lines
             intro.append(line)
         else:
             remainder.append(line)
