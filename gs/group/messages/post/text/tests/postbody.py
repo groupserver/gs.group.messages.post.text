@@ -19,7 +19,7 @@ import os
 from pkg_resources import resource_filename
 from unittest import TestCase
 from gs.group.messages.post.text.postbody import (
-    markup_youtube, markup_vimeo, split_message)
+    markup_youtube, markup_vimeo, split_message, SplitMessage, )
 
 
 class YouTubeTest(TestCase):
@@ -109,6 +109,15 @@ class SplitMessageTest(TestCase):
         with codecs.open(fullname, 'r', encoding='utf-8') as infile:
             yield infile
 
+    @staticmethod
+    def expected_split(msg, line):
+        '''Create a split at the expected line'''
+        splitMsg = msg.strip().split('\n')
+        expectedBody = '\n'.join(splitMsg[:line])
+        expectedEnd = '\n'.join(splitMsg[line:])
+        retval = SplitMessage(expectedBody, expectedEnd)
+        return retval
+
     def setUp(self):
         self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
 Gangland. Last Tuesday a reign of terror was ended when the notorious
@@ -190,7 +199,6 @@ extraordinary trials in British legal history \u2014 were sentenced to
         body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
         msg = body + self.bottomQuoting
         r = split_message(msg, max_consecutive_comment=1)
-        self.maxDiff = None
         self.assertSplit(body, self.bottomQuoting, r)
 
     def test_bottom_quote_dash(self):
@@ -208,34 +216,27 @@ extraordinary trials in British legal history \u2014 were sentenced to
         # One of the lines
         #     On  9/17/2015 11:14 AM, Dinsdale Piranha
         # is expected to move from the footer to the body
-        splitMsg = msg.split('\n')
-        expectedBody = '\n'.join(splitMsg[:12])
-        expectedEnd = '\n'.join(splitMsg[12:])
+        expected = self.expected_split(msg, 12)
         r = split_message(msg)
-        self.assertSplit(expectedBody, expectedEnd, r)
+        self.assertSplit(expected.intro, expected.remainder, r)
 
     def test_long_lines(self):
         '''Test a post by Kathleen Murphy to the St Paul Issue Forum, which has long lines.
 <http://forums.e-democracy.org/r/post/7pQkztAeqn1IW8yvLEmXX6>'''
         with self.open_test_file('edem-spif-kathleenmurpy.txt') as infile:
             msg = infile.read()
-        splitMsg = msg.split('\n')
-        expectedBody = '\n'.join(splitMsg[:6])
-        expectedEnd = '\n'.join(splitMsg[6:])
+        expected = self.expected_split(msg, 6)
         r = split_message(msg)
-        self.assertSplit(expectedBody, expectedEnd, r)
+        self.assertSplit(expected.intro, expected.remainder, r)
 
     def test_steve(self):
         '''Test a post from Steve to GroupServer development
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
         with self.open_test_file('groupserver-devel-steve.txt') as infile:
             msg = infile.read()
+        expected = self.expected_split(msg, 23)
         r = split_message(msg)
-        splitMsg = msg.split('\n')
-        expectedBody = '\n'.join(splitMsg[:23])
-        expectedEnd = '\n'.join(splitMsg[23:])
-        r = split_message(msg)
-        self.assertSplit(expectedBody, expectedEnd, r)
+        self.assertSplit(expected.intro, expected.remainder, r)
 
     def test_lao_tse(self):
         '''Test a quote from Lao Tse, which has a corner case signature sans a final newline'''
@@ -254,3 +255,13 @@ extraordinary trials in British legal history \u2014 were sentenced to
         expectedEnd = ''
         r = split_message(msg)
         self.assertSplit(expectedBody, expectedEnd, r)
+
+    def test_html_spam(self):
+        '''Test that we handle a spam message containing HTML well, or at least not poorly'''
+        with self.open_test_file('html-spam.txt') as infile:
+            msg = infile.read()
+        # The split is at a closing HTML-comment "-->".
+        expected = self.expected_split(msg, 14)
+        r = split_message(msg)
+        self.maxDiff = None
+        self.assertSplit(expected.intro, expected.remainder, r)

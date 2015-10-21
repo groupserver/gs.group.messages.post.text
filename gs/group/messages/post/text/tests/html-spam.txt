@@ -1,0 +1,34 @@
+
+
+<!--
+body{background-color:#f3f3f3;font-family:verdana,arial;color:#666;font-size:10px;}
+div{margin:10px;padding:10px 10px 0 10px;background-color:#fff;border:1px solid #ddd;}
+fieldset{border:0px;*margin:30px 0 0 0;padding:0 0 10px 0;position:relative;}
+fieldset:nth-of-type(1){margin:30px 0 0 0;}
+h1{margin:0 0 10px 0;background-color:#ECEBEB;border:1px solid #ddd;padding:5px;color:#666666;font-weight:bold;font-size:12px;}
+legend:nth-of-type(1){position:absolute;left:-2px;top:-20px;margin:0;}
+.esquerda {
+	color:#FFF;
+}
+.direita p {
+	color:#FFF;
+}
+.font {font-family: verdana}
+--> 
+
+Protocolo de atendimento: BRA_0175415282 
+Prezado(a) Cliente, 
+Informamos que seu Acesso ao INTERNET BANKING Bradesco ser encerrada. 
+
+Motivo do Email: Devido
+        a n o atualiza o da nova Plataforma de
+        seguran a imposta pelo sistema de Cr dito B radesco E seus dados encontram-se desatualizados at este momento. 
+
+Como eu posso evitar o 
+        Cancelamento? 
+
+Obtenha a atualiza o de seus dados agora atrav s do portal que disponibilizamos a voc . Siga todos os passos e procedimentos para evitar maiores transtornos. 
+Canal do Cliente Bradesco S/A. Atualizar Agora  <http://www.teratv.org/ibpflogin/Sessao.jsf.Acesso=> 
+
+Esta uma mensagem totalmente segura. Mensagem analizada e verificada pelo AVG AntiVirus e ScanMail 
+
