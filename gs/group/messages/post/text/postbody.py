@@ -280,21 +280,21 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
             trim = False
 
         ls = line[:4] if len(line) > 3 else ''
-        if trim and ((ls == '&gt;') or (ls[:2] == '> ') or (ls == '')):
-            remainder.insert(0, line)
-        elif trim and (line.find('wrote:') > 2):
-            remainder.insert(0, line)
-        elif (trim and (len(line.strip()) > 0)
-              and (len(line.strip().split()) == 1)
-              and ((len(prevLine.strip()) == 0)
-              or len(prevLine.strip().split()) == 1)):
-            # IF we are trimming, and the line has non-whitepsace
-            #   characters AND there is only one word on the line,
-            #   AND the previous line does NOT have any significant text
-            # THEN add it to the snipped-text.
-            remainder.insert(0, line)
+        if trim:
+                # IF we are trimming, and we are looking at a quote-character or an empty string
+                #   OR we have seen the 'wrote:' marker,
+                #   OR the line has non-whitepsace characters AND there is only one word on the
+                #   line, AND the previous line does NOT have any significant text
+                # THEN add it to the snipped-text.
+            if (((ls == '&gt;') or (ls[:2] == '> ') or (ls.strip() == ''))
+                    or (line.find('wrote:') > 2)
+                    or ((len(line.strip()) > 0) and (len(line.strip().split()) == 1)
+                        and ((len(prevLine.strip()) == 0) or len(prevLine.strip().split()) == 1))):
+                remainder.insert(0, line)
+            else:
+                trim = False
+                rintro.insert(0, line)
         else:
-            trim = False
             rintro.insert(0, line)
 
     # Do not snip, if we will only snip a single line of
