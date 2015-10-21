@@ -251,16 +251,17 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
         # if we've got less than 15 lines, just put it in the intro
         elif (i <= 15):
             intro.append(line)
-        elif (len(line) > 3 and ((line[:4] != '&gt;') or line[:2] != '> ')):
+        elif (len(line) > 3) and ((line[:4] != '&gt;') or (line[:2] != '> ')):
             intro.append(line)
-        elif consecutive_whitespace <= max_consecutive_whitespace:
+        elif (consecutive_whitespace + 1) < max_consecutive_whitespace:
+            # The +1 is needed because of how we count the lines
             intro.append(line)
         else:
             remainder.append(line)
             remainder_start = True
 
-        if len(line) > 3 and ((line[:4] == '&gt;') or (line[:2] == '> ')
-                              or (line.lower().find('wrote:') != -1)):
+        if (len(line) > 3) and ((line[:4] == '&gt;') or (line[:2] == '> ')
+                                or (line.lower().find('wrote:') != -1)):
             consecutive_comment += 1
         else:
             consecutive_comment = 0

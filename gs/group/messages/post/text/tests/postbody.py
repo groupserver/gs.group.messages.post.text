@@ -119,11 +119,11 @@ class SplitMessageTest(TestCase):
         return retval
 
     def setUp(self):
-        self.msg = ''''On Ethel the Frog tonight we look at violence: the violence of British
+        self.msg = '''On Ethel the Frog tonight we look at violence: the violence of British
 Gangland. Last Tuesday a reign of terror was ended when the notorious
 Piranha Brothers, Dug and Dinsdale \u2014 after one the of most
 extraordinary trials in British legal history \u2014 were sentenced to
-400 years imprisonment for crimes of violence.'''
+400 years imprisonment for crimes of violence.\n'''
 
         self.ftr = '\n\n--\nEthel the frog'
         self.bottomQuoting = '\n\nSomeone wrote:\n> Je ne ecrit pas français.\n> Desole.\n'
@@ -209,6 +209,24 @@ extraordinary trials in British legal history \u2014 were sentenced to
         r = split_message(msg, max_consecutive_comment=1)
         self.assertSplit(body, end, r)
 
+    def test_whitespace_split(self):
+        '''Test when whitespace indicates a split.'''
+        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        mw = 6
+        end = (mw * '\n') + 'A. Person <http://example.com/a.person>\n'
+        msg = body + end
+        r = split_message(msg, max_consecutive_whitespace=mw)
+        self.assertSplit(body, end, r)
+
+    def test_whitespace_no_split(self):
+        '''Test when whitespace does not indicate a split.'''
+        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        mw = 4
+        end = ((mw - 1) * '\n') + 'A. Person <http://example.com/a.person>\n'
+        msg = body + end
+        r = split_message(msg, max_consecutive_whitespace=mw)
+        self.assertSplit(msg, '', r)
+
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
         with self.open_test_file('piranah.txt') as infile:
@@ -234,7 +252,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
         with self.open_test_file('groupserver-devel-steve.txt') as infile:
             msg = infile.read()
-        expected = self.expected_split(msg, 23)
+        expected = self.expected_split(msg, 19)
         r = split_message(msg)
         self.assertSplit(expected.intro, expected.remainder, r)
 
