@@ -232,7 +232,7 @@ In addition, many users only write a short piece of text at the top of the email
 remainder of the message consists of all the previous posts. This method also removes the
 *bottom quoting*.
 
-Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscripts``."""
+Originally a ZMI-side script in ``Presentation/Tofu/MailingListManager/lscripts``."""
     intro = []
     remainder = deque()
     remainder_start = False
