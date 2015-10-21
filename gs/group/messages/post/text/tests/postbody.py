@@ -196,14 +196,14 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_bottom_quote_angle(self):
         'Test bottom quoting when it uses angle brackets'
-        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        body = (4 * self.msg)
         msg = body + self.bottomQuoting
         r = split_message(msg, max_consecutive_comment=1)
         self.assertSplit(body, self.bottomQuoting, r)
 
     def test_bottom_quote_dash(self):
         'Test bottom quoting when it uses an initial dash'
-        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        body = (4 * self.msg)
         end = self.bottomQuoting.replace('Some', '-- Some')
         msg = body + end
         r = split_message(msg, max_consecutive_comment=1)
@@ -211,7 +211,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_whitespace_split(self):
         '''Test when whitespace indicates a split.'''
-        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        body = (4 * self.msg)
         mw = 3
         end = ((mw + 1) * '\n') + 'A. Person <http://example.com/a.person>\n'
         msg = body + end
@@ -220,12 +220,22 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_whitespace_no_split(self):
         '''Test when whitespace does not indicate a split.'''
-        body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
+        body = (4 * self.msg)
         mw = 3
         end = (mw * '\n') + 'A. Person <http://example.com/a.person>\n'
         msg = body + end
         r = split_message(msg, max_consecutive_whitespace=mw)
         self.assertSplit(msg, '', r)
+
+    def test_multiple_quote_split(self):
+        '''Test when multiple quotes indicate a split'''
+        quotedLines = ['> ' + line for line in self.msg.split('\n')]
+        mq = 10
+        end = '\n'.join((quotedLines + quotedLines + quotedLines)[:(mq + 1)]) + '\n'
+        body = (6 * self.msg)  # Nice and long
+        msg = '\n'.join((body, end))
+        r = split_message(msg, max_consecutive_comment=mq)
+        self.assertSplit(body, end, r)
 
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
