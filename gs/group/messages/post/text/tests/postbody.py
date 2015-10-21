@@ -228,7 +228,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
         self.assertSplit(msg, '', r)
 
     def test_multiple_quote_split(self):
-        '''Test when multiple quotes indicate a split'''
+        '''Test when multiple quotes, at the bottom after a long intro, indicate a split'''
         quotedLines = ['> ' + line for line in self.msg.split('\n')]
         mq = 10
         end = '\n'.join((quotedLines + quotedLines + quotedLines)[:(mq + 1)]) + '\n'
@@ -236,6 +236,16 @@ extraordinary trials in British legal history \u2014 were sentenced to
         msg = '\n'.join((body, end))
         r = split_message(msg, max_consecutive_comment=mq)
         self.assertSplit(body, end, r)
+
+    def test_multiple_quote_further_info(self):
+        '''Test multiple quotes when further info does not indicate a split'''
+        quotedLines = ['> ' + line for line in self.msg.split('\n')]
+        mq = 5
+        end = '\n'.join((quotedLines + quotedLines + quotedLines)[:mq]) + '\n'
+        body = (6 * self.msg)  # Nice and long
+        msg = '\n'.join((body, end, self.msg))
+        r = split_message(msg, max_consecutive_comment=mq)
+        self.assertSplit(msg, '', r)
 
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
