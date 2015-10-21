@@ -14,6 +14,8 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 import codecs
+import os
+from pkg_resources import resource_filename
 from unittest import TestCase
 from gs.group.messages.post.text.postbody import (
     markup_youtube, markup_vimeo, split_message)
@@ -192,7 +194,9 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
     def test_bottom_quote_ugly(self):
         'Test when good quotes go bad'
-        with codecs.open('piranah.txt', 'r', encoding='utf-8') as infile:
+        filename = resource_filename('gs.group.messages.post.text',
+                                     os.path.join('tests', 'piranah.txt'))
+        with codecs.open(filename, 'r', encoding='utf-8') as infile:
             msg = infile.read()
         # One of the lines
         #     On  9/17/2015 11:14 AM, Dinsdale Piranha
@@ -206,8 +210,9 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_long_lines(self):
         '''Test a post by Kathleen Murphy to the St Paul Issue Forum, which has long lines.
 <http://forums.e-democracy.org/r/post/7pQkztAeqn1IW8yvLEmXX6>'''
-
-        with codecs.open('edem-spif-kathleenmurpy.txt', 'r', encoding='utf-8') as infile:
+        filename = resource_filename('gs.group.messages.post.text',
+                                     os.path.join('tests', 'edem-spif-kathleenmurpy.txt'))
+        with codecs.open(filename, 'r', encoding='utf-8') as infile:
             msg = infile.read()
         splitMsg = msg.split('\n')
         expectedBody = '\n'.join(splitMsg[:6])
@@ -218,8 +223,9 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_steve(self):
         '''Test a post from Steve to GroupServer development
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
-
-        with codecs.open('groupserver-devel-steve.txt', 'r', encoding='utf-8') as infile:
+        filename = resource_filename('gs.group.messages.post.text',
+                                     os.path.join('tests', 'groupserver-devel-steve.txt'))
+        with codecs.open(filename, 'r', encoding='utf-8') as infile:
             msg = infile.read()
         r = split_message(msg)
         splitMsg = msg.split('\n')
