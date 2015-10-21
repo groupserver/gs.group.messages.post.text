@@ -300,7 +300,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
     # Do not snip, if we will only snip a single line of
     #  actual content
     if(len(remainder) == 1):
-        rintro = rintro + remainder
+        rintro.extend(remainder)
         remainder = []
 
     intro = '\n'.join(rintro).strip()

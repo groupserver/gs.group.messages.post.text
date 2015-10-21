@@ -236,3 +236,12 @@ extraordinary trials in British legal history \u2014 were sentenced to
         expectedEnd = '\n'.join(splitMsg[23:])
         r = split_message(msg)
         self.assertSplit(expectedBody, expectedEnd, r)
+
+    def test_Lao_Tse(self):
+        '''Test a quote from Lao Tse, which has a corner case signature sans a newline'''
+        with self.open_test_file('without-action.txt') as infile:
+            msg = infile.read()
+        expectedBody = msg
+        expectedEnd = ''
+        r = split_message(msg)
+        self.assertSplit(expectedBody, expectedEnd, r)
