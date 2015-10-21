@@ -208,7 +208,10 @@ SplitMessage = namedtuple('SplitMessage', ['intro', 'remainder'])
 #: The four components seperated by a colon are the author-name, topic-name, group name, and
 #: site name. *At least* three groups sperated by colons are expected, but there could be more if
 #: any name contains a colon itself.
-postByRE = re_compile('Post by (.*:){3,}')
+postByRE = re_compile('^Post by (.*:){3,}')
+
+#: The strings that are commonly used to explicitly indicate a signiture starting
+EXPLICIT_SIG_START = ['--', '==', '~~', '__']
 
 
 def split_message(messageText, max_consecutive_comment=12, max_consecutive_whitespace=3):
@@ -237,19 +240,18 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
     consecutive_whitespace = 0
 
     for i, line in enumerate(messageText.split('\n'), 1):
-        if ((line[:2] == '--') or (line[:2] == '==') or (line[:2] == '__') or (line[:2] == '~~')
-                or (line[:3] == '- -') or postByRE.match(line)):
+        if ((line[:2] in EXPLICIT_SIG_START) or (line[:3] == '- -') or postByRE.match(line)):
             remainder_start = True
 
-        # if we've started on the remainder, just append to remainder
         if remainder_start:
+            # If we've started on the remainder, just append to the remainder
             remainder.append(line)
-        # count comments, but don't penalise top quoting as badly
-        elif (consecutive_comment >= max_consecutive_comment) and (i > 25):
+        elif (consecutive_comment > max_consecutive_comment) and (i > 25):
+            # Add comments (quotes) to the remainder, but don't penalise top-quoting
             remainder.append(line)
             remainder_start = True
-        # if we've got less than 15 lines, just put it in the intro
         elif (i <= 15):
+            # if we've got less than 15 lines, just put it in the intro
             intro.append(line)
         elif (len(line) > 3) and ((line[:4] != '&gt;') or (line[:2] != '> ')):
             intro.append(line)
@@ -260,18 +262,20 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
             remainder.append(line)
             remainder_start = True
 
+        # Raise a flag if we see a quote (comment). This is used in the if-statement above
         if (len(line) > 3) and ((line[:4] == '&gt;') or (line[:2] == '> ')
                                 or (line.lower().find('wrote:') != -1)):
             consecutive_comment += 1
         else:
             consecutive_comment = 0
-
+        # Raise a flag if we see a whitespace. This is used in the major if-statement above
         if len(line.strip()):
             consecutive_whitespace = 0
         else:
             consecutive_whitespace += 1
 
-    # Backtrack through the post, in reverse order
+    # Backtrack through the intro, in reverse order, adding things to either the remainder or
+    # keeping them in the intro
     rintro = deque()
     trim = True
     for i, line in enumerate(intro[::-1]):
@@ -305,10 +309,12 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
 
     intro = '\n'.join(rintro).strip()
     remainder = '\n'.join(remainder)
+
     # If we have snipped too much
     if not intro:
         intro = remainder
         remainder = ''
+
     retval = SplitMessage(intro, remainder)
     return retval
 
