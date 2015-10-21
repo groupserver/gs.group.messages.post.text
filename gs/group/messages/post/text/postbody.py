@@ -13,7 +13,7 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
-from collections import namedtuple
+from collections import (deque, namedtuple)
 from cgi import escape as cgi_escape
 from re import compile as re_compile, I as re_I, M as re_M, U as re_U
 from textwrap import TextWrapper
@@ -231,7 +231,7 @@ remainder of the message consists of all the previous posts. This method also re
 
 Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscripts``."""
     intro = []
-    remainder = []
+    remainder = deque()
     remainder_start = False
     consecutive_comment = 0
     consecutive_whitespace = 0
@@ -271,7 +271,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
             consecutive_whitespace += 1
 
     # Backtrack through the post, in reverse order
-    rintro = []
+    rintro = deque()
     trim = True
     for i, line in enumerate(intro[::-1]):
         prevLine = intro[intro.index(line) - 1] if (i != 0) else ''
@@ -290,12 +290,12 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
                  or (line.find('wrote:') > 2))
                 or ((len(line.strip()) > 0) and (len(line.strip().split()) == 1)
                     and ((len(prevLine.strip()) == 0) or len(prevLine.strip().split()) == 1))):
-                remainder.insert(0, line)
+                remainder.appendleft(line)
             else:
                 trim = False
-                rintro.insert(0, line)
+                rintro.appendleft(line)
         else:
-            rintro.insert(0, line)
+            rintro.appendleft(line)
 
     # Do not snip, if we will only snip a single line of
     #  actual content
