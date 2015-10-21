@@ -297,9 +297,8 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
         else:
             rintro.appendleft(line)
 
-    # Do not snip, if we will only snip a single line of
-    #  actual content
-    if(len(remainder) == 1):
+    # Do not snip, if we will only snip a single line of actual content
+    if (len(remainder) == 1) or ((len(remainder) == 2) and ('' in remainder)):
         rintro.extend(remainder)
         remainder = []
 

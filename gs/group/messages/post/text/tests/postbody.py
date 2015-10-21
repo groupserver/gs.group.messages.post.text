@@ -237,9 +237,18 @@ extraordinary trials in British legal history \u2014 were sentenced to
         r = split_message(msg)
         self.assertSplit(expectedBody, expectedEnd, r)
 
-    def test_Lao_Tse(self):
-        '''Test a quote from Lao Tse, which has a corner case signature sans a newline'''
+    def test_lao_tse(self):
+        '''Test a quote from Lao Tse, which has a corner case signature sans a final newline'''
         with self.open_test_file('without-action.txt') as infile:
+            msg = infile.read()
+        expectedBody = msg
+        expectedEnd = ''
+        r = split_message(msg)
+        self.assertSplit(expectedBody, expectedEnd, r)
+
+    def test_john_brunner(self):
+        '''Test a quote from John Brunner, which has a short sign-off sans a final newline'''
+        with self.open_test_file('shockwave-rider.txt') as infile:
             msg = infile.read()
         expectedBody = msg
         expectedEnd = ''
