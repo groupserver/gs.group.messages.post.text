@@ -14,14 +14,15 @@
 ############################################################################
 from __future__ import absolute_import, division, unicode_literals, print_function
 from gs.group.messages.post.base import PostViewlet
-from .postbody import split_message
+from .postbody import get_post_intro_and_remainder
 
 
 class TextPostViewlet(PostViewlet):
 
     def update(self):
         super(TextPostViewlet, self).update()
-        self.postIntro, self.postRemainder = split_message(self.post['body'])
+        self.postIntro, self.postRemainder = get_post_intro_and_remainder(self, self.post['body'])
+        # self.postIntro, self.postRemainder = split_message(self.post['body'])
 
     @property
     def show(self):
