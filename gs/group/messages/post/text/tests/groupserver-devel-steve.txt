@@ -1,0 +1,79 @@
+I had a quick chance to peak at my Notification sample.
+Mine is at: http://groupserver.org/p/stevenc/gs-profile-status.html
+
+Swap out stevenc for your profile link name.
+Other than wishing active groups were at the top, this text …
+“You get quite a lot of email! Switch to digest mode
+[development%40groupserver.org?Subject=Digest%20on&body=Hello%2C%0A%0APlease%20set%20me%20to%20digest-mode%20for%20GroupServer%20development%0A%3Chttp%3A//groupserver.org/groups/development%3E.%0A%0A--%0ASteven%20Clift%20%3Chttp%3A//groupserver.org/p/stevenc%3E] and you will get a single daily summary of what is going on in GroupServer development , instead of an email each time someone posts.”
+… may run counter to the goals of fostering active groups.
+In short, proactively encouraging people to switch to digest essentially causes
+us to lose much of their participation. Out of sight, out of mind.
+Obviously we need digest to keep people who hate email in the loop, but I would
+rather see … “your group isn’t too active, click here to not miss a message by
+getting posts immediately.”
+
+Steven Clift - Executive Director, E-Democracy.org
+
+clift@e-democracy.org - +1.612.234.7072
+
+@democracy - http://linkedin.com/in/netclift
+
+
+
+E-Democracy can help: http://e-democracy.org/services
+
+
+
+
+
+
+
+On Thu, May 28, 2015 at 7:13 PM, Michael JasonSmith wrote:
+
+> I now have the man-page for the script to send out the "What is going on in
+your groups" notification up on Read the Docs:
+
+>
+http://groupserver.readthedocs.org/projects/gsprofilestatussend/en/latest/script.html
+
+>
+
+> I have also written a plain-text version of the notification. It is simpler
+than the HTML, but still very complex for an email. I ended up using
+reStructedText markup for the section headings to try and manage the complexity.
+
+>
+
+> I will probably deploy the first cut of the notification to our production
+servers next week, and send it (by hand) on Wednesday (3 June, 2015). Initially
+it will only go out to all members of this group (GroupServer Development) and
+OnlineGroups.net Administrators . This will *hopefully* allow me to deal with most of the issues before sending
+it out to the wider audience on 1 July.
+
+>
+
+>
+
+> ――
+
+> View topic http://groupserver.org/r/topic/3jlzkUJCCieX4wXDOsz4bt
+
+> Leave group mailto:development@groupserver.org?Subject=Unsubscribe
+
+>
+
+> GroupServer: tweeting since 2010 https://twitter.com/groupserver
+
+
+
+
+
+
+
+
+Steven Clift - Executive Director, E-Democracy.org
+clift@e-democracy.org [clift@e-democracy.org] - +1.612.234.7072
+@democracy - http://linkedin.com/in/netclift [http://linkedin.com/in/netclift]
+
+E-Democracy can help: http://e-democracy.org/services [http://e-democracy.org/services]
+[https://app.mixmax.com/api/track/v2/3heNHN9n5xFaIRNf3/IyZy9mL5NWYyN2btVGZtUGQ0ZWasNmI/IyZy9mLyVmdyV2cwV3bydGQ05WZtB3bsVmdlRmI/IyZy9mLyVmdyV2cwV3bydGQ05WZtB3bsVmdlRmI?sc=false]

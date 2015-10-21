@@ -209,9 +209,21 @@ extraordinary trials in British legal history \u2014 were sentenced to
 
         with codecs.open('edem-spif-kathleenmurpy.txt', 'r', encoding='utf-8') as infile:
             msg = infile.read()
-        r = split_message(msg)
         splitMsg = msg.split('\n')
         expectedBody = '\n'.join(splitMsg[:6])
         expectedEnd = '\n'.join(splitMsg[6:])
+        r = split_message(msg)
+        self.assertSplit(expectedBody, expectedEnd, r)
+
+    def test_steve(self):
+        '''Test a post from Steve to GroupServer development
+<http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
+
+        with codecs.open('groupserver-devel-steve.txt', 'r', encoding='utf-8') as infile:
+            msg = infile.read()
+        r = split_message(msg)
+        splitMsg = msg.split('\n')
+        expectedBody = '\n'.join(splitMsg[:23])
+        expectedEnd = '\n'.join(splitMsg[23:])
         r = split_message(msg)
         self.assertSplit(expectedBody, expectedEnd, r)
