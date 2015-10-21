@@ -212,8 +212,8 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_whitespace_split(self):
         '''Test when whitespace indicates a split.'''
         body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
-        mw = 6
-        end = (mw * '\n') + 'A. Person <http://example.com/a.person>\n'
+        mw = 3
+        end = ((mw + 1) * '\n') + 'A. Person <http://example.com/a.person>\n'
         msg = body + end
         r = split_message(msg, max_consecutive_whitespace=mw)
         self.assertSplit(body, end, r)
@@ -221,8 +221,8 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_whitespace_no_split(self):
         '''Test when whitespace does not indicate a split.'''
         body = '\n'.join((self.msg, self.msg, self.msg, self.msg))
-        mw = 4
-        end = ((mw - 1) * '\n') + 'A. Person <http://example.com/a.person>\n'
+        mw = 3
+        end = (mw * '\n') + 'A. Person <http://example.com/a.person>\n'
         msg = body + end
         r = split_message(msg, max_consecutive_whitespace=mw)
         self.assertSplit(msg, '', r)
@@ -252,14 +252,14 @@ extraordinary trials in British legal history \u2014 were sentenced to
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
         with self.open_test_file('groupserver-devel-steve.txt') as infile:
             msg = infile.read()
-        expected = self.expected_split(msg, 19)
+        expected = self.expected_split(msg, 23)
         r = split_message(msg)
         self.assertSplit(expected.intro, expected.remainder, r)
 
     def test_lao_tse(self):
         '''Test a quote from Lao Tse, which has a corner case signature sans a final newline'''
         with self.open_test_file('without-action.txt') as infile:
-            msg = infile.read()
+            msg = infile.read().strip()
         expectedBody = msg
         expectedEnd = ''
         r = split_message(msg)
@@ -268,7 +268,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
     def test_john_brunner(self):
         '''Test a quote from John Brunner, which has a short sign-off sans a final newline'''
         with self.open_test_file('shockwave-rider.txt') as infile:
-            msg = infile.read()
+            msg = infile.read().strip()
         expectedBody = msg
         expectedEnd = ''
         r = split_message(msg)

@@ -253,7 +253,7 @@ Originally a stand-alone script in ``Presentation/Tofu/MailingListManager/lscrip
             intro.append(line)
         elif (len(line) > 3) and ((line[:4] != '&gt;') or (line[:2] != '> ')):
             intro.append(line)
-        elif (consecutive_whitespace + 1) < max_consecutive_whitespace:
+        elif consecutive_whitespace < max_consecutive_whitespace:
             # The +1 is needed because of how we count the lines
             intro.append(line)
         else:
