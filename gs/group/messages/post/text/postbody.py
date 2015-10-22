@@ -208,7 +208,7 @@ SplitMessage = namedtuple('SplitMessage', ['intro', 'remainder'])
 #: The four components seperated by a colon are the author-name, topic-name, group name, and
 #: site name. *At least* three groups sperated by colons are expected, but there could be more if
 #: any name contains a colon itself.
-postByRE = re_compile('^Post by (.*:){3,}')
+postByRE = re_compile('^\s*Post by (.*:){3,}')
 
 #: The strings that are commonly used to explicitly indicate a signiture starting
 EXPLICIT_SIG_START = ['--', '==', '~~', '__']
