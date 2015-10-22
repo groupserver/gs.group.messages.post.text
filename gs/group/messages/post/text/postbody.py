@@ -279,22 +279,16 @@ Originally a ZMI-side script in ``Presentation/Tofu/MailingListManager/lscripts`
     rintro = deque()
     trim = True
     for i, line in enumerate(intro[::-1]):
-        prevLine = intro[intro.index(line) - 1] if (i != 0) else ''
-
         if len(intro) < 5:
             trim = False
 
         if trim:
             ls = line[:4] if len(line) > 3 else ''
-            # IF we are trimming, and we are looking at a quote-character or an empty string
-            #   OR we have seen the 'wrote:' marker,
-            #   OR the line has non-whitepsace characters AND there is only one word on the
-            #   line, AND the previous line does NOT have any significant text
-            # THEN add it to the snipped-text.
             if (((ls == '&gt;') or (ls[:2] == '> ') or (ls.strip() == '')
-                 or (line.find('wrote:') > 2))
-                or ((len(line.strip()) > 0) and (len(line.strip().split()) == 1)
-                    and ((len(prevLine.strip()) == 0) or len(prevLine.strip().split()) == 1))):
+                 or (line.find('wrote:') > 2))):
+                # IF we are trimming, and we are looking at a quote-character or an empty string
+                #   OR we have seen the 'wrote:' marker
+                # THEN add it to the snipped-text.
                 remainder.appendleft(line)
             else:
                 trim = False

@@ -271,6 +271,7 @@ extraordinary trials in British legal history \u2014 were sentenced to
         '''Test a post from Steve to GroupServer development
 <http://groupserver.org/r/topic/1lgYbWTDPFvK76GHdXr0g2>'''
         with self.open_test_file('groupserver-devel-steve.txt') as infile:
+
             msg = infile.read()
         expected = self.expected_split(msg, 23)
         r = split_message(msg)
@@ -301,5 +302,20 @@ extraordinary trials in British legal history \u2014 were sentenced to
         # The split is at a closing HTML-comment "-->".
         expected = self.expected_split(msg, 14)
         r = split_message(msg)
-        self.maxDiff = None
         self.assertSplit(expected.intro, expected.remainder, r)
+
+    def test_short_closing(self):
+        '''Ensure the short closings are not snipped'''
+        # --=mpj17=-- Short closings used to be snipped, but they are now kept.
+        closing = '\nThanks,\n  Ethel'
+        msg = self.msg + closing
+        r = split_message(msg)
+        self.assertSplit(msg, '', r)
+
+    def test_very_short_closing(self):
+        '''Ensure the one-line closings are not snipped'''
+        # --=mpj17=-- The "--" would *normally* cause a snip, but not when there is only one line
+        closing = '\n-- Ethel'
+        msg = self.msg + closing
+        r = split_message(msg)
+        self.assertSplit(msg, '', r)
