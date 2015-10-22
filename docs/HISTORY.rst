@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.2 (2015-10-22)
+------------------
+
+* Leaving the *closing* (such as “Yours sincerely…” or “Kind
+  regards…”) in the main body of the message
+  <http://groupserver.org/r/topic/2aoyDWJ8tYel6UUQkpPnM>
+
 1.0.1 (2015-10-21)
 ------------------
 
