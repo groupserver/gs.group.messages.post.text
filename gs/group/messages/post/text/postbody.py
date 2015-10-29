@@ -30,9 +30,6 @@ EMAIL_WORD_LIMIT = 5000
 
 email_matcher = re_compile(r".*?([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,4}).*?",
                            re_I | re_M | re_U)
-uri_matcher = re_compile("(?i)(http://|https://)(.+?)(\&lt;|\&gt;"
-                         "|\)|\]|\}|\"|\'|$|\s)")
-www_matcher = re_compile("""(?i)(www\..+)""")
 youtube_matcher = re_compile(
     "<?(?:https?:\/\/)?(?:www\.)?youtu(?:be)?\.(?:[a-z]){2,3}(?:[a-z/?=]+)"
     "([a-zA-Z0-9-_]{11})(?:\?[a-z0-9&-_=]+)?>?")
@@ -40,7 +37,6 @@ splashcast_matcher = re_compile("(?i)(http://www.splashcastmedia.com/"
                                 "web_watch/\?code\=)(.*)($|\s)")
 vimeo_matcher = re_compile(
     "(?i)(?:https?:\/\/)(?:.*)vimeo.com\/(.*)(?:$|\s)")
-bold_matcher = re_compile("""(\*.*\*)""")
 
 # The following expression is based on the one inside the
 # TextWrapper class, but without the breaking on '-'.
@@ -49,30 +45,6 @@ splitExp = re_compile(r'(\s+|(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')
 
 def escape_word(word):
     word = cgi_escape(word)
-    return word
-
-
-def markup_uri(contentProvider, word, substituted, substituted_words):
-    """ Markup URI in word.
-
-    """
-    if substituted:
-        return word
-
-    word = uri_matcher.sub('<a href="\g<1>\g<2>">\g<1>\g<2></a>\g<3>',
-                           word)
-    return word
-
-
-def markup_www(contentProvider, word, substituted, substituted_words):
-    """ Markup URIs starting with www, but no method.
-
-    """
-    if substituted:
-        return word
-
-    word = www_matcher.sub('<a href="http://\g<1>">\g<1></a>',
-                           word)
     return word
 
 
@@ -153,19 +125,6 @@ def markup_splashcast(contentProvider, word, substituted, substituted_words):
     return word
 
 
-def markup_bold(contentProvider, word, substituted, substituted_words):
-    """Markup words that should be bold, because they have astersisks
-      around them.
-    """
-    if substituted:
-        # Do not substitute if the word has already been marked-up
-        return word
-
-    word = bold_matcher.sub('<b>\g<1></b>',
-                            word)
-    return word
-
-
 def wrap_message(messageText, width=79):
     """Word-wrap the message
 
@@ -190,56 +149,6 @@ def wrap_message(messageText, width=79):
     email_wrapper.wordsep_re = splitExp
     filledLines = [email_wrapper.fill(l) for l in messageText.split('\n')]
     retval = '\n'.join(filledLines)
-    return retval
-
-
-standard_markup_functions = (markup_email_address, markup_youtube,
-                             markup_splashcast, markup_vimeo,
-                             markup_uri, markup_www, markup_bold)
-
-
-def markup_word(contentProvider, word, substituted_words):
-    word = escape_word(word)
-    substituted = False
-
-    for function in standard_markup_functions:
-        nword = function(contentProvider, word, substituted, substituted_words)
-        if nword != word:
-            substituted = True
-            if word not in substituted_words:
-                substituted_words.append(word)
-        word = nword
-    return word
-
-
-def markup_email(contentProvider, text):
-    retval = ''
-    substituted_words = []
-    word_count = 0
-
-    if text:
-        out_text = ''
-        curr_word = ''
-        for char in text:
-            if char.isspace():
-                if curr_word:
-                    markedUpWord = markup_word(contentProvider, curr_word,
-                                               substituted_words)
-                    curr_word = ''
-                    out_text += markedUpWord
-                    word_count += 1
-                    if word_count > EMAIL_WORD_LIMIT:
-                        out_text += '\n\n<strong>This email has been '\
-                            'automatically truncated to 5000 words.</strong>'
-                        break
-                out_text += char
-            else:
-                curr_word += char
-        if curr_word:
-            markedUpWord = markup_word(contentProvider, curr_word,
-                                       substituted_words)
-            out_text += markedUpWord
-        retval = out_text.strip()
     return retval
 
 
@@ -297,7 +206,7 @@ def get_post_intro_and_remainder(contentProvider, text):
         raise ValueError("The groupInfo object should always have a groupObj")
     mailBody = get_mail_body(contentProvider, text)
     plain = split_message(mailBody)
-    markedUpIntro = HTMLBody(plain.intro)
-    markedUpRemainder = HTMLBody(plain.remainder)
+    markedUpIntro = unicode(HTMLBody(plain.intro)) if plain.intro else ''
+    markedUpRemainder = unicode(HTMLBody(plain.remainder)) if plain.remainder else ''
     retval = SplitMessage(markedUpIntro, markedUpRemainder)
     return retval

@@ -22,7 +22,6 @@ class TextPostViewlet(PostViewlet):
     def update(self):
         super(TextPostViewlet, self).update()
         self.postIntro, self.postRemainder = get_post_intro_and_remainder(self, self.post['body'])
-        # self.postIntro, self.postRemainder = split_message(self.post['body'])
 
     @property
     def show(self):
