@@ -13,7 +13,6 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
-from cgi import escape as cgi_escape
 from operator import attrgetter
 from re import compile as re_compile
 from textwrap import TextWrapper
@@ -35,11 +34,6 @@ EMAIL_WORD_LIMIT = 5000
 # The following expression is based on the one inside the
 # TextWrapper class, but without the breaking on '-'.
 splitExp = re_compile(r'(\s+|(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))')
-
-
-def escape_word(word):
-    word = cgi_escape(word)
-    return word
 
 
 class OnlineHTMLBody(HTMLBody):
@@ -64,21 +58,13 @@ class OnlineHTMLBody(HTMLBody):
 def wrap_message(messageText, width=79):
     """Word-wrap the message
 
-    ARGUMENTS
-        "messageText" The text to alter.
-        "width"       The column-number which to wrap at.
+:param str messageText: The text to alter.
+:param int width: The column-number which to wrap at.
+:returns: The wrapped text.
+:rtype: str
 
-    RETURNS
-        A string containing the wrapped text.
-
-    SIDE EFFECTS
-        None.
-
-    NOTE
-        Originally a stand-alone script in
-        "Presentation/Tofu/MailingListManager/lscripts".
-
-    """
+.. Note: Originally a stand-alone script in
+         ``Presentation/Tofu/MailingListManager/lscripts``."""
     email_wrapper = TextWrapper(
         width=width, expand_tabs=False, replace_whitespace=False, break_on_hyphens=False,
         break_long_words=False)
@@ -91,25 +77,15 @@ def wrap_message(messageText, width=79):
 def get_mail_body(contentProvider, text):
     """Get the body of the mail message, formatted for the Web.
 
-    The "self.post" instance contains the plain-text version
-    of the message, as was sent out to the user's via email.
-    For formatting on the Web it is necessary to convert the
-    text to the correct content-type, replace all URLs with
-    anchor-elements, remove all at signs, wrap the message to
-    80 characters, and remove the file-notification. This method
-    does these things.
+:param object contentProvider: The content provider that is rendering the message.
+:param str text: The text to extract a body from.
+:returns: The formatted body of the email message.
+:rtype: str
 
-    ARGUMENTS
-        contentProvider:  The contentProvider of the message.
-        text:     The text to extract a body from
-
-    RETURNS
-        A string representing the formatted body of the email
-        message.
-
-    SIDE EFFECTS
-        None.
-    """
+The ``self.post`` instance contains the plain-text version of the message, as was sent out to the
+user's via email. For formatting on the Web it is necessary to convert the text to the correct
+content-type, replace all URLs with anchor-elements, remove all at signs, wrap the message to 80
+characters, and remove the file-notification. This method does these things."""
     retval = ''
     if text:
         wrapEmail = getUtility(IWrapEmail)
@@ -126,18 +102,10 @@ def get_mail_body(contentProvider, text):
 def get_post_intro_and_remainder(contentProvider, text):
     """Get the introduction and remainder text of the formatted post
 
-    ARGUMENTS
-        contentProvider:  The contentProvider for the post, providing
-                  access to the context, groupInfo and other useful tidbits.
-        text:     The text to split into an introduction and remainder
-
-    RETURNS
-        A 2-tuple of the strings that represent the email intro
-        and the remainder.
-
-    SIDE EFFECTS
-        None.
-    """
+:param object contentProvider: The content provider renderning the message, providing access to
+                               the context, groupInfo and other useful tidbits.
+:parm str text: The text to split into an introduction and remainder
+:returns:  A 2-tuple of the strings that represent the email intro and the remainder."""
     if not contentProvider.groupInfo.groupObj:
         raise ValueError("The groupInfo object should always have a groupObj")
     mailBody = get_mail_body(contentProvider, text)

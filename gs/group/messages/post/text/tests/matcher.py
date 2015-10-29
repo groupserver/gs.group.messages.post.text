@@ -182,4 +182,4 @@ class TestPublicEmailMatcher(TestCase):
     def test_email_sub(self):
         e = 'person@example.com'
         r = publicEmailMatcher.sub(e)
-        self.assertNotIn(e, r)
+        self.assertNotIn(e, r)  # --=mpj17=-- Yes, that is a Not
