@@ -14,7 +14,8 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from unittest import TestSuite, main as unittest_main
-from gs.group.messages.post.text.tests.postbody import (YouTubeTest, VimeoTest, SplitMessageTest, )
+from gs.group.messages.post.text.tests.postbody import (YouTubeTest, VimeoTest, )
+from gs.group.messages.post.text.tests.splitmessage import (SplitMessageTest, )
 from gs.group.messages.post.text.tests.viewlet import (TestTextPostViewlet, )
 testCases = (YouTubeTest, VimeoTest, TestTextPostViewlet, SplitMessageTest, )
 
