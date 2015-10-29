@@ -13,81 +13,26 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals
+from mock import MagicMock, patch
 from unittest import TestCase
-from gs.group.messages.post.text.postbody import (markup_youtube, markup_vimeo, )
+from gs.group.messages.post.text.postbody import OnlineHTMLBody
+from gs.group.messages.post.text.matcher import publicEmailMatcher
+from gs.group.privacy import (PERM_ANN, PERM_GRP, )
 
 
-class YouTubeTest(TestCase):
-    @staticmethod
-    def construct_url(prefix):
-        return '{0}/watch?v=qV5lzRHrGeg'.format(prefix)
+class OnlineHTMLBodyTest(TestCase):
+    @patch('gs.group.messages.post.text.postbody.get_visibility')
+    def test_public(self, mocked_get_visibility):
+        contentProvider = MagicMock()
+        mocked_get_visibility.return_value = PERM_ANN
 
-    def test_youtube_com(self):
-        'Test http://youtube.com'
-        url = self.construct_url('http://youtube.com')
-        r = markup_youtube(None, url, [], [])
-        self.assertEqual('\n<iframe', r[:8])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
+        r = OnlineHTMLBody('Tonight on Ethyl the Frog', contentProvider)
+        self.assertIn(publicEmailMatcher, r.matchers)
 
-    def test_www_youtube_com(self):
-        'Test http://www.youtube.com'
-        url = self.construct_url('http://www.youtube.com')
-        r = markup_youtube(None, url, [], [])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
+    @patch('gs.group.messages.post.text.postbody.get_visibility')
+    def test_not_public(self, mocked_get_visibility):
+        contentProvider = MagicMock()
+        mocked_get_visibility.return_value = PERM_GRP
 
-    def test_youtu_be(self):
-        'Test http://youtu.be'
-        url = self.construct_url('http://youtu.be')
-        r = markup_youtube(None, url, [], [])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
-
-    def test_https_youtube_com(self):
-        'Test https://youtube.com'
-        url = self.construct_url('https://youtube.com')
-        r = markup_youtube(None, url, [], [])
-        self.assertEqual('\n<iframe', r[:8])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
-
-    def test_https_www_youtube_com(self):
-        'Test https://www.youtube.com'
-        url = self.construct_url('http://www.youtube.com')
-        r = markup_youtube(None, url, [], [])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
-
-    def test_https_youtu_be(self):
-        'Test https://youtu.be'
-        url = self.construct_url('https://youtu.be')
-        r = markup_youtube(None, url, [], [])
-        self.assertIn('src="https://www.youtube.com/embed/qV5lzRHrGeg"', r)
-
-
-class VimeoTest(TestCase):
-    @staticmethod
-    def construct_url(prefix):
-        return '{0}/118019156'.format(prefix)
-
-    def test_vimeo_com(self):
-        'Test http://vimeo.com'
-        url = self.construct_url('http://vimeo.com')
-        r = markup_vimeo(None, url, [], [])
-        self.assertEqual('\n<iframe', r[:8])
-        self.assertIn('src="https://player.vimeo.com/video/118019156?', r)
-
-    def test_www_vimeo_com(self):
-        'Test http://www.vimeo.com'
-        url = self.construct_url('http://www.vimeo.com')
-        r = markup_vimeo(None, url, [], [])
-        self.assertIn('src="https://player.vimeo.com/video/118019156?', r)
-
-    def test_https_vimeo_com(self):
-        'Test https://vimeo.com'
-        url = self.construct_url('https://vimeo.com')
-        r = markup_vimeo(None, url, [], [])
-        self.assertEqual('\n<iframe', r[:8])
-        self.assertIn('src="https://player.vimeo.com/video/118019156?', r)
-
-    def test_https_www_vimeo_com(self):
-        'Test https://www.vimeo.com'
-        url = self.construct_url('https://www.vimeo.com')
-        r = markup_vimeo(None, url, [], [])
-        self.assertIn('src="https://player.vimeo.com/video/118019156?', r)
+        r = OnlineHTMLBody('Tonight on Ethyl the Frog', contentProvider)
+        self.assertNotIn(publicEmailMatcher, r.matchers)

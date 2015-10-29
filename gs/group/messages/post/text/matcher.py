@@ -15,15 +15,34 @@
 from __future__ import absolute_import, unicode_literals, print_function
 from gs.group.list.email.html.matcher import Matcher
 
+START = '</span><!--Line continues-->\n<br/>\n<iframe width="462" height="260" '
+END = 'frameborder="0" allowfullscreen="allowfullscreen"></iframe><br/>\n'\
+      '<span class="line line-continued">'
 
+#: The :class:`Matcher` instance that turns URI links to YouTube into embedded
+#: videos.
 youTubeMatcher = Matcher(
     r"(?P<leading>\&lt;|\(|\[|\{|\"|\'|^)"
     r"(?P<protocol>http://|https://)"
-    r"(?P<host>youtu(be)?\.([a-z]){2,3})"
+    r"(?P<host>(www\.)?youtu(be)?\.([a-z]){2,3})"
     r"(?P<query>[a-z/?=]+)"
-    r"(?P<videoId>[a-zA-Z0-9-_]{11})"
+    r"(?P<videoId>[a-zA-Z0-9-_]{11})"  # This is the important part
     r"(?P<rest>\?[a-z0-9&-_=]+)?"
     r"(?P<trailing>\&gt;|\)|\]|\}|\"|\'|$|\s)",
-    '</span><br/>\n<iframe width="462" height="260" '
-    'src="https://www.youtube.com/embed/\g<videoId>" '
-    'frameborder="0" allowfullscreen="allowfullscreen"></iframe><br/>\n<span class="line">', 25)
+    START + 'src="https://www.youtube.com/embed/\g<videoId>" ' + END, 25)
+
+#: The :class:`Matcher` instance that turns URI links to Vimeo into embedded
+#: videos.
+vimeoMatcher = Matcher(
+    r"(?P<leading>\&lt;|\(|\[|\{|\"|\'|^)"
+    r"(?P<protocol>http://|https://)"
+    r"(?P<host>.*vimeo.com)"
+    r"(?P<videoId>.*)"  # This is the important part
+    r"(?P<trailing>\&gt;|\)|\]|\}|\"|\'|$|\s)",
+    START + 'src="https://player.vimeo.com/video\g<videoId>?color=ffffff&title=0&byline=0&badge=0"'
+    + END, 26)
+
+#: The :class:`Matcher` instance that redacts email addresses for public groups.
+publicEmailMatcher = Matcher(
+    r"(?P<leading>.*?)(?P<address>[A-Z0-9\._%+-]+@[A-Z0-9.-]+\.[A-Z]+)(?P<trailing>.*)",
+    r'<span class="email">\g<leading>&lt;email obscured&gt;\g<trailing></span>', 20)

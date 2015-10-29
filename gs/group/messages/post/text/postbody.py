@@ -14,13 +14,16 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
 from cgi import escape as cgi_escape
-from re import compile as re_compile, I as re_I, M as re_M, U as re_U
+from operator import attrgetter
+from re import compile as re_compile
 from textwrap import TextWrapper
 from zope.component import getUtility
 from gs.cache import cache
 from gs.group.privacy import get_visibility, PERM_ANN
 from gs.group.list.email.html.htmlbody import HTMLBody
+from gs.group.list.email.html.matcher import (boldMatcher, emailMatcher, wwwMatcher, uriMatcher)
 from .interfaces import IWrapEmail  # , IMarkupEmail
+from .matcher import (youTubeMatcher, vimeoMatcher, publicEmailMatcher)
 from .splitmessage import (split_message, SplitMessage, )
 
 # this is currently the hard limit on the number of word's we will process.
@@ -28,15 +31,6 @@ from .splitmessage import (split_message, SplitMessage, )
 # AJAX to incrementally fetch large emails
 EMAIL_WORD_LIMIT = 5000
 
-email_matcher = re_compile(r".*?([A-Z0-9._%+-]+)@([A-Z0-9.-]+\.[A-Z]{2,4}).*?",
-                           re_I | re_M | re_U)
-youtube_matcher = re_compile(
-    "<?(?:https?:\/\/)?(?:www\.)?youtu(?:be)?\.(?:[a-z]){2,3}(?:[a-z/?=]+)"
-    "([a-zA-Z0-9-_]{11})(?:\?[a-z0-9&-_=]+)?>?")
-splashcast_matcher = re_compile("(?i)(http://www.splashcastmedia.com/"
-                                "web_watch/\?code\=)(.*)($|\s)")
-vimeo_matcher = re_compile(
-    "(?i)(?:https?:\/\/)(?:.*)vimeo.com\/(.*)(?:$|\s)")
 
 # The following expression is based on the one inside the
 # TextWrapper class, but without the breaking on '-'.
@@ -48,81 +42,23 @@ def escape_word(word):
     return word
 
 
-def markup_email_address(contentProvider, word, substituted, substituted_words):
-    '''Markup an email address.
+class OnlineHTMLBody(HTMLBody):
+    '''The HTML form of a plain-text email body.
 
-Some people become upset if their email address is shown to the general public.
-To people becoming upset the email address is redacted (obscured) if, and only
-if, Anonymous can view the message. In all other cases the email address is
-shown.'''
-    retval = word
-    if not(substituted) and email_matcher.match(word):
+:param str originalText: The original (plain) text
+:param object contentProvider: The content provider that is rendering this mess'''
+
+    def __init__(self, originalText, contentProvider):
+        super(OnlineHTMLBody, self).__init__(originalText)
+
+        self.matchers = [youTubeMatcher, vimeoMatcher, boldMatcher, wwwMatcher, uriMatcher]
         messages = contentProvider.groupInfo.groupObj.messages
-        if get_visibility(messages) == PERM_ANN:
-            # The messages in the group are visibile to the anonymous user,
-            #   so obfuscate (redact) any email addresses in the post.
-            retval = email_matcher.sub('&lt;email obscured&gt;', word)
+        if get_visibility(messages) == PERM_ANN:  # The messages are visible to Anon
+
+            self.matchers += [publicEmailMatcher, ]
         else:
-            # The messages in the group are visibile to group members only
-            # so show email addresses in the post, and make them useful.
-            retval = '<a class="email" href="mailto:%s">%s</a>' % (word, word)
-
-    assert retval, 'Email address <%s> not marked up' % word
-    return retval
-
-
-def markup_youtube(contentProvider, word, substituted, substituted_words):
-    """ Markup youtube URIs.
-
-    """
-    if substituted:
-        return word
-
-    if word in substituted_words:
-        return word
-
-    word = youtube_matcher.sub(
-        '\n<iframe width="462" height="260" '
-        'src="https://www.youtube.com/embed/\g<1>" frameborder="0" '
-        'allowfullscreen="allowfullscreen"></iframe>\n', word)
-    return word
-
-
-def markup_vimeo(contentProvider, word, substituted, substituted_words):
-    """ Markup vimeo URIs.
-
-    """
-    if substituted:
-        return word
-
-    if word in substituted_words:
-        return word
-
-    word = vimeo_matcher.sub(
-        '\n<iframe src="https://player.vimeo.com/video/\g<1>?'
-        'color=ffffff&title=0&byline=0&badge=0" width="462" height="260" '
-        'frameborder="0" allowfullscreen="allowfullscreen"></iframe>\n', word)
-
-    return word
-
-
-def markup_splashcast(contentProvider, word, substituted, substituted_words):
-    """ Markup splashcast URIs.
-
-    """
-    if substituted:
-        return word
-
-    if word in substituted_words:
-        return word
-
-    word = splashcast_matcher.sub(
-        '<div class="markup-splashcast"><embed '
-        'src="http://web.splashcast.net/go/skin/\g<2>'
-        '/sz/wide" wmode="Transparent" width="380" height="416" '
-        'allowFullScreen="true" '
-        'type="application/x-shockwave-flash" /></div>\g<3>', word)
-    return word
+            self.matchers += [emailMatcher, ]
+        sorted(self.matchers, key=attrgetter('weight'))
 
 
 def wrap_message(messageText, width=79):
@@ -206,7 +142,14 @@ def get_post_intro_and_remainder(contentProvider, text):
         raise ValueError("The groupInfo object should always have a groupObj")
     mailBody = get_mail_body(contentProvider, text)
     plain = split_message(mailBody)
-    markedUpIntro = unicode(HTMLBody(plain.intro)) if plain.intro else ''
-    markedUpRemainder = unicode(HTMLBody(plain.remainder)) if plain.remainder else ''
+
+    markedUpIntro = ''
+    if plain.intro:
+        markedUpIntro = unicode(OnlineHTMLBody(plain.intro, contentProvider))
+
+    markedUpRemainder = ''
+    if plain.remainder:
+        markedUpRemainder = unicode(OnlineHTMLBody(plain.remainder, contentProvider))
+
     retval = SplitMessage(markedUpIntro, markedUpRemainder)
     return retval
