@@ -16,11 +16,10 @@ from __future__ import absolute_import, unicode_literals
 from unittest import TestSuite, main as unittest_main
 from gs.group.messages.post.text.tests.matcher import (TestYouTubeMatcher, TestVimeoMatcher,
                                                        TestPublicEmailMatcher)
-from gs.group.messages.post.text.tests.splitmessage import (SplitMessageTest, )
 from gs.group.messages.post.text.tests.viewlet import (TestTextPostViewlet, )
 from gs.group.messages.post.text.tests.postbody import (OnlineHTMLBodyTest, )
 testCases = (TestYouTubeMatcher, TestVimeoMatcher, TestPublicEmailMatcher, TestTextPostViewlet,
-             SplitMessageTest, OnlineHTMLBodyTest, )
+             OnlineHTMLBodyTest, )
 
 
 def load_tests(loader, tests, pattern):

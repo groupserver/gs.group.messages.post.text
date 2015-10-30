@@ -15,7 +15,7 @@
 from __future__ import absolute_import, unicode_literals
 from mock import patch
 from unittest import TestCase
-from gs.group.list.email.html.matcher import (emailMatcher, )
+from gs.group.messages.text import (emailMatcher, )
 from gs.group.messages.post.text.postbody import OnlineHTMLBody
 from gs.group.privacy import (PERM_ANN, PERM_GRP, )
 
