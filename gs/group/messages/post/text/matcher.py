@@ -42,7 +42,26 @@ vimeoMatcher = Matcher(
     START + 'src="https://player.vimeo.com/video\g<videoId>?color=ffffff&title=0&byline=0&badge=0"'
     + END, 26)
 
+
+class PublicEmailMatcher(Matcher):
+    def __init__(self, okAddresses=[]):
+        super(PublicEmailMatcher, self).__init__(
+            r"(?P<leading>.*?)"
+            r"(?P<address>[A-Z0-9\._%+-]+@[A-Z0-9.-]+\.[A-Z]+)"
+            r"(?P<trailing>.*)",
+            r'<span class="email">\g<leading>&lt;email obscured&gt;\g<trailing></span>', 20)
+        self.okAddresses = okAddresses
+
+    def sub(self, s):
+        m = self.re.match(s)
+        gd = m.groupdict()
+        if gd['address'] in self.okAddresses:
+            r = '<a class="email" href="mailto:{address}">{leading}{address}{trailing}'
+            retval = r.format(address=gd['address'], leading=gd['leading'], trailing=gd['trailing'])
+        else:
+            retval = super(PublicEmailMatcher, self).sub(s)
+        assert retval, 'There is no retval'
+        return retval
+
 #: The :class:`Matcher` instance that redacts email addresses for public groups.
-publicEmailMatcher = Matcher(
-    r"(?P<leading>.*?)(?P<address>[A-Z0-9\._%+-]+@[A-Z0-9.-]+\.[A-Z]+)(?P<trailing>.*)",
-    r'<span class="email">\g<leading>&lt;email obscured&gt;\g<trailing></span>', 20)
+publicEmailMatcher = PublicEmailMatcher()

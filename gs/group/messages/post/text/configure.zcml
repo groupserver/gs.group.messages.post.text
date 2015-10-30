@@ -26,8 +26,6 @@
     weight="10"
     title="Plain text body" />
 
-  <utility component=".postbody.markup_email"
-           provides=".interfaces.IMarkupEmail" />
   <utility component=".postbody.wrap_message"
            provides=".interfaces.IWrapEmail" />
 

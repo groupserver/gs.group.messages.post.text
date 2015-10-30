@@ -4,10 +4,10 @@
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   class="gs-group-messages-post-text"
   i18n:domain="gs.group.messages.post.text">
-  <pre class="entry-content"
+  <div class="entry-content"
        tal:content="structure view/postIntro">
     This is the body of the document.
-  </pre><!--entry-content-->
+  </div><!--entry-content-->
   <div class="email-remainder muted disclosureWidget"
        tal:condition="python:view.postRemainder.strip()"
        tal:define="remId string:emailRemainder${view/post/post_id};
@@ -25,10 +25,10 @@
                      hide string:display:none"
          tal:attributes="id dshId;
                          style python:show if view.showRemainder else hide;">
-      <pre tal:content="structure view/postRemainder">
+      <div tal:content="structure view/postRemainder">
         This is the remainder of the email, with such things as
         the footer.
-      </pre>
+      </div>
     </div><!--disclosureShowHide-->
   </div><!--email-remainder-->
   <div class="fileNotification" role="list"
