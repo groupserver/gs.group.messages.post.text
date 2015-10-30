@@ -13,7 +13,7 @@
 #
 ############################################################################
 from __future__ import absolute_import, unicode_literals, print_function
-from gs.group.list.email.html.matcher import Matcher
+from gs.group.messages.text import Matcher
 
 START = '</span><!--Line continues-->\n<br/>\n<iframe width="462" height="260" '
 END = 'frameborder="0" allowfullscreen="allowfullscreen"></iframe><br/>\n'\
