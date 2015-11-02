@@ -1,6 +1,19 @@
 Changelog
 =========
 
+1.1.0 (2015-10-30)
+------------------
+
+* Allowing the support email-address and group email-address to
+  be seen in posts made to public groups
+* Updating the documentation
+* Moving the ``split_message`` function to `gs.group.messages.text`_
+* Moving the ``Matcher`` classes to `gs.group.messages.text`_
+* Adding unit tests
+
+.. _gs.group.messages.text:
+   https://github.com/groupserver/gs.group.messages.text
+
 1.0.2 (2015-10-22)
 ------------------
 
