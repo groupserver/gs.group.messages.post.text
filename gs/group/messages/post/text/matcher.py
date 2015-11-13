@@ -56,7 +56,7 @@ class PublicEmailMatcher(Matcher):
         m = self.re.match(s)
         gd = m.groupdict()
         if gd['address'] in self.okAddresses:
-            r = '<a class="email" href="mailto:{address}">{leading}{address}{trailing}'
+            r = '<a class="email" href="mailto:{address}">{leading}{address}{trailing}</a>'
             retval = r.format(address=gd['address'], leading=gd['leading'], trailing=gd['trailing'])
         else:
             retval = super(PublicEmailMatcher, self).sub(s)
