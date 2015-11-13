@@ -15,7 +15,7 @@
 from __future__ import absolute_import, unicode_literals, print_function
 from unittest import TestCase
 from gs.group.messages.post.text.matcher import (START, END, youTubeMatcher, vimeoMatcher,
-                                                 publicEmailMatcher)
+                                                 publicEmailMatcher, PublicEmailMatcher)
 
 
 class TestYouTubeMatcher(TestCase):
@@ -176,10 +176,25 @@ class TestPublicEmailMatcher(TestCase):
         self.assertIsNone(r)
 
     def test_email_match(self):
+        'Test that an email is picked up by the Matcher'
         r = publicEmailMatcher.match('person@example.com')
         self.assertTrue(r)
 
     def test_email_sub(self):
+        'Test that an email is redacted by the Matcher'
         e = 'person@example.com'
         r = publicEmailMatcher.sub(e)
         self.assertNotIn(e, r)  # --=mpj17=-- Yes, that is a Not
+
+    def test_public_email(self):
+        'Test that a public email is replaced.'
+        e = 'test@groups.example.com'
+        p = PublicEmailMatcher([e])
+        r = p.match(e)
+        self.assertTrue(r)
+
+        r = p.sub(e)
+        self.assertEqual('<a', r[:2])
+        self.assertEqual('</a>', r[-4:])
+        expected = 'href="mailto:{0}"'.format(e)
+        self.assertIn(expected, r)
