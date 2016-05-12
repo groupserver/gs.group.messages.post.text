@@ -44,13 +44,13 @@ vimeoMatcher = Matcher(
 
 
 class PublicEmailMatcher(Matcher):
-    def __init__(self, okAddresses=[]):
+    def __init__(self, okAddresses=None):
         super(PublicEmailMatcher, self).__init__(
             r"(?P<leading>.*?)"
             r"(?P<address>[A-Z0-9\._%+-]+@[A-Z0-9.-]+\.[A-Z]+)"
             r"(?P<trailing>.*)",
             r'<span class="email">\g<leading>&lt;email obscured&gt;\g<trailing></span>', 20)
-        self.okAddresses = okAddresses
+        self.okAddresses = [] if okAddresses is None else okAddresses
 
     def sub(self, s):
         m = self.re.match(s)
