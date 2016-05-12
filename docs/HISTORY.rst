@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.2 (2016-05-12)
+------------------
+
+* Fixing a coding error regarding mutable data-types as
+  parameters
+
 1.1.1 (2015-11-12)
 ------------------
 
